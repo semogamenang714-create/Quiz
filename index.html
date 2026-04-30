@@ -3,121 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J-MASTER SRS & KANA</title>
+    <title>J-MASTER SRS & KANA - Pastel Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fbcfe8 0%, #dbeafe 50%, #fef9c3 100%);
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
         .perspective { perspective: 1000px; }
-        .card-inner { transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+        
+        .card-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
         .is-flipped { transform: rotateY(180deg); }
-        .card-front, .card-back { backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
         .card-back { transform: rotateY(180deg); }
+
+        /* Smooth Animation for buttons */
+        .btn-pastel {
+            transition: all 0.2s ease;
+        }
+        .btn-pastel:active { transform: scale(0.95); }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen p-4 flex flex-col items-center">
+<body class="p-4 flex flex-col items-center">
     <div class="w-full max-w-sm">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-xl font-black tracking-tighter">J-MASTER <span class="text-indigo-600 underline">SRS</span></h1>
-            <div class="flex gap-2">
-                <button onclick="showView('study')" class="text-[10px] font-bold bg-white px-3 py-1 rounded-full border">SRS</button>
-                <button onclick="showView('kana')" class="text-[10px] font-bold bg-white px-3 py-1 rounded-full border">KANA</button>
+        
+        <div class="flex justify-between items-center mb-8 mt-4">
+            <h1 class="text-2xl font-bold text-slate-800 tracking-tight">J-MASTER <span class="text-pink-500">SRS</span></h1>
+            <div class="flex gap-2 glass p-1 rounded-2xl">
+                <button onclick="showView('study')" class="text-[10px] font-bold px-4 py-2 rounded-xl transition-all hover:bg-white/50">SRS</button>
+                <button onclick="showView('kana')" class="text-[10px] font-bold px-4 py-2 rounded-xl transition-all hover:bg-white/50">KANA</button>
             </div>
         </div>
 
-        <div id="study-view" class="view space-y-4">
-            <div id="counter" class="text-[10px] font-black text-indigo-400 bg-indigo-50 px-3 py-1 rounded-full inline-block">MEMUAT...</div>
-            <div class="perspective h-80 w-full">
-                <div id="flashcard" class="card-inner relative w-full h-full" onclick="flipCard()">
-                    <div class="card-front bg-white rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col items-center justify-center p-6">
-                        <span class="text-[9px] font-black text-slate-300 uppercase mb-6">Kanji</span>
-                        <div id="card-front-text" class="text-6xl font-bold text-slate-800">一</div>
+        <div id="study-view" class="view space-y-6">
+            <div class="perspective h-96 w-full">
+                <div id="flashcard" class="card-inner" onclick="flipCard()">
+                    <div class="card-front glass shadow-lg">
+                        <span class="text-[10px] font-bold text-pink-400 uppercase tracking-widest mb-4">Kanji</span>
+                        <div id="card-front-text" class="text-7xl font-bold text-slate-700">人</div>
+                        <div class="mt-12 text-slate-400 text-[10px] animate-pulse">Tap untuk arti</div>
                     </div>
-                    <div class="card-back bg-white rounded-[2.5rem] shadow-md border-2 border-indigo-50 flex flex-col items-center justify-center p-6">
-                        <div id="card-reading" class="text-lg text-indigo-500 font-bold mb-1">いち</div>
-                        <div id="card-meaning" class="text-2xl font-bold text-slate-800 text-center">Satu</div>
+                    <div class="card-back glass shadow-xl border-white">
+                        <div id="card-reading" class="text-xl text-blue-500 font-bold mb-2">ひと</div>
+                        <div id="card-meaning" class="text-3xl font-bold text-slate-800 text-center px-6">Orang</div>
                     </div>
                 </div>
             </div>
-            <div id="controls" class="grid grid-cols-2 gap-3 opacity-0 pointer-events-none">
-                <button onclick="nextCard(false)" class="py-4 rounded-2xl bg-orange-50 text-orange-500 font-bold text-[10px] uppercase border-b-4 border-orange-200">ULANG</button>
-                <button onclick="nextCard(true)" class="py-4 rounded-2xl bg-indigo-600 text-white font-bold text-[10px] uppercase border-b-4 border-indigo-800">HAFAL</button>
+            
+            <div id="controls" class="grid grid-cols-2 gap-4 opacity-0 transition-all duration-500 translate-y-4">
+                <button onclick="nextCard()" class="btn-pastel py-4 rounded-2xl bg-white/60 text-slate-500 font-bold text-xs shadow-sm border border-white">ULANG</button>
+                <button onclick="nextCard()" class="btn-pastel py-4 rounded-2xl bg-pink-400 text-white font-bold text-xs shadow-md shadow-pink-200">HAFAL ✨</button>
             </div>
         </div>
 
-        <div id="kana-view" class="view hidden space-y-6 text-center">
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                <span class="text-[9px] font-black text-slate-300 uppercase mb-4 block">Tebak Romaji</span>
-                <div id="kana-char" class="text-7xl font-bold text-slate-800 mb-8">あ</div>
-                <div id="kana-options" class="grid grid-cols-2 gap-3">
-                    </div>
+        <div id="kana-view" class="view hidden space-y-6">
+            <div class="glass p-8 rounded-[3rem] text-center relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200/30 rounded-full blur-2xl"></div>
+                <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-4 block">Tebak Romaji</span>
+                <div id="kana-char" class="text-8xl font-bold text-slate-700 mb-10">あ</div>
+                <div id="kana-options" class="grid grid-cols-2 gap-4"></div>
             </div>
-            <div class="text-[10px] font-bold text-slate-400">SKOR: <span id="kana-score" class="text-indigo-600">0</span></div>
+            <div class="glass py-3 px-6 rounded-full inline-block mx-auto text-center w-full">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Skor Kamu: </span>
+                <span id="kana-score" class="text-lg font-bold text-pink-500">0</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // Data
         const kanjiData = [
-            { front: '人', reading: 'ひと', meaning: 'Orang' },
-            { front: '日本', reading: 'にほん', meaning: 'Jepang' },
-            { front: '水', reading: 'みず', meaning: 'Air' },
-            { front: '行きます', reading: 'いきます', meaning: 'Pergi' }
+            { f: '人', r: 'ひと', m: 'Orang' }, { f: '水', r: 'みず', m: 'Air' }, { f: '日本', r: 'にほん', m: 'Jepang' }, { f: '行きます', r: 'いきます', m: 'Pergi' }, { f: '食べます', r: 'たべます', m: 'Makan' }, { f: '見ます', r: 'みます', m: 'Melihat' }
         ];
-        const kanaData = { 'あ': 'a', 'い': 'i', 'う': 'u', 'え': 'e', 'お': 'o', 'か': 'ka', 'き': 'ki' };
+        const kanaData = { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so' };
+        let cur = 0; let score = 0;
 
-        let currentIndex = 0;
-        let score = 0;
-
-        // View Switcher
-        function showView(viewName) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(viewName + '-view').classList.remove('hidden');
-            if(viewName === 'kana') initKana();
-        }
-
-        // SRS Logic
-        function updateSRS() {
-            const card = kanjiData[currentIndex % kanjiData.length];
-            document.getElementById('card-front-text').innerText = card.front;
-            document.getElementById('card-reading').innerText = card.reading;
-            document.getElementById('card-meaning').innerText = card.meaning;
-            document.getElementById('counter').innerText = `KARTU ${currentIndex + 1}`;
-            document.getElementById('flashcard').classList.remove('is-flipped');
-            document.getElementById('controls').classList.add('opacity-0');
+        function showView(v) {
+            document.querySelectorAll('.view').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('animate-in', 'fade-in', 'slide-in-from-bottom-4');
+            });
+            const target = document.getElementById(v + '-view');
+            target.classList.remove('hidden');
+            // Basic animation
+            target.style.animation = 'fadeIn 0.5s ease-out forwards';
+            if(v === 'kana') initKana();
         }
 
         function flipCard() {
             document.getElementById('flashcard').classList.add('is-flipped');
-            document.getElementById('controls').classList.remove('opacity-0', 'pointer-events-none');
+            const controls = document.getElementById('controls');
+            controls.classList.remove('opacity-0', 'translate-y-4');
         }
 
-        function nextCard() { currentIndex++; updateSRS(); }
+        function nextCard() {
+            cur = (cur + 1) % kanjiData.length;
+            document.getElementById('card-front-text').innerText = kanjiData[cur].f;
+            document.getElementById('card-reading').innerText = kanjiData[cur].r;
+            document.getElementById('card-meaning').innerText = kanjiData[cur].m;
+            document.getElementById('flashcard').classList.remove('is-flipped');
+            document.getElementById('controls').classList.add('opacity-0', 'translate-y-4');
+        }
 
-        // Kana Logic
         function initKana() {
             const keys = Object.keys(kanaData);
             const target = keys[Math.floor(Math.random() * keys.length)];
-            const romaji = kanaData[target];
+            const correct = kanaData[target];
             document.getElementById('kana-char').innerText = target;
+            const allOpts = Object.values(kanaData);
+            let opts = [correct];
+            while(opts.length < 4) {
+                let r = allOpts[Math.floor(Math.random() * allOpts.length)];
+                if(!opts.includes(r)) opts.push(r);
+            }
+            opts.sort(() => Math.random() - 0.5);
             
-            const options = [romaji, 'so', 'ka', 'ne'].sort(() => Math.random() - 0.5);
-            const container = document.getElementById('kana-options');
-            container.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = "py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold hover:bg-indigo-50";
-                btn.innerText = opt;
-                btn.onclick = () => {
-                    if(opt === romaji) { score++; document.getElementById('kana-score').innerText = score; initKana(); }
-                    else alert('Salah! Coba lagi');
+            const btnContainer = document.getElementById('kana-options');
+            btnContainer.innerHTML = '';
+            opts.forEach(o => {
+                const b = document.createElement('button');
+                b.className = "btn-pastel py-5 bg-white/50 border border-white rounded-[1.5rem] font-bold text-slate-600 shadow-sm hover:bg-white";
+                b.innerText = o;
+                b.onclick = () => {
+                    if(o === correct) { 
+                        score++; 
+                        document.getElementById('kana-score').innerText = score; 
+                        initKana(); 
+                    } else {
+                        b.classList.add('bg-red-100', 'border-red-200');
+                        setTimeout(() => b.classList.remove('bg-red-100', 'border-red-200'), 500);
+                    }
                 };
-                container.appendChild(btn);
+                btnContainer.appendChild(b);
             });
         }
-
-        updateSRS();
     </script>
 </body>
-    </html>
-    
+</html>

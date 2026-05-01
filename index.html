@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>J-Master SRS | Anki Mode Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
@@ -11,6 +11,7 @@
             font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif; 
             background: linear-gradient(135deg, #f8faff 0%, #fff5f6 100%);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -73,7 +74,7 @@
     </style>
 </head>
 <body>
-    <div id="app" class="w-full max-w-md h-screen flex flex-col p-5 relative z-10">
+    <div id="app" class="w-full max-w-md h-screen h-[100dvh] flex flex-col p-5 pb-8 relative z-10">
         
         <!-- Background Decor -->
         <div class="fixed top-[-5%] left-[-5%] w-72 h-72 bg-indigo-100 rounded-full blur-[80px] opacity-50 z-0"></div>
@@ -151,7 +152,7 @@
                 </div>
             </section>
 
-            <!-- VIEW: Daily Quiz (New) -->
+            <!-- VIEW: Daily Quiz -->
             <section id="view-quiz" class="view h-full flex flex-col hidden animate-fade">
                 <div id="quiz-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
                     <div class="text-5xl mb-6">⚡</div>
@@ -169,7 +170,6 @@
                         <div id="quiz-display" class="text-8xl font-black text-slate-800">--</div>
                     </div>
                     <div id="quiz-options" class="grid grid-cols-2 gap-3 mb-4 shrink-0">
-                        <!-- Options go here -->
                     </div>
                 </div>
 
@@ -282,13 +282,13 @@
                         </div>
                     </div>
                     <button onclick="saveSettings()" class="w-full bg-indigo-600 text-white text-[11px] font-black uppercase py-4.5 rounded-2xl shadow-lg shadow-indigo-100 active:scale-95 transition-all">Simpan Perubahan</button>
-                    <button onclick="resetAllData()" class="w-full bg-rose-50 text-rose-500 border border-rose-100 text-[10px] font-black uppercase py-3.5 rounded-xl active:bg-rose-100 transition-all mt-6">Hapus Semua Progress</button>
+                    <button onclick="resetAllData()" class="w-full bg-rose-50 text-rose-500 border border-rose-100 text-[10px] font-black uppercase py-3.5 rounded-xl active:bg-rose-100 transition-all mt-6">Reset Semua Progress</button>
                 </div>
             </section>
         </main>
 
-        <!-- Navigation -->
-        <nav class="mt-5 glass rounded-[2.5rem] p-1.5 flex gap-1 shrink-0 z-30">
+        <!-- Navigation: Dinaikkan sedikit agar tidak tertutup navigasi HP -->
+        <nav class="mt-auto mb-6 glass rounded-[2.5rem] p-1.5 flex gap-1 shrink-0 z-30">
             <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-4 rounded-full flex flex-col items-center justify-center gap-1 nav-active transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 <span class="text-[8px] font-black uppercase tracking-tighter">Study</span>
@@ -308,19 +308,19 @@
 
     <script>
         const ALL_KANJI = [
-            {f:'一',r:'いち',m:'Satu'},{f:'二',r:'に',m:'Dua'},{f:'三',r:'さん',m:'Tiga'},{f:'四',r:'よん',m:'Empat'},{f:'五',r:'ご',m:'Lima'},{f:'六',r:'ろく',m:'Enam'},{f:'七',r:'なな',m:'Tujuh'},{f:'八',r:'はち',m:'Delapan'},{f:'九',r:'きゅう',m:'Sembilan'},{f:'十',r:'じゅう',m:'Sepuluh'},{f:'百',r:'ひゃく',m:'Ratus'},{f:'千',r:'せん',m:'Ribuan'},{f:'万',r:'まん',m:'Puluh ribu'},{f:'円',r:'えん',m:'Yen'},{f:'半',r:'はん',m:'Setengah'},
+            {f:'一',r:'いち',m:'Satu'},{f:'二',r:'に',m:'Dua'},{f:'三',r:'さん',m:'Tiga'},{f:'四',r:'よん',m:'Empat'},{f:'五',r:'ご',m:'Lima'},{f:'六',r:'ろく',m:'Enam'},{f:'七',r:'なな',m:'Tujuh'},{f:'八',r:'ハち',m:'Delapan'},{f:'九',r:'きゅう',m:'Sembilan'},{f:'十',r:'じゅう',m:'Sepuluh'},{f:'百',r:'ひゃく',m:'Ratus'},{f:'千',r:'せん',m:'Ribuan'},{f:'万',r:'まん',m:'Puluh ribu'},{f:'円',r:'えん',m:'Yen'},{f:'半',r:'はん',m:'Setengah'},
             {f:'右',r:'みぎ',m:'Kanan'},{f:'左',r:'ひだり',m:'Kiri'},{f:'上',r:'うえ',m:'Atas'},{f:'下',r:'した',m:'Bawah'},{f:'前',r:'まえ',m:'Depan'},{f:'後ろ',r:'うしろ',m:'Belakang'},{f:'中',r:'なか',m:'Dalam'},{f:'外',r:'そと',m:'Luar'},{f:'間',r:'あいだ',m:'Antara'},{f:'西',r:'にし',m:'Barat'},{f:'東',r:'ひがし',m:'Timur'},{f:'北',r:'きた',m:'Utara'},{f:'南',r:'みなみ',m:'Selatan'},
             {f:'雨',r:'あめ',m:'Hujan'},{f:'火',r:'ひ',m:'Api'},{f:'水',r:'みず',m:'Air'},{f:'空',r:'そら',m:'Langit'},{f:'花',r:'はな',m:'Bunga'},{f:'魚',r:'さかな',m:'Ikan'},{f:'山',r:'やま',m:'Gunung'},{f:'川',r:'かわ',m:'Sungai'},{f:'木',r:'き',m:'Pohon'},{f:'土',r:'つち',m:'Tanah'},{f:'天',r:'てん',m:'Cuaca'},{f:'雪',r:'ゆき',m:'Salju'},{f:'海',r:'うみ',m:'Laut'},{f:'空気',r:'くうき',m:'Udara'},
             {f:'飲む',r:'のむ',m:'Minum'},{f:'食べる',r:'たべる',m:'Makan'},{f:'見る',r:'みる',m:'Melihat'},{f:'休む',r:'やすむ',m:'Istirahat'},{f:'会う',r:'あう',m:'Bertemu'},{f:'言う',r:'いう',m:'Berkata'},{f:'行く',r:'いく',m:'Pergi'},{f:'書く',r:'かく',m:'Menulis'},{f:'読む',r:'よむ',m:'Membaca'},{f:'買う',r:'かう',m:'Membeli'},{f:'入る',r:'はいる',m:'Masuk'},{f:'聞く',r:'きく',m:'Mendengar'},{f:'来る',r:'くる',m:'Datang'},{f:'話す',r:'はなす',m:'Berbicara'},{f:'持つ',r:'もつ',m:'Membawa'},{f:'待つ',r:'まつ',m:'Menunggu'},{f:'教える',r:'おしえる',m:'Memberitahu'},{f:'働く',r:'はたらく',m:'Bekerja'},{f:'借りる',r:'かりる',m:'Meminjam'},{f:'貸す',r:'かす',m:'Meminjamkan'},{f:'返す',r:'かえす',m:'Mengembalikan'},
             {f:'安い',r:'やすい',m:'Murah'},{f:'高い',r:'たかい',m:'Tinggi/Mahal'},{f:'古い',r:'ふるい',m:'Lama/Usang'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'長い',r:'ながい',m:'Panjang'},{f:'短い',r:'みじかい',m:'Pendek'},{f:'多い',r:'おおい',m:'Banyak'},{f:'少ない',r:'すくない',m:'Sedikit'},{f:'明るい',r:'あかるい',m:'Terang/Ceria'},{f:'暑い',r:'あつい',m:'Panas (cuaca)'},{f:'寒い',r:'さむい',m:'Dingin (cuaca)'},{f:'冷たい',r:'つめたい',m:'Dingin (benda)'},
-            {f:'年',r:'ねん',m:'Tahun'},{f:'月',r:'つき',m:'Bulan'},{f:'日',r:'ひ',m:'Hari'},{f:'時',r:'とき',m:'Waktu'},{f:'分',r:'ふん',m:'Menit'},{f:'週',r:'しゅう',m:'Minggu'},{f:'午前',r:'ごぜん',m:'Pagi (AM)'},{f:'午後',r:'ごご',m:'Siang (PM)'},{f:'朝',r:'あさ',m:'Pagi'},{f:'昼',r:'ひる',m:'Siang'},{f:'夜',r:'よる',m:'Malam'},{f:'月曜日',r:'げつようび',m:'Senin'},{f:'火曜日',r:'かようび',m:'Selasa'},{f:'水曜日',r:'水ようび',m:'Rabu'},{f:'木曜日',r:'木ようび',m:'Kamis'},{f:'金曜日',r:'金ようび',m:'Jumat'},{f:'土曜日',r:'土ようび',m:'Sabtu'},{f:'日曜日',r:'日ようび',m:'Minggu'},
-            {f:'人',r:'ひと',m:'Orang'},{f:'男',r:'おとこ',m:'Laki-laki'},{f:'女',r:'おんな',m:'Perempuan'},{f:'子',r:'こ',m:'Anak'},{f:'父',r:'ちち',m:'Ayah'},{f:'母',r:'はは',m:'Ibu'},{f:'姉',r:'あね',m:'Kakak perempuan'},{f:'兄',r:'あに',m:'Kakak laki-laki'},{f:'妹',r:'いもうと',m:'Adik perempuan'},{f:'弟',r:'おとうと',m:'Adik laki-laki'},{f:'兄弟',r:'きょうだい',m:'Saudara'},{f:'友達',r:'ともだち',m:'Teman'},{f:'大人',r:'おとな',m:'Dewasa'},{f:'私',r:'わたし',m:'Saya'},
+            {f:'年',r:'ねん',m:'Tahun'},{f:'月',r:'つき',m:'Bulan'},{f:'日',r:'ひ',m:'Hari'},{f:'時',r:'とき',m:'Waktu'},{f:'分',r:'ふん',m:'Menit'},{f:'週',r:'しゅう',m:'Minggu'},{f:'午前',r:'ごぜん',m:'Pagi (AM)'},{f:'午後',r:'ごご',m:'Siang (PM)'},{f:'朝',r:'あさ',m:'Pagi'},{f:'昼',r:'ひる',m:'Siang'},{f:'夜',r:'よる',m:'Malam'},{f:'月曜日',r:'げつようび',m:'Senin'},{f:'火曜日',r:'かようび',m:'Selasa'},{f:'水曜日',r:'すいようび',m:'Rabu'},{f:'木曜日',r:'もくようび',m:'Kamis'},{f:'金曜日',r:'きんようび',m:'Jumat'},{f:'土曜日',r:'どようび',m:'Sabtu'},{f:'日曜日',r:'にちようび',m:'Minggu'},
+            {f:'人',r:'ひと',m:'Orang'},{f:'男',r:'おとco',m:'Laki-laki'},{f:'女',r:'おんな',m:'Perempuan'},{f:'子',r:'こ',m:'Anak'},{f:'父',r:'ちち',m:'Ayah'},{f:'母',r:'はは',m:'Ibu'},{f:'姉',r:'あね',m:'Kakak perempuan'},{f:'兄',r:'あに',m:'Kakak laki-laki'},{f:'妹',r:'いもうと',m:'Adik perempuan'},{f:'弟',r:'おとうと',m:'Adik laki-laki'},{f:'兄弟',r:'きょうだい',m:'Saudara'},{f:'友達',r:'ともだち',m:'Teman'},{f:'大人',r:'おとな',m:'Dewasa'},{f:'私',r:'わたし',m:'Saya'},
             {f:'駅',r:'えき',m:'Stasiun'},{f:'学校',r:'がっこう',m:'Sekolah'},{f:'高校',r:'こうこう',m:'SMA'},{f:'大学',r:'だいがく',m:'Universitas'},{f:'会社',r:'かいしゃ',m:'Perusahaan'},{f:'店',r:'みせ',m:'Toko'},{f:'病院',r:'びょういん',m:'Rumah sakit'},{f:'公園',r:'こうえん',m:'Taman'},{f:'国',r:'くに',m:'Negara'},{f:'道',r:'みち',m:'Jalan'},{f:'東京',r:'とうきょう',m:'Tokyo'},{f:'京都',r:'きょうと',m:'Kyoto'}
         ];
 
         const KANA_POOL = {
             hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','ni':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
-            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro','ワ':'wa','ヲ':'wo','ン':'n' }
+            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','そ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro','ワ':'wa','ヲ':'wo','ン':'n' }
         };
 
         // --- STATE ---
@@ -343,8 +343,8 @@
         const getWIBDate = () => new Date().toLocaleDateString("en-US", {timeZone: "Asia/Jakarta"});
 
         const init = () => {
-            const storedCards = localStorage.getItem('jmaster_v14_cards');
-            const storedSettings = localStorage.getItem('jmaster_v14_settings');
+            const storedCards = localStorage.getItem('jmaster_v15_cards');
+            const storedSettings = localStorage.getItem('jmaster_v15_settings');
             const todayWIB = getWIBDate();
 
             if (storedCards) cards = JSON.parse(storedCards);
@@ -368,7 +368,6 @@
             updateUI();
         };
 
-        // --- SRS LOGIC ---
         const startSession = () => {
             const now = Date.now();
             const dueRev = cards.filter(c => c.repetitions > 0 && c.nextReview <= now);
@@ -377,7 +376,7 @@
             const remRev = Math.max(0, settings.reviewLimit - settings.reviewDoneToday);
             activeQueue = [...dueRev.slice(0, remRev), ...newCards.slice(0, remNew)].sort(() => Math.random() - 0.5);
             totalQueueSize = activeQueue.length;
-            if (activeQueue.length === 0) return showToast("Target tuntas!", "success");
+            if (activeQueue.length === 0) return showToast("Target harian tuntas!", "success");
             updateUI();
         };
 
@@ -415,7 +414,6 @@
 
         window.flipCard = () => { if(!isFlipped && activeQueue.length > 0) setIsFlipped(true); };
 
-        // --- DAILY KANJI QUIZ ---
         window.startDailyQuiz = () => {
             const available = cards.filter(c => c.repetitions > 0);
             if(available.length < 5) return showToast("Pelajari min. 5 kartu dulu!", "error");
@@ -431,10 +429,9 @@
             if(quizQueue.length === 0) return showQuizResult();
             const current = quizQueue[0];
             const qCount = 10 - quizQueue.length + 1;
-            document.getElementById('quiz-q-count').innerText = `Soal ${qCount}/10`;
             document.getElementById('quiz-display').innerText = current.f;
+            document.getElementById('quiz-q-count').innerText = `Soal ${qCount}/10`;
             
-            // Options
             let opts = [current.m];
             const pool = ALL_KANJI.map(k => k.m);
             while(opts.length < 4) {
@@ -471,7 +468,6 @@
             document.getElementById('quiz-final-score').innerText = `${quizScore}/10`;
         };
 
-        // --- KANA BLITZ ---
         window.startKanaQuiz = () => {
             if (!kanaConfig.hira && !kanaConfig.kata) return showToast("Pilih Kana!", "error");
             kanaCorrect = 0; kanaWrong = 0; kanaTime = 0; kanaQuestionCount = 0;
@@ -525,18 +521,15 @@
             document.getElementById('kana-result').classList.remove('hidden');
         };
 
-        // --- NAVIGATION ---
         window.switchView = (target) => {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(`view-${target}`).classList.remove('hidden');
             
-            // Nav Highlights
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
             const map = { 'study': 'nav-study', 'quiz': 'nav-study', 'settings': 'nav-study', 'kana': 'nav-kana', 'list': 'nav-list' };
             const btn = document.getElementById(map[target]);
             if(btn) btn.classList.add('nav-active');
 
-            // Reset Sub-Views
             if(target === 'kana') {
                 document.getElementById('kana-setup').classList.remove('hidden');
                 document.getElementById('kana-active').classList.add('hidden');
@@ -595,11 +588,11 @@
         window.saveSettings = (sh = true) => {
             settings.newLimit = parseInt(document.getElementById('input-new-limit').value) || 10;
             settings.reviewLimit = parseInt(document.getElementById('input-rev-limit').value) || 20;
-            localStorage.setItem('jmaster_v14_settings', JSON.stringify(settings));
+            localStorage.setItem('jmaster_v15_settings', JSON.stringify(settings));
             if(sh) { showToast("Disimpan", "success"); switchView('study'); }
         };
 
-        const saveCards = () => localStorage.setItem('jmaster_v14_cards', JSON.stringify(cards));
+        const saveCards = () => localStorage.setItem('jmaster_v15_cards', JSON.stringify(cards));
         window.resetCard = (id) => { if(confirm("Reset progress kartu ini?")) { const c = cards.find(x => x.id === id); c.repetitions = 0; c.interval = 0; c.ease = 2.5; c.nextReview = 0; saveCards(); renderList(); } };
         window.resetAllData = () => { if(confirm("Hapus seluruh progress?")) { localStorage.clear(); location.reload(); } };
 

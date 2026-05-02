@@ -2,8 +2,12 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>J-Master SRS | Anki Mode Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0B1120">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>J-Master SRS | Anki Mode Pro (Cloud PWA)</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,10 +36,7 @@
             transition: background 0.5s ease;
         }
         
-        /* Palet Dark Mode: Biru Tua ke Ungu Tua */
-        .dark body {
-            background: linear-gradient(135deg, #0B1120 0%, #3B0764 100%);
-        }
+        .dark body { background: linear-gradient(135deg, #0B1120 0%, #3B0764 100%); }
 
         .glass {
             background: rgba(255, 255, 255, 0.6);
@@ -64,7 +65,6 @@
         }
         .card-back { transform: rotateY(180deg); }
         
-        /* Tombol Sesi Checkbox */
         .btn-glow-active {
             background: rgba(79, 70, 229, 0.1) !important;
             border-color: rgba(79, 70, 229, 0.8) !important;
@@ -72,7 +72,6 @@
             box-shadow: 0 0 15px rgba(79, 70, 229, 0.4), inset 0 0 5px rgba(79, 70, 229, 0.1);
             transform: scale(1.02);
         }
-
         .dark .btn-glow-active {
             background: rgba(236, 72, 153, 0.15) !important;
             border-color: rgba(236, 72, 153, 0.8) !important;
@@ -80,121 +79,70 @@
             box-shadow: 0 0 15px rgba(236, 72, 153, 0.4), inset 0 0 5px rgba(236, 72, 153, 0.1);
         }
 
-        /* Navigasi Bawah */
         .nav-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: #94a3b8;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: transparent; border: 1px solid transparent; color: #94a3b8; transition: all 0.3s ease;
         }
-        
         .nav-active { color: #4f46e5; }
         .dark .nav-active { color: #f472b6; } 
 
         .nav-btn:hover, .nav-btn:active {
-            color: #4f46e5;
-            background: rgba(79, 70, 229, 0.05);
-            border-color: rgba(79, 70, 229, 0.4) !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3), inset 0 0 5px rgba(79, 70, 229, 0.1);
-            transform: scale(1.05);
+            color: #4f46e5; background: rgba(79, 70, 229, 0.05); border-color: rgba(79, 70, 229, 0.4) !important;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3), inset 0 0 5px rgba(79, 70, 229, 0.1); transform: scale(1.05);
         }
-
         .dark .nav-btn:hover, .dark .nav-btn:active {
-            color: #e879f9; 
-            background: rgba(232, 121, 249, 0.05);
-            border-color: rgba(232, 121, 249, 0.5) !important;
+            color: #e879f9; background: rgba(232, 121, 249, 0.05); border-color: rgba(232, 121, 249, 0.5) !important;
             box-shadow: 0 0 15px rgba(232, 121, 249, 0.4), inset 0 0 5px rgba(232, 121, 249, 0.1);
         }
 
-        /* Animasi Benar/Salah */
-        @keyframes correct-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); background-color: rgba(16, 185, 129, 0.2); border-color: #10b981; }
-            100% { transform: scale(1); }
-        }
-        @keyframes wrong-shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); background-color: rgba(244, 63, 94, 0.1); border-color: #f43f5e; }
-            75% { transform: translateX(5px); }
-        }
+        @keyframes correct-pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); background-color: rgba(16, 185, 129, 0.2); border-color: #10b981; } 100% { transform: scale(1); } }
+        @keyframes wrong-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); background-color: rgba(244, 63, 94, 0.1); border-color: #f43f5e; } 75% { transform: translateX(5px); } }
         .ans-correct { animation: correct-pulse 0.4s ease-out; color: #059669 !important; border-color: #10b981 !important; }
         .ans-wrong { animation: wrong-shake 0.4s ease-out; color: #e11d48 !important; border-color: #f43f5e !important; }
+        .dark .ans-correct { color: #34d399 !important; } .dark .ans-wrong { color: #fb7185 !important; }
 
-        .dark .ans-correct { color: #34d399 !important; }
-        .dark .ans-wrong { color: #fb7185 !important; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
         
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 10px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-        /* Smooth Progress Bar Hover */
-        .interactive-bar {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        .dark .interactive-bar {
-            border: 1px solid rgba(216, 180, 254, 0.2);
-        }
-        
+        .interactive-bar { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); border: 1px solid rgba(255, 255, 255, 0.6); }
+        .dark .interactive-bar { border: 1px solid rgba(216, 180, 254, 0.2); }
         .interactive-bar:hover, .interactive-bar:active {
-            transform: scaleY(1.8) scaleX(1.01);
-            border-color: rgba(79, 70, 229, 0.8) !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.6), inset 0 0 5px rgba(79, 70, 229, 0.2);
-            background: rgba(255, 255, 255, 0.9);
+            transform: scaleY(1.8) scaleX(1.01); border-color: rgba(79, 70, 229, 0.8) !important;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.6), inset 0 0 5px rgba(79, 70, 229, 0.2); background: rgba(255, 255, 255, 0.9);
         }
         .dark .interactive-bar:hover, .dark .interactive-bar:active {
-            border-color: rgba(244, 114, 182, 0.8) !important;
-            box-shadow: 0 0 15px rgba(244, 114, 182, 0.6), inset 0 0 5px rgba(244, 114, 182, 0.2);
-            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(244, 114, 182, 0.8) !important; box-shadow: 0 0 15px rgba(244, 114, 182, 0.6), inset 0 0 5px rgba(244, 114, 182, 0.2); background: rgba(30, 41, 59, 0.9);
         }
 
-        /* 🔴 QUIZ & KANA OPTIONS ANIMATION (Interactive & Balanced) 🔴 */
-        .quiz-opt-btn {
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-        }
-        
-        /* Hanya nyala (glow) dan membal saat DIPENCET (Touch/Active) */
+        .quiz-opt-btn { transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; }
         .quiz-opt-btn:active {
-            color: #4f46e5 !important;
-            background: rgba(79, 70, 229, 0.1) !important;
-            border-color: rgba(79, 70, 229, 0.8) !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4), inset 0 0 5px rgba(79, 70, 229, 0.1) !important;
-            transform: scale(0.92) !important;
+            color: #4f46e5 !important; background: rgba(79, 70, 229, 0.1) !important; border-color: rgba(79, 70, 229, 0.8) !important;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4), inset 0 0 5px rgba(79, 70, 229, 0.1) !important; transform: scale(0.92) !important;
         }
-        
-        /* Glow Pink saat dipencet di Dark Mode */
         .dark .quiz-opt-btn:active {
-            color: #f472b6 !important;
-            background: rgba(244, 114, 182, 0.15) !important;
-            border-color: rgba(244, 114, 182, 0.8) !important;
-            box-shadow: 0 0 15px rgba(244, 114, 182, 0.5), inset 0 0 5px rgba(244, 114, 182, 0.2) !important;
-            transform: scale(0.92) !important;
+            color: #f472b6 !important; background: rgba(244, 114, 182, 0.15) !important; border-color: rgba(244, 114, 182, 0.8) !important;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.5), inset 0 0 5px rgba(244, 114, 182, 0.2) !important; transform: scale(0.92) !important;
         }
         
-        /* Utility Dark Mode */
-        .dark-text-main { transition: color 0.3s ease; }
-        .dark .dark-text-main { color: #f1f5f9; }
-        .dark-text-sub { transition: color 0.3s ease; }
-        .dark .dark-text-sub { color: #cbd5e1; }
-        .dark-text-accent { transition: color 0.3s ease; }
-        .dark .dark-text-accent { color: #f472b6; }
+        .dark-text-main { transition: color 0.3s ease; } .dark .dark-text-main { color: #f1f5f9; }
+        .dark-text-sub { transition: color 0.3s ease; } .dark .dark-text-sub { color: #cbd5e1; }
+        .dark-text-accent { transition: color 0.3s ease; } .dark .dark-text-accent { color: #f472b6; }
+        
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #4f46e5; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        .dark .spinner { border-top-color: #f472b6; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="transition-colors duration-500">
-    <div id="app" class="w-full max-w-md h-screen h-[100dvh] flex flex-col p-4 pb-6 relative z-10">
+    <div id="app" class="w-full max-w-md h-screen h-[100dvh] flex flex-col p-4 pb-8 relative z-10">
         
-        <!-- Orbs/Blur Backgrounds -->
         <div class="fixed top-[-5%] left-[-5%] w-72 h-72 bg-indigo-100 dark:bg-purple-900 rounded-full blur-[80px] opacity-50 z-0 transition-colors duration-700"></div>
         <div class="fixed bottom-[-5%] right-[-5%] w-72 h-72 bg-rose-100 dark:bg-pink-900 rounded-full blur-[80px] opacity-50 z-0 transition-colors duration-700"></div>
 
-        <header class="flex justify-between items-center mb-4 shrink-0 relative z-20 px-1">
+        <header id="app-header" class="flex justify-between items-center mb-4 shrink-0 relative z-20 px-1 hidden">
             <div>
                 <h1 class="text-xl font-black tracking-tighter text-slate-800 dark-text-main">J-MASTER <span class="text-indigo-600 dark:text-fuchsia-400">SRS</span></h1>
                 <div class="flex gap-2 text-[9px] font-bold text-slate-400 dark:text-slate-500 mt-1 uppercase tracking-widest">
@@ -216,8 +164,52 @@
         </header>
 
         <main class="flex-1 overflow-hidden relative">
+
+            <section id="view-loading" class="view h-full flex flex-col items-center justify-center animate-fade">
+                <div class="spinner mb-4"></div>
+                <div class="text-[10px] font-black text-slate-400 dark:text-purple-300 uppercase tracking-widest">Menyambungkan Cloud...</div>
+            </section>
+
+            <section id="view-login" class="view h-full flex flex-col justify-center px-4 animate-fade hidden max-w-sm mx-auto w-full">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-black tracking-tighter text-slate-800 dark-text-main">J-MASTER <span class="text-indigo-600 dark:text-fuchsia-400">CLOUD</span></h1>
+                    <p class="text-[10px] font-bold text-slate-500 dark:text-purple-300 mt-2 uppercase tracking-widest opacity-80">Sinkronisasi Progres Otomatis</p>
+                </div>
+
+                <div id="login-form-container" class="glass p-6 rounded-3xl space-y-4 border-white/60 dark:border-purple-800/40">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 dark:text-purple-300 uppercase mb-2 block tracking-widest">Username</label>
+                        <input type="text" id="login-username" class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-4 text-[12px] font-bold outline-none ring-1 ring-slate-100 dark:ring-slate-700 focus:ring-indigo-500 dark:focus:ring-pink-500 transition-all dark:text-white" placeholder="Contoh: desti">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 dark:text-purple-300 uppercase mb-2 block tracking-widest">Password</label>
+                        <input type="password" id="login-password" class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-4 text-[12px] font-bold outline-none ring-1 ring-slate-100 dark:ring-slate-700 focus:ring-indigo-500 dark:focus:ring-pink-500 transition-all dark:text-white" placeholder="••••••••">
+                    </div>
+                    <button onclick="handleLogin()" class="w-full bg-indigo-600 dark:bg-gradient-to-r dark:from-purple-600 dark:to-pink-600 text-white text-[11px] font-black uppercase py-4 rounded-2xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all mt-2">
+                        Masuk
+                    </button>
+                    <div class="text-center mt-4">
+                        <button onclick="toggleAdminForm(true)" class="text-[9px] font-bold text-slate-400 hover:text-indigo-500 dark:text-purple-400 underline decoration-dashed underline-offset-4 uppercase tracking-wider">Daftar User (Khusus Admin)</button>
+                    </div>
+                </div>
+
+                <div id="admin-form-container" class="glass p-6 rounded-3xl space-y-4 border-white/60 dark:border-purple-800/40 hidden">
+                    <h3 class="text-[10px] text-rose-500 dark:text-pink-400 font-black text-center mb-2 uppercase tracking-widest">Setup User Baru</h3>
+                    <div>
+                        <input type="password" id="admin-code" class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-3 text-[11px] font-bold outline-none ring-1 ring-rose-200 dark:ring-pink-500/50 focus:ring-rose-500 transition-all dark:text-white mb-2" placeholder="Kode Admin">
+                        <input type="text" id="reg-username" class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-3 text-[11px] font-bold outline-none ring-1 ring-slate-100 dark:ring-slate-700 focus:ring-indigo-500 transition-all dark:text-white mb-2" placeholder="Username Baru">
+                        <input type="password" id="reg-password" class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-3 text-[11px] font-bold outline-none ring-1 ring-slate-100 dark:ring-slate-700 focus:ring-indigo-500 transition-all dark:text-white" placeholder="Password Baru">
+                    </div>
+                    <button onclick="handleRegisterAdmin()" class="w-full bg-rose-500 dark:bg-pink-600 text-white text-[10px] font-black uppercase py-3 rounded-2xl shadow-lg active:scale-95 transition-all">
+                        Buat User
+                    </button>
+                    <div class="text-center mt-2">
+                        <button onclick="toggleAdminForm(false)" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Batal</button>
+                    </div>
+                </div>
+            </section>
             
-            <section id="view-study" class="view h-full flex flex-col animate-fade">
+            <section id="view-study" class="view h-full flex flex-col animate-fade hidden">
                 <div id="study-status" class="flex-1 flex flex-col items-center justify-center text-center p-4">
                     <div id="status-icon" class="text-5xl mb-4">📚</div>
                     <h2 id="status-title" class="text-lg font-black text-slate-800 dark-text-main uppercase tracking-tight">Sesi Belajar</h2>
@@ -248,8 +240,6 @@
 
                 <div id="study-active" class="flex-1 flex flex-col hidden overflow-hidden">
                     <div class="flex items-center gap-3 mb-4 px-1 shrink-0">
-                        
-                        <!-- ANKI STYLE QUEUE COUNTERS -->
                         <div class="flex gap-2.5 text-[9px] font-black tracking-widest bg-white/50 dark:bg-slate-800/50 px-3.5 py-1.5 rounded-full border border-white/40 dark:border-slate-700/50 shadow-sm">
                             <span class="text-blue-500 dark:text-sky-400" id="count-new">NEW: 0</span>
                             <span class="text-rose-500 dark:text-rose-400" id="count-learn">LRN: 0</span>
@@ -278,7 +268,6 @@
                         </div>
                     </div>
                     
-                    <!-- SRS ACTIONS WITH DYNAMIC INTERVAL LABELS -->
                     <div id="srs-actions" class="mt-6 grid grid-cols-4 gap-2 opacity-0 pointer-events-none translate-y-6 transition-all duration-300 shrink-0">
                         <button onclick="handleRate(0)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-rose-100 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-900/30 active:scale-95 transition-all">
                             <span class="text-rose-500 dark:text-rose-400 font-black text-[9px] uppercase">Lupa</span>
@@ -430,8 +419,14 @@
                 <div id="card-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar"></div>
             </section>
 
-            <section id="view-settings" class="view h-full flex flex-col hidden animate-fade">
-                <h2 class="text-sm font-black text-slate-800 dark-text-main mb-6 px-1 uppercase tracking-wider">Pengaturan</h2>
+            <section id="view-settings" class="view h-full flex flex-col hidden animate-fade overflow-y-auto custom-scrollbar">
+                <h2 class="text-sm font-black text-slate-800 dark-text-main mb-6 px-1 uppercase tracking-wider">Pengaturan (<span id="set-username" class="text-indigo-500"></span>)</h2>
+                
+                <!-- PWA Install Button -->
+                <button id="btn-install-pwa" onclick="installPWA()" class="w-full bg-gradient-to-r from-emerald-400 to-teal-500 text-white text-[10px] font-black uppercase py-4 rounded-2xl shadow-lg active:scale-95 transition-all mb-4 hidden">
+                    📲 Install App ke Home Screen
+                </button>
+
                 <div class="space-y-4">
                     <div class="glass p-5 rounded-3xl space-y-5 border-white/60 dark:border-purple-800/40">
                         <div>
@@ -444,45 +439,113 @@
                         </div>
                     </div>
                     <button onclick="saveSettings()" class="w-full bg-indigo-600 dark:bg-pink-600 text-white text-[10px] font-black uppercase py-4 rounded-2xl shadow-lg shadow-indigo-100 dark:shadow-none active:scale-95 transition-all">Simpan Perubahan</button>
-                    <button onclick="resetAllData()" class="w-full bg-rose-50 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400 border border-rose-100 dark:border-rose-900/50 text-[9px] font-black uppercase py-3 rounded-xl active:bg-rose-100 transition-all mt-4">Reset Semua Progress</button>
+                    
+                    <button onclick="logout()" class="w-full bg-slate-900 dark:bg-slate-800 text-white text-[9px] font-black uppercase py-3 rounded-xl active:scale-95 transition-all mt-4 border border-slate-700">Logout dari Perangkat</button>
                 </div>
             </section>
         </main>
 
-        <!-- Navbar di-resize lebih bersih, glow HANYA saat disentuh -->
-        <nav class="mt-auto mb-2 glass rounded-[2rem] p-1.5 flex gap-1 shrink-0 z-30 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-            <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center justify-center gap-1 nav-active">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span class="text-[7px] font-black uppercase tracking-tighter">Study</span>
+        <nav id="app-nav" class="mt-auto mb-5 mx-auto w-[92%] glass rounded-full p-1 flex gap-1 shrink-0 z-30 shadow-[0_8px_30px_rgba(0,0,0,0.08)] hidden">
+            <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5 nav-active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="text-[8px] font-black uppercase tracking-tighter mt-0.5">Study</span>
             </button>
-            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center justify-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span class="text-[7px] font-black uppercase tracking-tighter">Kana</span>
+            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span class="text-[8px] font-black uppercase tracking-tighter mt-0.5">Kana</span>
             </button>
-            <button onclick="switchView('list')" id="nav-list" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center justify-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                <span class="text-[7px] font-black uppercase tracking-tighter">List</span>
+            <button onclick="switchView('list')" id="nav-list" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <span class="text-[8px] font-black uppercase tracking-tighter mt-0.5">List</span>
             </button>
         </nav>
 
-        <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all opacity-0 pointer-events-none z-50 whitespace-nowrap"></div>
+        <div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all opacity-0 pointer-events-none z-50 whitespace-nowrap"></div>
     </div>
 
-    <script>
-        // Tema Logika
-        const toggleTheme = () => {
+    <!-- Modul Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- PWA SETUP ---
+        const setupPWA = () => {
+            const svgIcon = encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="#4f46e5"/><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-size="250" font-weight="bold" fill="white" font-family="sans-serif">あ</text></svg>`);
+            const iconData = `data:image/svg+xml;charset=utf-8,${svgIcon}`;
+
+            const manifest = {
+                "name": "J-Master SRS Cloud",
+                "short_name": "J-Master",
+                "description": "Aplikasi Belajar Kosakata Bahasa Jepang & Kaigo",
+                "start_url": ".",
+                "display": "standalone",
+                "background_color": "#0B1120",
+                "theme_color": "#4f46e5",
+                "icons": [
+                    { "src": iconData, "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
+                    { "src": iconData, "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+                ]
+            };
+
+            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestUrl;
+            document.head.appendChild(link);
+
+            const swCode = `
+                const CACHE_NAME = 'jmaster-v1';
+                self.addEventListener('install', event => { self.skipWaiting(); });
+                self.addEventListener('activate', event => { event.waitUntil(clients.claim()); });
+                self.addEventListener('fetch', event => {
+                    // PWA passthrough
+                    event.respondWith(fetch(event.request).catch(() => new Response('Koneksi internet terputus.')));
+                });
+            `;
+            const swBlob = new Blob([swCode], {type: 'application/javascript'});
+            const swUrl = URL.createObjectURL(swBlob);
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register(swUrl)
+                    .catch(err => console.log('SW PWA (Biasanya error di iFrame preview, aman saat export/hosting)'));
+            }
+        };
+        setupPWA();
+
+        // PWA Install Prompt Logic
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btn = document.getElementById('btn-install-pwa');
+            if (btn) btn.classList.remove('hidden');
+        });
+
+        window.installPWA = () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choice) => {
+                if (choice.outcome === 'accepted') {
+                    document.getElementById('btn-install-pwa').classList.add('hidden');
+                }
+                deferredPrompt = null;
+            });
+        };
+
+        // --- UI & TEMA SETUP ---
+        window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
             localStorage.setItem('jmaster_theme', isDark ? 'dark' : 'light');
             updateThemeIcon(isDark);
         };
-
         const updateThemeIcon = (isDark) => {
             document.getElementById('icon-sun').classList.toggle('hidden', !isDark);
             document.getElementById('icon-moon').classList.toggle('hidden', isDark);
         };
-
-        // Cek Tema Awal
         if (localStorage.getItem('jmaster_theme') === 'dark' || (!('jmaster_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             updateThemeIcon(true);
@@ -490,12 +553,44 @@
             updateThemeIcon(false);
         }
 
+        const showToast = (msg, type) => {
+            const t = document.getElementById('toast'); t.innerText = msg;
+            t.className = `fixed bottom-28 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all z-50 whitespace-nowrap ${type === 'error' ? 'bg-rose-500' : 'bg-slate-900 dark:bg-pink-600'}`;
+            t.classList.remove('opacity-0'); setTimeout(() => t.classList.add('opacity-0'), 2500);
+        };
+        window.showToast = showToast;
+
+        // Setup Firebase
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        let firebaseUser = null;
+        let loggedInUsername = null;
+
+        // Data Inti
+        let cards = [];
+        let settings = { newLimit: 20, reviewLimit: 50, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
+        
+        let activeNew = [], activeDue = [], activeLearn = [];
+        let currentCard = null, currentCardType = '';
+        
+        let quizQueue = [], quizScore = 0, totalQuizQuestions = 0;
+        let totalQueueSize = 0, isFlipped = false;
+        
+        let sessionConfig = { vocab: true, hira: false, kata: false };
+        let kanaConfig = { hira: true, kata: false };
+        let kanaCorrect = 0, kanaWrong = 0, kanaTime = 0, kanaInterval = null, currentKanaTarget = null, kanaQuestionCount = 0, isProcessing = false;
+
+        const getWIBDate = () => new Date().toLocaleDateString("en-US", {timeZone: "Asia/Jakarta"});
+
         const KANA_POOL = {
             hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
             kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro','ワ':'wa','ヲ':'wo','ン':'n' }
         };
 
-        // SUPER MASSIF DATABASE: ~1000 KOSAKATA LENGKAP DARI PDF + KAIGO
         const BASE_VOCAB = [
             {f:'こんにちは',r:'Konnichiwa',m:'Halo / Selamat siang'},{f:'おはようございます',r:'Ohayou gozaimasu',m:'Selamat pagi'},{f:'こんばんは',r:'Konbanwa',m:'Selamat malam'},{f:'おやすみなさい',r:'Oyasuminasai',m:'Selamat tidur'},{f:'ばいばい',r:'Bye-bye',m:'Dahh!'},{f:'さようなら',r:'Sayounara',m:'Sampai jumpa'},{f:'私',r:'わたし',m:'Saya'},{f:'私たち',r:'わたしたち',m:'Kami'},{f:'あなた',r:'あなた',m:'Kamu'},{f:'あなたがた',r:'あなたがた',m:'Kamu sekalian'},{f:'彼',r:'かれ',m:'Dia (laki)'},{f:'彼女',r:'かのじょ',m:'Dia (perempuan)'},{f:'これ',r:'kore',m:'Ini'},{f:'それ',r:'sore',m:'Itu'},{f:'あれ',r:'are',m:'Itu (jauh)'},
             {f:'月曜日',r:'げつようび',m:'Senin'},{f:'火曜日',r:'かようび',m:'Selasa'},{f:'水曜日',r:'すいようび',m:'Rabu'},{f:'木曜日',r:'もくようび',m:'Kamis'},{f:'金曜日',r:'きんようび',m:'Jumat'},{f:'土曜日',r:'どようび',m:'Sabtu'},{f:'日曜日',r:'にちようび',m:'Minggu'},{f:'今日',r:'きょう',m:'Hari ini'},{f:'昨日',r:'きのう',m:'Kemarin'},{f:'明後日',r:'あさって',m:'Lusa'},{f:'一昨日',r:'おととい',m:'Kemarin dulu'},{f:'朝',r:'あさ',m:'Pagi'},{f:'今朝',r:'けさ',m:'Tadi pagi'},{f:'晩/夜',r:'ばん/よる',m:'Malam'},{f:'夕べ',r:'ゆうべ',m:'Tadi malam'},{f:'今晩',r:'こんばん',m:'Malam ini'},{f:'明日',r:'あした',m:'Besok'},{f:'毎日',r:'まいにち',m:'Setiap hari'},{f:'毎朝',r:'まいあさ',m:'Setiap pagi'},{f:'毎晩',r:'まいばん',m:'Setiap malam'},{f:'今週',r:'こんしゅう',m:'Minggu ini'},{f:'先週',r:'せんしゅう',m:'Minggu lalu'},{f:'来週',r:'らいしゅう',m:'Minggu depan'},{f:'一月',r:'いちがつ',m:'Januari'},{f:'二月',r:'にがつ',m:'Februari'},{f:'三月',r:'さんがつ',m:'Maret'},{f:'四月',r:'しがつ',m:'April'},{f:'五月',r:'ごがつ',m:'Mei'},{f:'六月',r:'ろくがつ',m:'Juni'},{f:'七月',r:'しちがつ',m:'Juli'},{f:'八月',r:'はちがつ',m:'Agustus'},{f:'九月',r:'くがつ',m:'September'},{f:'十月',r:'じゅうがつ',m:'Oktober'},{f:'十一月',r:'じゅういちがつ',m:'November'},{f:'十二月',r:'じゅうにがつ',m:'Desember'},{f:'春',r:'はる',m:'Musim Semi'},{f:'夏',r:'なつ',m:'Musim Panas'},{f:'秋',r:'あき',m:'Musim Gugur'},{f:'冬',r:'ふゆ',m:'Musim Dingin'},{f:'季節',r:'きせつ',m:'Musim'},
@@ -520,16 +615,12 @@
         ];
 
         const ALL_VOCAB = [...BASE_VOCAB];
-        Object.entries(KANA_POOL.hira).forEach(([kana, romaji]) => {
-            ALL_VOCAB.push({ f: kana, r: romaji, m: 'Hiragana' });
-        });
-        Object.entries(KANA_POOL.kata).forEach(([kana, romaji]) => {
-            ALL_VOCAB.push({ f: kana, r: romaji, m: 'Katakana' });
-        });
+        Object.entries(KANA_POOL.hira).forEach(([kana, romaji]) => { ALL_VOCAB.push({ f: kana, r: romaji, m: 'Hiragana' }); });
+        Object.entries(KANA_POOL.kata).forEach(([kana, romaji]) => { ALL_VOCAB.push({ f: kana, r: romaji, m: 'Katakana' }); });
 
         // --- STATE ---
-        const STORAGE_CARDS_KEY = 'jmaster_v21_cards'; 
-        const STORAGE_SETTINGS_KEY = 'jmaster_v21_settings';
+        const STORAGE_CARDS_KEY = 'jmaster_v22_cards'; 
+        const STORAGE_SETTINGS_KEY = 'jmaster_v22_settings';
 
         let cards = [];
         let settings = { newLimit: 20, reviewLimit: 50, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
@@ -685,14 +776,14 @@
                 currentCardType = 'learn';
             } else {
                 currentCard = null;
-                updateUI();
+                window.updateUI();
                 return;
             }
             setIsFlipped(false);
-            updateUI();
+            window.updateUI();
         };
 
-        const handleRate = (evalScore) => {
+        window.handleRate = (evalScore) => {
             if (!currentCard) return;
             setIsFlipped(false);
             
@@ -731,8 +822,7 @@
                     original.nextReview = Date.now() + (original.interval * 24 * 60 * 60 * 1000);
                 }
                 
-                saveCards(); 
-                saveSettings(false); 
+                saveProgress(); 
                 nextCard();
             }, 300);
         };
@@ -752,9 +842,84 @@
             activeDue = [];
             activeLearn = [];
             currentCard = null;
-            updateUI();
+            window.updateUI();
         };
 
+        const getIntervalString = (days) => {
+            if (days === 0) return '<1m';
+            if (days < 30) return `${days}d`;
+            if (days < 365) return `${Math.round(days/30)}mo`;
+            return `${Math.round(days/365)}y`;
+        };
+
+        window.updateUI = () => {
+            const remNew = Math.max(0, settings.newLimit - settings.newDoneToday);
+            const remRev = Math.max(0, settings.reviewLimit - settings.reviewDoneToday);
+            document.getElementById('stat-new').innerText = `NEW: ${remNew}`;
+            document.getElementById('stat-rev').innerText = `DUE: ${remRev}`;
+            document.getElementById('input-new-limit').value = settings.newLimit;
+            document.getElementById('input-rev-limit').value = settings.reviewLimit;
+            
+            if(!currentCard) {
+                document.getElementById('study-status').classList.remove('hidden');
+                document.getElementById('study-active').classList.add('hidden');
+                
+                if(remNew === 0 && remRev === 0) {
+                    document.getElementById('status-icon').innerText = "🎉";
+                    document.getElementById('status-title').innerText = "お疲れ様でした！";
+                    document.getElementById('status-title').classList.add('text-indigo-600', 'dark:text-pink-400');
+                    document.getElementById('status-desc').innerHTML = "Selamat! Limit kartu harianmu sudah terpenuhi.<br/><br/>Terus semangat belajarnya ya!";
+                    document.getElementById('session-buttons').classList.add('hidden'); 
+                } else {
+                    document.getElementById('status-icon').innerText = "📚";
+                    document.getElementById('status-title').innerText = "Sesi Belajar";
+                    document.getElementById('status-title').classList.remove('text-indigo-600', 'dark:text-pink-400');
+                    document.getElementById('status-desc').innerHTML = "Atur kategori kartu yang ingin di-review.";
+                    document.getElementById('session-buttons').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('study-status').classList.add('hidden');
+                document.getElementById('study-active').classList.remove('hidden');
+                
+                const displayFront = document.getElementById('display-front');
+                const labelFront = document.getElementById('card-label-front');
+                
+                displayFront.innerText = currentCard.f;
+                if (currentCard.m === 'Hiragana') labelFront.innerText = "Hiragana";
+                else if (currentCard.m === 'Katakana') labelFront.innerText = "Katakana";
+                else labelFront.innerText = "Vocab / Kanji";
+
+                displayFront.className = "font-bold text-slate-800 dark-text-main tracking-tighter text-center px-4 leading-tight transition-all duration-300";
+                if(currentCard.f.length > 12) displayFront.classList.add('text-base', 'md:text-lg');
+                else if(currentCard.f.length > 8) displayFront.classList.add('text-lg', 'md:text-xl');
+                else if(currentCard.f.length > 5) displayFront.classList.add('text-xl', 'md:text-2xl');
+                else displayFront.classList.add('text-3xl', 'md:text-4xl');
+
+                document.getElementById('display-reading').innerText = currentCard.r;
+                document.getElementById('display-meaning').innerText = currentCard.m;
+                
+                document.getElementById('count-new').innerText = `NEW: ${activeNew.length}`;
+                document.getElementById('count-learn').innerText = `LRN: ${activeLearn.length}`;
+                document.getElementById('count-due').innerText = `DUE: ${activeDue.length}`;
+
+                const totalLeft = activeNew.length + activeDue.length + activeLearn.length;
+                const progressPercent = totalQueueSize > 0 ? ((totalQueueSize - totalLeft) / totalQueueSize) * 100 : 0;
+                document.getElementById('session-progress').style.width = `${progressPercent}%`;
+
+                const ivl = currentCard.interval;
+                const ease = currentCard.ease;
+                const ivlHard = ivl === 0 ? 1 : Math.max(1, Math.round(ivl * 1.2));
+                const ivlGood = ivl === 0 ? 2 : Math.max(1, Math.round(ivl * ease));
+                const ivlEasy = ivl === 0 ? 4 : Math.max(4, Math.round(ivl * ease * 1.3));
+
+                document.getElementById('lbl-lupa').innerText = '<1m';
+                document.getElementById('lbl-sulit').innerText = getIntervalString(ivlHard);
+                document.getElementById('lbl-bagus').innerText = getIntervalString(ivlGood);
+                document.getElementById('lbl-mudah').innerText = getIntervalString(ivlEasy);
+            }
+        };
+
+        // KUIS DAN KANA
         window.startDailyQuiz = () => {
             const available = cards.filter(c => c.repetitions > 0);
             if(available.length === 0) return showToast("Review dulu kartunya!", "error");
@@ -771,7 +936,15 @@
         };
 
         const nextQuizQuestion = () => {
-            if(quizQueue.length === 0) return showQuizResult();
+            if(quizQueue.length === 0) {
+                document.getElementById('quiz-progress').style.width = `100%`;
+                setTimeout(() => {
+                    document.getElementById('quiz-active').classList.add('hidden');
+                    document.getElementById('quiz-result').classList.remove('hidden');
+                    document.getElementById('quiz-final-score').innerText = `${quizScore}/${totalQuizQuestions}`;
+                }, 500);
+                return;
+            }
             const current = quizQueue[0];
             const qCount = totalQuizQuestions - quizQueue.length + 1;
             const displayEl = document.getElementById('quiz-display');
@@ -810,16 +983,6 @@
             setTimeout(() => { quizQueue.shift(); nextQuizQuestion(); }, 600);
         };
 
-        const showQuizResult = () => {
-            document.getElementById('quiz-progress').style.width = `100%`;
-            setTimeout(() => {
-                document.getElementById('quiz-active').classList.add('hidden');
-                document.getElementById('quiz-result').classList.remove('hidden');
-                document.getElementById('quiz-final-score').innerText = `${quizScore}/${totalQuizQuestions}`;
-            }, 500);
-        };
-
-        // KANA BLITZ LOGIC
         window.startKanaQuiz = () => {
             if (!kanaConfig.hira && !kanaConfig.kata) return showToast("Pilih Kana!", "error");
             kanaCorrect = 0; kanaWrong = 0; kanaTime = 0; kanaQuestionCount = 0;
@@ -865,9 +1028,7 @@
             clearInterval(kanaInterval);
             const total = kanaCorrect + kanaWrong;
             const accuracy = total > 0 ? Math.round((kanaCorrect / total) * 100) : 0;
-            
-            const m = Math.floor(kanaTime / 60); 
-            const s = kanaTime % 60;
+            const m = Math.floor(kanaTime / 60); const s = kanaTime % 60;
             
             document.getElementById('res-time').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
             document.getElementById('res-total').innerText = total;
@@ -878,126 +1039,26 @@
             document.getElementById('kana-result').classList.remove('hidden');
         };
 
-        window.switchView = (target) => {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(`view-${target}`).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('nav-active');
-            });
-            const map = { 'study': 'nav-study', 'quiz': 'nav-study', 'settings': 'nav-study', 'kana': 'nav-kana', 'list': 'nav-list' };
-            const btn = document.getElementById(map[target]);
-            if(btn) {
-                btn.classList.add('nav-active');
-            }
-
-            if(target === 'kana') {
-                document.getElementById('kana-setup').classList.remove('hidden');
-                document.getElementById('kana-active').classList.add('hidden');
-                document.getElementById('kana-result').classList.add('hidden');
-                clearInterval(kanaInterval);
-            }
-            if(target === 'quiz') {
-                document.getElementById('quiz-setup').classList.remove('hidden');
-                document.getElementById('quiz-active').classList.add('hidden');
-                document.getElementById('quiz-result').classList.add('hidden');
-            }
-            if(target === 'list') { document.getElementById('search-input').value = ""; renderList(); }
-            if(target === 'study') {
-                updateSessionSelectionUI();
-                updateUI();
-            }
-        };
-
-        const getIntervalString = (days) => {
-            if (days === 0) return '<1m';
-            if (days < 30) return `${days}d`;
-            if (days < 365) return `${Math.round(days/30)}mo`;
-            return `${Math.round(days/365)}y`;
-        };
-
-        const updateUI = () => {
-            const remNew = Math.max(0, settings.newLimit - settings.newDoneToday);
-            const remRev = Math.max(0, settings.reviewLimit - settings.reviewDoneToday);
-            document.getElementById('stat-new').innerText = `NEW: ${remNew}`;
-            document.getElementById('stat-rev').innerText = `DUE: ${remRev}`;
-            document.getElementById('input-new-limit').value = settings.newLimit;
-            document.getElementById('input-rev-limit').value = settings.reviewLimit;
-            
-            if(!currentCard) {
-                document.getElementById('study-status').classList.remove('hidden');
-                document.getElementById('study-active').classList.add('hidden');
-                
-                if(remNew === 0 && remRev === 0) {
-                    document.getElementById('status-icon').innerText = "🎉";
-                    document.getElementById('status-title').innerText = "お疲れ様でした！";
-                    document.getElementById('status-title').classList.add('text-indigo-600', 'dark:text-pink-400');
-                    document.getElementById('status-desc').innerHTML = "Selamat! Limit kartu harianmu sudah terpenuhi.<br/><br/>Terus semangat belajarnya ya, ingat tujuan besarmu!";
-                    document.getElementById('session-buttons').classList.add('hidden'); 
-                } else {
-                    document.getElementById('status-icon').innerText = "📚";
-                    document.getElementById('status-title').innerText = "Sesi Belajar";
-                    document.getElementById('status-title').classList.remove('text-indigo-600', 'dark:text-pink-400');
-                    document.getElementById('status-desc').innerHTML = "Atur kategori kartu yang ingin di-review.";
-                    document.getElementById('session-buttons').classList.remove('hidden');
-                }
-            } else {
-                document.getElementById('study-status').classList.add('hidden');
-                document.getElementById('study-active').classList.remove('hidden');
-                
-                const displayFront = document.getElementById('display-front');
-                const labelFront = document.getElementById('card-label-front');
-                
-                displayFront.innerText = currentCard.f;
-                
-                if (currentCard.m === 'Hiragana') labelFront.innerText = "Hiragana";
-                else if (currentCard.m === 'Katakana') labelFront.innerText = "Katakana";
-                else labelFront.innerText = "Vocab / Kanji";
-
-                displayFront.className = "font-bold text-slate-800 dark-text-main tracking-tighter text-center px-4 leading-tight transition-all duration-300";
-                if(currentCard.f.length > 12) displayFront.classList.add('text-base', 'md:text-lg');
-                else if(currentCard.f.length > 8) displayFront.classList.add('text-lg', 'md:text-xl');
-                else if(currentCard.f.length > 5) displayFront.classList.add('text-xl', 'md:text-2xl');
-                else displayFront.classList.add('text-3xl', 'md:text-4xl');
-
-                document.getElementById('display-reading').innerText = currentCard.r;
-                document.getElementById('display-meaning').innerText = currentCard.m;
-                
-                // UPDATE ANKI QUEUE NUMBERS
-                document.getElementById('count-new').innerText = `NEW: ${activeNew.length}`;
-                document.getElementById('count-learn').innerText = `LRN: ${activeLearn.length}`;
-                document.getElementById('count-due').innerText = `DUE: ${activeDue.length}`;
-
-                const totalLeft = activeNew.length + activeDue.length + activeLearn.length;
-                const progressPercent = totalQueueSize > 0 ? ((totalQueueSize - totalLeft) / totalQueueSize) * 100 : 0;
-                document.getElementById('session-progress').style.width = `${progressPercent}%`;
-
-                // UPDATE DYNAMIC INTERVAL LABELS FOR SRS BUTTONS
-                const ivl = currentCard.interval;
-                const ease = currentCard.ease;
-                const isNew = currentCard.repetitions === 0;
-
-                const ivlHard = ivl === 0 ? 1 : Math.max(1, Math.round(ivl * 1.2));
-                const ivlGood = ivl === 0 ? 2 : Math.max(1, Math.round(ivl * ease));
-                const ivlEasy = ivl === 0 ? 4 : Math.max(4, Math.round(ivl * ease * 1.3));
-
-                document.getElementById('lbl-lupa').innerText = '<1m';
-                document.getElementById('lbl-sulit').innerText = getIntervalString(ivlHard);
-                document.getElementById('lbl-bagus').innerText = getIntervalString(ivlGood);
-                document.getElementById('lbl-mudah').innerText = getIntervalString(ivlEasy);
-            }
-        };
-
         window.saveSettings = (sh = true) => {
             settings.newLimit = parseInt(document.getElementById('input-new-limit').value) || 20;
             settings.reviewLimit = parseInt(document.getElementById('input-rev-limit').value) || 50;
-            localStorage.setItem(STORAGE_SETTINGS_KEY, JSON.stringify(settings));
-            if(sh) { showToast("Simpan!", "success"); switchView('study'); }
+            saveProgress();
+            if(sh) { showToast("Pengaturan Disimpan!", "success"); window.switchView('study'); }
         };
 
-        const saveCards = () => localStorage.setItem(STORAGE_CARDS_KEY, JSON.stringify(cards));
-        window.resetCard = (id) => { if(confirm("Reset kartu?")) { const c = cards.find(x => x.id === id); c.repetitions = 0; c.interval = 0; c.ease = 2.5; c.nextReview = 0; saveCards(); renderList(); } };
-        window.resetAllData = () => { if(confirm("Hapus semua data?")) { localStorage.clear(); location.reload(); } };
+        window.resetCard = (id) => { 
+            if(confirm("Reset kartu?")) { 
+                const c = cards.find(x => x.id === id); c.repetitions = 0; c.interval = 0; c.ease = 2.5; c.nextReview = 0; 
+                saveProgress(); window.renderList(); 
+            } 
+        };
+
+        window.resetAllData = () => { 
+            if(confirm("Hapus semua progress?")) { 
+                cards = ALL_VOCAB.map(k => ({ ...k, repetitions: 0, interval: 0, ease: 2.5, nextReview: 0, id: Math.random().toString(36).substr(2, 9) }));
+                saveProgress(); window.switchView('study'); showToast("Data Direset", "success");
+            } 
+        };
 
         window.renderList = () => {
             const list = document.getElementById('card-list');
@@ -1027,14 +1088,6 @@
                 list.innerHTML += `<div class="text-center text-[9px] font-bold text-slate-400 dark:text-slate-500 py-4 uppercase tracking-widest">+ ${filteredCards.length - displayLimit} lainnya (Gunakan fitur cari)</div>`;
             }
         };
-
-        const showToast = (msg, type) => {
-            const t = document.getElementById('toast'); t.innerText = msg;
-            t.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all z-50 whitespace-nowrap ${type === 'error' ? 'bg-rose-500' : 'bg-slate-900 dark:bg-pink-600'}`;
-            t.classList.remove('opacity-0'); setTimeout(() => t.classList.add('opacity-0'), 2500);
-        };
-
-        init();
     </script>
 </body>
 </html>

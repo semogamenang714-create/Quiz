@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0B1120">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>J-Master SRS Pro | 1000+ Cards</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -264,46 +262,43 @@
                 </div>
             </section>
 
-            <!-- KANA BLITZ / QUIZ / LIST / SETTINGS BLOCKS -->
-            <section id="view-quiz" class="view h-full flex flex-col hidden animate-fade">
-                <div id="quiz-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
-                    <div class="text-5xl mb-6 hover:scale-110 transition-transform">⚡</div>
-                    <h2 class="text-xl font-black text-white uppercase mb-6">Vocab Quiz</h2>
-                    <button onclick="startDailyQuiz()" class="glass bg-pink-600 text-white text-[11px] font-black uppercase px-12 py-4 rounded-2xl border-pink-400/50 shadow-xl">Mulai Quiz</button>
-                </div>
-                <div id="quiz-active" class="h-full flex flex-col hidden">
-                    <div id="quiz-display" class="text-3xl font-black text-white text-center my-auto px-4 leading-tight">--</div>
-                    <div id="quiz-options" class="grid grid-cols-2 gap-3 mb-10 shrink-0"></div>
-                </div>
-                <div id="quiz-result" class="h-full flex flex-col items-center justify-center hidden">
-                    <div class="text-4xl mb-4 animate-bounce">🏆</div>
-                    <div id="quiz-final-score" class="text-2xl font-black text-white">0/0</div>
-                    <button onclick="switchView('study')" class="mt-8 bg-purple-600 text-white px-10 py-3 rounded-xl text-[10px] font-black uppercase">Kembali</button>
-                </div>
-            </section>
-
+            <!-- KANA BLITZ UPDATED -->
             <section id="view-kana" class="view h-full flex flex-col hidden animate-fade">
                 <div id="kana-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
                     <div class="w-16 h-16 glass rounded-[1.5rem] flex items-center justify-center mb-6 text-3xl text-white border-purple-500/30">あ</div>
-                    <h2 class="text-lg font-black text-white uppercase mb-8">Kana Blitz</h2>
+                    <h2 class="text-lg font-black text-white uppercase mb-8">Kana & Kanji Blitz</h2>
                     <div class="glass p-3.5 rounded-3xl w-full space-y-2 mb-8 border-purple-800/40">
                         <button onclick="toggleKana('hira')" id="btn-hira" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-700/50 bg-slate-800/40 text-[11px] font-black text-slate-300">HIRAGANA (あ) <span id="icon-hira" class="hidden text-pink-400">✓</span></button>
                         <button onclick="toggleKana('kata')" id="btn-kata" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-700/50 bg-slate-800/40 text-[11px] font-black text-slate-300">KATAKANA (ア) <span id="icon-kata" class="hidden text-pink-400">✓</span></button>
+                        <button onclick="toggleKana('kanji')" id="btn-kanji" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-700/50 bg-slate-800/40 text-[11px] font-black text-slate-300">KANJI (READING) <span id="icon-kanji" class="hidden text-pink-400">✓</span></button>
                     </div>
-                    <button onclick="startKanaQuiz()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-2xl text-[10px] font-black uppercase shadow-md border-pink-500/50">Mulai Kuis</button>
+                    <button onclick="startKanaQuiz()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-2xl text-[10px] font-black uppercase shadow-md border-pink-500/50">Mulai Blitz</button>
                 </div>
+                
                 <div id="kana-active" class="h-full flex flex-col hidden">
-                    <div id="kana-timer" class="text-center font-bold text-pink-400 text-sm mt-4">0:00</div>
+                    <div class="flex justify-between items-center mt-4 px-2">
+                        <div id="kana-timer" class="font-bold text-pink-400 text-lg">0:00</div>
+                        <button onclick="stopKanaQuiz()" class="bg-rose-600/20 text-rose-400 border border-rose-500/30 px-5 py-1.5 rounded-full text-[10px] font-black uppercase active:scale-90 transition-all">Stop</button>
+                    </div>
                     <div id="kana-display" class="text-8xl font-black text-white text-center my-auto">--</div>
                     <div id="kana-options" class="grid grid-cols-2 gap-3 mb-10 shrink-0"></div>
                 </div>
-                <div id="kana-result" class="h-full flex flex-col items-center justify-center hidden">
-                    <div id="res-time" class="text-lg font-black text-pink-400">Waktu: --</div>
-                    <div id="res-total" class="text-white mt-2">Skor: --</div>
-                    <button onclick="switchView('kana')" class="mt-8 bg-purple-600 text-white px-10 py-3 rounded-xl text-[10px] font-black uppercase">Main Lagi</button>
+
+                <div id="kana-result" class="h-full flex flex-col items-center justify-center hidden text-center animate-fade">
+                    <div class="text-5xl mb-4">🏆</div>
+                    <h3 class="text-white font-black text-xl mb-6 uppercase">Hasil Blitz</h3>
+                    <div class="glass w-full p-6 rounded-3xl space-y-3 mb-8 border-purple-500/20">
+                        <div class="flex justify-between text-xs"><span class="text-slate-400">WAKTU</span><span id="res-time" class="text-white font-bold">0:00</span></div>
+                        <div class="flex justify-between text-xs"><span class="text-emerald-400">BENAR</span><span id="res-correct" class="text-emerald-400 font-bold">0</span></div>
+                        <div class="flex justify-between text-xs"><span class="text-rose-400">SALAH</span><span id="res-wrong" class="text-rose-400 font-bold">0</span></div>
+                        <div class="h-px bg-slate-700/50 my-2"></div>
+                        <div class="flex justify-between text-sm font-black"><span class="text-fuchsia-400">AKURASI</span><span id="res-accuracy" class="text-fuchsia-400">0%</span></div>
+                    </div>
+                    <button onclick="switchView('kana')" class="w-full bg-purple-600 text-white py-4 rounded-2xl text-[10px] font-black uppercase shadow-xl active:scale-95 transition-all">Main Lagi</button>
                 </div>
             </section>
 
+            <!-- STATS/LIST & SETTINGS -->
             <section id="view-list" class="view h-full flex flex-col hidden animate-fade">
                 <div class="mb-2 shrink-0 px-1">
                     <h2 class="text-sm font-black text-white mb-3">Statistik & Riwayat</h2>
@@ -344,7 +339,7 @@
         <!-- Navbar Modern -->
         <nav id="app-nav" class="mt-auto mb-2 mx-auto w-[92%] glass rounded-full p-1 flex gap-1 shrink-0 z-30 shadow-lg hidden">
             <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5 nav-active"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="text-[8px] font-black uppercase mt-0.5">Study</span></button>
-            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="text-[8px] font-black uppercase mt-0.5">Kana</span></button>
+            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="text-[8px] font-black uppercase mt-0.5">Blitz</span></button>
             <button onclick="switchView('list')" id="nav-list" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span class="text-[8px] font-black uppercase mt-0.5">List</span></button>
         </nav>
 
@@ -354,39 +349,27 @@
     <script>
         // --- 1000+ DATABASE LENGKAP ---
         const KANA_POOL = {
-            hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
-            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' }
+            hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','mo':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
+            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','て':'te','と':'to','ナ':'na','に':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ひ':'hi','フ':'fu','へ':'he','ほ':'ho','マ':'ma','み':'mi','ム':'mu','め':'me','モ':'mo','ヤ':'ya','ゆ':'yu','ヨ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' }
         };
 
         const BASE_DATABASE = [
-            // SAPAAN
             {f:'こんにちは',r:'Konnichiwa',m:'Halo / Selamat siang'},{f:'おはようございます',r:'Ohayou gozaimasu',m:'Selamat pagi'},{f:'こんばんは',r:'Konbanwa',m:'Selamat malam'},{f:'おやすみなさい',r:'Oyasuminasai',m:'Selamat tidur'},{f:'さようなら',r:'Sayounara',m:'Sampai jumpa'},
-            // TUBUH (KAIGO)
             {f:'頭',r:'あたま',m:'Kepala'},{f:'顔',r:'かお',m:'Wajah'},{f:'目',r:'め',m:'Mata'},{f:'耳',r:'みみ',m:'Telinga'},{f:'鼻',r:'はな',m:'Hidung'},{f:'口',r:'くち',m:'Mulut'},{f:'首',r:'くび',m:'Leher'},{f:'肩',r:'かた',m:'Bahu'},{f:'腕',r:'うで',m:'Lengan'},{f:'手',r:'て',m:'Tangan'},{f:'指',r:'ゆび',m:'Jari'},{f:'胸',r:'むね',m:'Dada'},{f:'腹',r:'はら',m:'Perut'},{f:'腰',r:'こし',m:'Pinggang'},{f:'背中',r:'せなか',m:'Punggung'},{f:'足',r:'あし',m:'Kaki'},{f:'膝',r:'ひざ',m:'Lutut'},
-            // MEDIS & KEPERAWATAN
             {f:'介護',r:'かいご',m:'Perawatan (Kaigo)'},{f:'高齢者',r:'こうれいしゃ',m:'Lansia'},{f:'患者',r:'かんじゃ',m:'Pasien'},{f:'車椅子',r:'くるまいす',m:'Kursi roda'},{f:'杖',r:'つえ',m:'Tongkat'},{f:'血圧',r:'けつあつ',m:'Tekanan darah'},{f:'体温',r:'たいおん',m:'Suhu tubuh'},{f:'おむつ',r:'おむつ',m:'Popok'},{f:'入浴',r:'にゅうよく',m:'Mandi'},{f:'食事',r:'しょくじ',m:'Makan'},{f:'水分',r:'すいぶん',m:'Cairan'},{f:'脈拍',r:'みゃくはく',m:'Denyut nadi'},{f:'包帯',r:'ほうたい',m:'Perban'},{f:'薬',r:'くすり',m:'Obat'},{f:'点滴',r:'てんてき',m:'Infus'},{f:'便',r:'べん',m:'Feses / BAB'},{f:'尿',r:'にょう',m:'Urin / BAK'},
-            // KATA KERJA LENGKAP
             {f:'食べる',r:'たべる',m:'Makan'},{f:'飲む',r:'のむ',m:'Minum'},{f:'行く',r:'いく',m:'Pergi'},{f:'来る',r:'くる',m:'Datang'},{f:'帰る',r:'かえる',m:'Pulang'},{f:'見る',r:'みる',m:'Melihat'},{f:'聞く',r:'きく',m:'Mendengar'},{f:'書く',r:'かく',m:'Menulis'},{f:'読む',r:'よむ',m:'Membaca'},{f:'買う',r:'かう',m:'Membeli'},{f:'座る',r:'すわる',m:'Duduk'},{f:'立つ',r:'たつ',m:'Berdiri'},{f:'寝る',r:'ねる',m:'Tidur'},{f:'起きる',r:'おきる',m:'Bangun'},{f:'歩く',r:'あるく',m:'Berjalan'},{f:'走る',r:'はしる',m:'Berlari'},{f:'洗う',r:'あらう',m:'Mencuci'},{f:'磨く',r:'みがく',m:'Menggosok'},{f:'手伝う',r:'てつだう',m:'Membantu'},{f:'運ぶ',r:'はこぶ',m:'Membawa / Mengangkut'},{f:'変える',r:'かえる',m:'Mengubah'},{f:'着る',r:'きる',m:'Memakai baju'},{f:'脱ぐ',r:'ぬぐ',m:'Melepas baju'},
-            // KATA SIFAT
             {f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'暑い',r:'あつい',m:'Panas (suhu)'},{f:'熱い',r:'あつい',m:'Panas (benda)'},{f:'寒い',r:'さむい',m:'Dingin (suhu)'},{f:'冷たい',r:'つめたい',m:'Dingin (benda)'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'古い',r:'ふるい',m:'Lama'},{f:'高い',r:'たかい',m:'Tinggi / Mahal'},{f:'安い',r:'やすい',m:'Murah'},{f:'痛い',r:'いたい',m:'Sakit / Nyeri'},{f:'苦しい',r:'くるしい',m:'Sesak / Menderita'},{f:'眠い',r:'ねむい',m:'Mengantuk'},{f:'速い',r:'はやい',m:'Cepat'},{f:'遅い',r:'おそい',m:'Lambat'},
-            // BENDA & TEMPAT
             {f:'病院',r:'びょういん',m:'Rumah Sakit'},{f:'薬局',r:'やっきょく',m:'Apotek'},{f:'部屋',r:'へや',m:'Kamar'},{f:'トイレ',r:'といれ',m:'Toilet'},{f:'台所',r:'だいどころ',m:'Dapur'},{f:'学校',r:'がっこう',m:'Sekolah'},{f:'駅',r:'えき',m:'Stasiun'},{f:'空港',r:'くうこう',m:'Bandara'},{f:'銀行',r:'ぎんこう',m:'Bank'},{f:'郵便局',r:'ゆうびんきょく',m:'Kantor Pos'},{f:'公園',r:'こうえん',m:'Taman'},{f:'机',r:'つくえ',m:'Meja'},{f:'椅子',r:'いす',m:'Kursi'},{f:'靴',r:'くつ',m:'Sepatu'},{f:'眼鏡',r:'めがね',m:'Kacamata'},{f:'財布',r:'さいふ',m:'Dompet'},{f:'時計',r:'とけい',m:'Jam'},
-            // KELUARGA & ORANG
             {f:'お父さん',r:'おとうさん',m:'Ayah'},{f:'お母さん',r:'おかあさん',m:'Ibu'},{f:'おじいさん',r:'おじいさん',m:'Kakek'},{f:'おばあさん',r:'おばあさん',m:'Nenek'},{f:'兄',r:'あに',m:'Kakak Laki-laki'},{f:'姉',r:'あね',m:'Kakak Perempuan'},{f:'友達',r:'ともだち',m:'Teman'},{f:'先生',r:'せんせい',m:'Guru'},{f:'看護師',r:'かんごし',m:'Perawat'},{f:'医者',r:'いしゃ',m:'Dokter'},
-            // HEWAN & ALAM
             {f:'犬',r:'いぬ',m:'Anjing'},{f:'猫',r:'ねこ',m:'Kucing'},{f:'魚',r:'さかな',m:'Ikan'},{f:'鳥',r:'とり',m:'Burung'},{f:'太陽',r:'たいよう',m:'Matahari'},{f:'空',r:'そら',m:'Langit'},{f:'雨',r:'あめ',m:'Hujan'},{f:'雪',r:'ゆき',m:'Salju'},{f:'風',r:'かぜ',m:'Angin'},
-            // WARNA
             {f:'赤',r:'あか',m:'Merah'},{f:'青',r:'あおい',m:'Biru'},{f:'黒',r:'くろ',m:'Hitam'},{f:'白',r:'しろ',m:'Putih'},{f:'黄色',r:'きいろ',m:'Kuning'},{f:'緑',r:'みどり',m:'Hijau'},
-            // ANGKA
             {f:'一',r:'いち',m:'Satu'},{f:'二',r:'に',m:'Dua'},{f:'三',r:'さん',m:'Tiga'},{f:'四',r:'よん',m:'Empat'},{f:'五',r:'ご',m:'Lima'},{f:'十',r:'じゅう',m:'Sepuluh'},{f:'百',r:'ひゃく',m:'Seratus'},{f:'千',r:'せん',m:'Seribu'},{f:'万',r:'まん',m:'Sepuluh Ribu'},
-            // HARI & WAKTU
             {f:'今日',r:'きょう',m:'Hari ini'},{f:'明日',r:'あした',m:'Besok'},{f:'昨日',r:'きのう',m:'Kemarin'},{f:'月曜日',r:'げつようび',m:'Senin'},{f:'火曜日',r:'かようび',m:'Selasa'},{f:'水曜日',r:'すいようび',m:'Rabu'},{f:'木曜日',r:'もくようび',m:'Kamis'},{f:'金曜日',r:'きんようび',m:'Jumat'},{f:'土曜日',r:'どようび',m:'Sabtu'},{f:'日曜日',r:'にちようび',m:'Minggu'}
         ];
 
-        // MENGHASILKAN 1000+ KARTU OTOMATIS (MENGGABUNGKAN SEMUA KANA & DATABASE)
         const ALL_VOCAB_MASTER = [...BASE_DATABASE];
-        Object.entries(KANA_POOL.hira).forEach(([kana, romaji]) => { ALL_VOCAB_MASTER.push({ f: kana, r: romaji, m: 'Hiragana' }); });
-        Object.entries(KANA_POOL.kata).forEach(([kana, romaji]) => { ALL_VOCAB_MASTER.push({ f: kana, r: romaji, m: 'Katakana' }); });
+        Object.entries(KANA_POOL.hira).forEach(([k, r]) => ALL_VOCAB_MASTER.push({ f: k, r: r, m: 'Hiragana' }));
+        Object.entries(KANA_POOL.kata).forEach(([k, r]) => ALL_VOCAB_MASTER.push({ f: k, r: r, m: 'Katakana' }));
 
         // --- SISTEM LOGIN & DATA LOKAL ---
         let currentUsername = null;
@@ -394,11 +377,10 @@
         let settings = { newLimit: 20, reviewLimit: 50, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
         let activeNew = [], activeDue = [], activeLearn = [], currentCard = null, currentCardType = '', totalQueueSize = 0, isFlipped = false;
         let sessionConfig = { vocab: true, hira: false, kata: false };
-        let kanaConfig = { hira: true, kata: false };
-        let kanaCorrect = 0, kanaWrong = 0, kanaTime = 0, kanaInterval = null, currentKanaTarget = null, kanaQuestionCount = 0, isProcessing = false;
+        let kanaConfig = { hira: true, kata: false, kanji: false };
+        let blitzStats = { correct: 0, wrong: 0, time: 0, interval: null, currentTarget: null, isProcessing: false };
 
         const getWIBDate = () => new Date().toLocaleDateString("en-US", {timeZone: "Asia/Jakarta"});
-
         const showToast = (msg, type) => {
             const t = document.getElementById('toast'); t.innerText = msg;
             t.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all z-50 whitespace-nowrap ${type === 'error' ? 'bg-rose-500' : 'bg-pink-600'}`;
@@ -416,10 +398,8 @@
             const pass = document.getElementById('reg-password').value;
             if(code !== "JAPAN123") return showToast("Kode Admin Salah!", "error");
             if(!user || !pass) return showToast("Lengkapi data!", "error");
-
             let accounts = JSON.parse(localStorage.getItem('jmaster_accounts') || '{}');
             if(accounts[user]) return showToast("Username sudah ada!", "error");
-
             accounts[user] = { password: pass };
             localStorage.setItem('jmaster_accounts', JSON.stringify(accounts));
             showToast("Akun " + user + " Berhasil Dibuat!", "success");
@@ -443,27 +423,17 @@
         const loadUserData = (username) => {
             const rawData = localStorage.getItem('jmaster_data_' + username);
             const savedData = rawData ? JSON.parse(rawData) : { cards: [], settings: null };
-            
-            // LOGIKA MERGE: Hanya tambah kosa kata baru ke progres lama
             let finalCards = savedData.cards || [];
             const existingKeys = new Set(finalCards.map(c => c.f));
-
             ALL_VOCAB_MASTER.forEach(item => {
                 if(!existingKeys.has(item.f)) {
-                    finalCards.push({ 
-                        ...item, repetitions: 0, interval: 0, ease: 2.5, nextReview: 0, id: Math.random().toString(36).substr(2, 9) 
-                    });
+                    finalCards.push({ ...item, repetitions: 0, interval: 0, ease: 2.5, nextReview: 0, id: Math.random().toString(36).substr(2, 9) });
                 }
             });
-
             cards = finalCards;
             settings = savedData.settings || { newLimit: 20, reviewLimit: 50, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
-            
             const today = getWIBDate();
-            if(settings.dailyReset !== today) {
-                settings.dailyReset = today; settings.newDoneToday = 0; settings.reviewDoneToday = 0;
-            }
-
+            if(settings.dailyReset !== today) { settings.dailyReset = today; settings.newDoneToday = 0; settings.reviewDoneToday = 0; }
             saveUserData();
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('app-header').classList.remove('hidden');
@@ -472,11 +442,7 @@
             switchView('study');
         };
 
-        const saveUserData = () => {
-            if(!currentUsername) return;
-            localStorage.setItem('jmaster_data_' + currentUsername, JSON.stringify({ cards, settings }));
-        };
-
+        const saveUserData = () => { if(!currentUsername) return; localStorage.setItem('jmaster_data_' + currentUsername, JSON.stringify({ cards, settings })); };
         window.logout = () => { localStorage.removeItem('jmaster_session'); location.reload(); };
 
         // --- SRS LOGIC ---
@@ -501,7 +467,6 @@
                 if (!isH && !isK && sessionConfig.vocab) return true;
                 return false;
             });
-
             activeDue = target.filter(c => c.repetitions > 0 && c.nextReview <= now).slice(0, settings.reviewLimit - settings.reviewDoneToday);
             activeNew = target.filter(c => c.repetitions === 0).slice(0, settings.newLimit - settings.newDoneToday);
             activeLearn = [];
@@ -526,7 +491,6 @@
                 if (currentCardType === 'learn') activeLearn.shift();
                 else if (currentCardType === 'new') activeNew.shift();
                 else activeDue.shift();
-
                 if(evalScore === 0) { original.interval = 0; activeLearn.push(currentCard); } 
                 else {
                     if(original.repetitions === 0) settings.newDoneToday++; else settings.reviewDoneToday++;
@@ -581,70 +545,72 @@
         };
         const flipCard = () => { if(!isFlipped && currentCard) setIsFlipped(true); };
         const endSessionEarly = () => { activeNew = []; activeDue = []; activeLearn = []; currentCard = null; updateUI(); };
+
+        // --- UPDATED BLITZ LOGIC ---
         const toggleKana = (t) => { kanaConfig[t] = !kanaConfig[t]; updateKanaUI(); };
         const updateKanaUI = () => {
             document.getElementById('btn-hira').classList.toggle('btn-glow-active', kanaConfig.hira);
             document.getElementById('btn-kata').classList.toggle('btn-glow-active', kanaConfig.kata);
+            document.getElementById('btn-kanji').classList.toggle('btn-glow-active', kanaConfig.kanji);
             document.getElementById('icon-hira').classList.toggle('hidden', !kanaConfig.hira);
             document.getElementById('icon-kata').classList.toggle('hidden', !kanaConfig.kata);
+            document.getElementById('icon-kanji').classList.toggle('hidden', !kanaConfig.kanji);
         };
 
         window.startKanaQuiz = () => {
-            if(!kanaConfig.hira && !kanaConfig.kata) return showToast("Pilih Kana!", "error");
-            kanaCorrect = 0; kanaWrong = 0; kanaTime = 0;
+            if(!kanaConfig.hira && !kanaConfig.kata && !kanaConfig.kanji) return showToast("Pilih kategori!", "error");
+            blitzStats = { correct: 0, wrong: 0, time: 0, interval: null, currentTarget: null, isProcessing: false };
             document.getElementById('kana-setup').classList.add('hidden');
             document.getElementById('kana-active').classList.remove('hidden');
-            kanaInterval = setInterval(() => { kanaTime++; const m=Math.floor(kanaTime/60), s=kanaTime%60; document.getElementById('kana-timer').innerText = `${m}:${s<10?'0':''}${s}`; }, 1000);
-            nextKana();
+            document.getElementById('kana-result').classList.add('hidden');
+            blitzStats.interval = setInterval(() => {
+                blitzStats.time++;
+                const m = Math.floor(blitzStats.time/60), s = blitzStats.time%60;
+                document.getElementById('kana-timer').innerText = `${m}:${s<10?'0':''}${s}`;
+            }, 1000);
+            nextBlitz();
         };
 
-        const nextKana = () => {
-            let pool = {}; if(kanaConfig.hira) pool = {...pool, ...KANA_POOL.hira}; if(kanaConfig.kata) pool = {...pool, ...KANA_POOL.kata};
-            const keys = Object.keys(pool); const char = keys[Math.floor(Math.random()*keys.length)]; currentKanaTarget = pool[char];
-            document.getElementById('kana-display').innerText = char;
-            let opts = [currentKanaTarget]; while(opts.length<4) { const r = Object.values(pool)[Math.floor(Math.random()*keys.length)]; if(!opts.includes(r)) opts.push(r); }
+        const nextBlitz = () => {
+            let pool = [];
+            if(kanaConfig.hira) Object.entries(KANA_POOL.hira).forEach(([k,v]) => pool.push({f:k, a:v}));
+            if(kanaConfig.kata) Object.entries(KANA_POOL.kata).forEach(([k,v]) => pool.push({f:k, a:v}));
+            if(kanaConfig.kanji) BASE_DATABASE.forEach(k => pool.push({f:k.f, a:k.r}));
+            
+            blitzStats.currentTarget = pool[Math.floor(Math.random()*pool.length)];
+            document.getElementById('kana-display').innerText = blitzStats.currentTarget.f;
+            
+            let opts = [blitzStats.currentTarget.a];
+            while(opts.length < 4) {
+                let r = pool[Math.floor(Math.random()*pool.length)].a;
+                if(!opts.includes(r)) opts.push(r);
+            }
             opts.sort(() => Math.random() - 0.5);
-            document.getElementById('kana-options').innerHTML = opts.map(o => `<button onclick="checkKana(event, '${o}')" class="quiz-opt-btn glass py-5 rounded-2xl font-black text-white text-sm uppercase">${o}</button>`).join('');
-            isProcessing = false;
+            document.getElementById('kana-options').innerHTML = opts.map(o => `
+                <button onclick="checkBlitz(event, '${o}')" class="quiz-opt-btn glass py-5 rounded-2xl font-black text-white text-[11px] uppercase">${o}</button>
+            `).join('');
+            blitzStats.isProcessing = false;
         };
 
-        const checkKana = (e, o) => {
-            if(isProcessing) return; isProcessing = true;
-            if(o === currentKanaTarget) { kanaCorrect++; e.target.classList.add('ans-correct'); } else { kanaWrong++; e.target.classList.add('ans-wrong'); }
-            setTimeout(nextKana, 400);
+        window.checkBlitz = (e, o) => {
+            if(blitzStats.isProcessing) return; blitzStats.isProcessing = true;
+            if(o === blitzStats.currentTarget.a) { blitzStats.correct++; e.target.classList.add('ans-correct'); } 
+            else { blitzStats.wrong++; e.target.classList.add('ans-wrong'); }
+            setTimeout(nextBlitz, 400);
         };
 
-        const stopKanaQuiz = () => {
-            clearInterval(kanaInterval);
+        window.stopKanaQuiz = () => {
+            clearInterval(blitzStats.interval);
             document.getElementById('kana-active').classList.add('hidden');
             document.getElementById('kana-result').classList.remove('hidden');
-            document.getElementById('res-time').innerText = "Waktu: " + document.getElementById('kana-timer').innerText;
-            document.getElementById('res-total').innerText = "Benar: " + kanaCorrect;
-        };
-
-        window.startDailyQuiz = () => {
-            const available = cards.filter(c => c.repetitions > 0);
-            if(available.length === 0) return showToast("Review kartu dulu!", "error");
-            quizQueue = available.sort(() => Math.random() - 0.5).slice(0, 10);
-            totalQuizQuestions = quizQueue.length; quizScore = 0;
-            document.getElementById('quiz-setup').classList.add('hidden');
-            document.getElementById('quiz-active').classList.remove('hidden');
-            nextQuiz();
-        };
-
-        const nextQuiz = () => {
-            if(quizQueue.length === 0) { document.getElementById('quiz-active').classList.add('hidden'); document.getElementById('quiz-result').classList.remove('hidden'); document.getElementById('quiz-final-score').innerText = `${quizScore}/${totalQuizQuestions}`; return; }
-            const c = quizQueue[0]; document.getElementById('quiz-display').innerText = c.f;
-            let opts = [c.m]; while(opts.length<4) { const r = cards[Math.floor(Math.random()*cards.length)].m; if(!opts.includes(r)) opts.push(r); }
-            opts.sort(() => Math.random() - 0.5);
-            document.getElementById('quiz-options').innerHTML = opts.map(o => `<button onclick="checkQuiz(event, '${o}')" class="quiz-opt-btn glass p-3 h-20 rounded-2xl font-black text-white text-[10px] uppercase leading-tight">${o}</button>`).join('');
-            isProcessing = false;
-        };
-
-        const checkQuiz = (e, o) => {
-            if(isProcessing) return; isProcessing = true;
-            if(o === quizQueue[0].m) { quizScore++; e.target.classList.add('ans-correct'); } else e.target.classList.add('ans-wrong');
-            setTimeout(() => { quizQueue.shift(); nextQuiz(); }, 400);
+            
+            const total = blitzStats.correct + blitzStats.wrong;
+            const acc = total === 0 ? 0 : Math.round((blitzStats.correct / total) * 100);
+            
+            document.getElementById('res-time').innerText = document.getElementById('kana-timer').innerText;
+            document.getElementById('res-correct').innerText = blitzStats.correct;
+            document.getElementById('res-wrong').innerText = blitzStats.wrong;
+            document.getElementById('res-accuracy').innerText = acc + '%';
         };
 
         window.saveSettings = () => { 
@@ -657,7 +623,7 @@
             const list = document.getElementById('card-list');
             const search = document.getElementById('search-input').value.toLowerCase();
             const filtered = cards.filter(c => c.f.includes(search) || c.m.toLowerCase().includes(search));
-            list.innerHTML = filtered.slice(0, 150).map(c => `
+            list.innerHTML = filtered.slice(0, 100).map(c => `
                 <div class="glass p-4 rounded-3xl flex justify-between items-center border-purple-500/10 mb-2">
                     <div><div class="font-bold text-white text-sm">${c.f}</div><div class="text-[8px] text-slate-400 uppercase">${c.r} • ${c.m}</div></div>
                     <div class="text-[6px] border border-purple-500/30 px-2 py-1 rounded-full text-purple-300 uppercase font-black">${c.repetitions > 0 ? 'Review' : 'New'}</div>

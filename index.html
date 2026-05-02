@@ -1,1039 +1,481 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>J-Master SRS | Anki Mode Pro</title>
+    <title>J-Master SRS | Dark Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#0B1120', // Biru Tua
-                    }
-                }
-            }
+            theme: { extend: { colors: { darkbg: '#0B1120' } } }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;800&family=Noto+Sans+JP:wght@400;900&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif; 
-            background: linear-gradient(135deg, #f8faff 0%, #fff5f6 100%);
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
-            transition: background 0.5s ease;
-        }
-        
-        /* Palet Dark Mode: Biru Tua ke Ungu Tua */
-        .dark body {
             background: linear-gradient(135deg, #0B1120 0%, #3B0764 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; color: #f1f5f9;
         }
-
         .glass {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
-            transition: all 0.4s ease;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px);
+            border: 1px solid rgba(216, 180, 254, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
-        
-        .dark .glass {
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid rgba(216, 180, 254, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-        }
-
         .perspective { perspective: 1000px; }
-        .card-inner {
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform-style: preserve-3d;
-        }
+        .card-inner { transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); transform-style: preserve-3d; }
         .flipped { transform: rotateY(180deg); }
-        .card-front, .card-back {
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
+        .card-front, .card-back { backface-visibility: hidden; position: absolute; inset: 0; }
         .card-back { transform: rotateY(180deg); }
-        
-        /* Tombol Sesi Checkbox */
-        .btn-glow-active {
-            background: rgba(79, 70, 229, 0.1) !important;
-            border-color: rgba(79, 70, 229, 0.8) !important;
-            color: #4f46e5 !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4), inset 0 0 5px rgba(79, 70, 229, 0.1);
-            transform: scale(1.02);
-        }
-
-        .dark .btn-glow-active {
-            background: rgba(236, 72, 153, 0.15) !important;
-            border-color: rgba(236, 72, 153, 0.8) !important;
-            color: #f472b6 !important;
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4), inset 0 0 5px rgba(236, 72, 153, 0.1);
-        }
-
-        /* Navigasi Bawah */
-        .nav-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: #94a3b8;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .nav-active { color: #4f46e5; }
-        .dark .nav-active { color: #f472b6; } 
-
-        .nav-btn:hover, .nav-btn:active {
-            color: #4f46e5;
-            background: rgba(79, 70, 229, 0.05);
-            border-color: rgba(79, 70, 229, 0.4) !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3), inset 0 0 5px rgba(79, 70, 229, 0.1);
-            transform: scale(1.05);
-        }
-
-        .dark .nav-btn:hover, .dark .nav-btn:active {
-            color: #e879f9; 
-            background: rgba(232, 121, 249, 0.05);
-            border-color: rgba(232, 121, 249, 0.5) !important;
-            box-shadow: 0 0 15px rgba(232, 121, 249, 0.4), inset 0 0 5px rgba(232, 121, 249, 0.1);
-        }
-
-        /* Animasi Benar/Salah */
-        @keyframes correct-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); background-color: rgba(16, 185, 129, 0.2); border-color: #10b981; }
-            100% { transform: scale(1); }
-        }
-        @keyframes wrong-shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); background-color: rgba(244, 63, 94, 0.1); border-color: #f43f5e; }
-            75% { transform: translateX(5px); }
-        }
-        .ans-correct { animation: correct-pulse 0.4s ease-out; color: #059669 !important; border-color: #10b981 !important; }
-        .ans-wrong { animation: wrong-shake 0.4s ease-out; color: #e11d48 !important; border-color: #f43f5e !important; }
-
-        .dark .ans-correct { color: #34d399 !important; }
-        .dark .ans-wrong { color: #fb7185 !important; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
-        
+        .btn-glow-active { background: rgba(236, 72, 153, 0.2) !important; border-color: #f472b6 !important; color: #f472b6 !important; }
+        .nav-active { color: #f472b6; }
+        .ans-correct { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; }
+        .ans-wrong { background: rgba(244, 63, 94, 0.2) !important; border-color: #f43f5e !important; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 10px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
-
-        /* Smooth Progress Bar Hover */
-        .interactive-bar {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        .dark .interactive-bar {
-            border: 1px solid rgba(216, 180, 254, 0.2);
-        }
-        
-        .interactive-bar:hover, .interactive-bar:active {
-            transform: scaleY(1.8) scaleX(1.01);
-            border-color: rgba(79, 70, 229, 0.8) !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.6), inset 0 0 5px rgba(79, 70, 229, 0.2);
-            background: rgba(255, 255, 255, 0.9);
-        }
-        .dark .interactive-bar:hover, .dark .interactive-bar:active {
-            border-color: rgba(244, 114, 182, 0.8) !important;
-            box-shadow: 0 0 15px rgba(244, 114, 182, 0.6), inset 0 0 5px rgba(244, 114, 182, 0.2);
-            background: rgba(30, 41, 59, 0.9);
-        }
-
-        /* 🔴 QUIZ & KANA OPTIONS ANIMATION (Interactive & Balanced) 🔴 */
-        .quiz-opt-btn {
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-        }
-        
-        /* Hanya nyala (glow) dan membal saat DIPENCET (Touch/Active) */
-        .quiz-opt-btn:active {
-            color: #4f46e5 !important;
-            background: rgba(79, 70, 229, 0.1) !important;
-            border-color: rgba(79, 70, 229, 0.8) !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4), inset 0 0 5px rgba(79, 70, 229, 0.1) !important;
-            transform: scale(0.92) !important;
-        }
-        
-        /* Glow Pink saat dipencet di Dark Mode */
-        .dark .quiz-opt-btn:active {
-            color: #f472b6 !important;
-            background: rgba(244, 114, 182, 0.15) !important;
-            border-color: rgba(244, 114, 182, 0.8) !important;
-            box-shadow: 0 0 15px rgba(244, 114, 182, 0.5), inset 0 0 5px rgba(244, 114, 182, 0.2) !important;
-            transform: scale(0.92) !important;
-        }
-        
-        /* Utility Dark Mode */
-        .dark-text-main { transition: color 0.3s ease; }
-        .dark .dark-text-main { color: #f1f5f9; }
-        .dark-text-sub { transition: color 0.3s ease; }
-        .dark .dark-text-sub { color: #cbd5e1; }
-        .dark-text-accent { transition: color 0.3s ease; }
-        .dark .dark-text-accent { color: #f472b6; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
 </head>
-<body class="transition-colors duration-500">
-    <div id="app" class="w-full max-w-md h-screen h-[100dvh] flex flex-col p-4 pb-8 relative z-10">
+<body class="dark">
+    <div id="app" class="w-full max-w-md h-screen flex flex-col p-4 pb-8 relative z-10">
         
-        <!-- Orbs/Blur Backgrounds -->
-        <div class="fixed top-[-5%] left-[-5%] w-72 h-72 bg-indigo-100 dark:bg-purple-900 rounded-full blur-[80px] opacity-50 z-0 transition-colors duration-700"></div>
-        <div class="fixed bottom-[-5%] right-[-5%] w-72 h-72 bg-rose-100 dark:bg-pink-900 rounded-full blur-[80px] opacity-50 z-0 transition-colors duration-700"></div>
-
-        <header class="flex justify-between items-center mb-4 shrink-0 relative z-20 px-1">
+        <header class="flex justify-between items-center mb-4 px-1">
             <div>
-                <h1 class="text-xl font-black tracking-tighter text-slate-800 dark-text-main">J-MASTER <span class="text-indigo-600 dark:text-fuchsia-400">SRS</span></h1>
-                <div class="flex gap-2 text-[9px] font-bold text-slate-400 dark:text-slate-500 mt-1 uppercase tracking-widest">
-                    <span id="stat-new">NEW: --</span>
-                    <span class="opacity-30">•</span>
-                    <span id="stat-rev">DUE: --</span>
+                <h1 class="text-xl font-black tracking-tighter">J-MASTER <span class="text-fuchsia-400">SRS</span></h1>
+                <div class="flex gap-2 text-[9px] font-bold text-slate-500 uppercase">
+                    <span id="stat-new">NEW: --</span> <span>•</span> <span id="stat-rev">DUE: --</span>
                 </div>
             </div>
-            
-            <div class="flex gap-2">
-                <button onclick="toggleTheme()" class="glass p-2.5 rounded-2xl text-slate-400 dark:text-purple-300 hover:text-indigo-600 dark:hover:text-pink-400 active:scale-90 transition-all duration-300">
-                    <svg id="icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                </button>
-                <button onclick="switchView('settings')" class="glass p-2.5 rounded-2xl text-slate-400 dark:text-purple-300 hover:text-indigo-600 dark:hover:text-pink-400 active:scale-90 transition-all duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                </button>
-            </div>
+            <button onclick="switchView('settings')" class="glass p-2.5 rounded-2xl text-purple-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
         </header>
 
         <main class="flex-1 overflow-hidden relative">
-            
-            <section id="view-study" class="view h-full flex flex-col animate-fade">
-                <div id="study-status" class="flex-1 flex flex-col items-center justify-center text-center p-4">
+            <section id="view-study" class="view h-full flex flex-col">
+                <div id="study-status" class="flex-1 flex flex-col items-center justify-center text-center">
                     <div id="status-icon" class="text-5xl mb-4">📚</div>
-                    <h2 id="status-title" class="text-lg font-black text-slate-800 dark-text-main uppercase tracking-tight">Sesi Belajar</h2>
-                    <p id="status-desc" class="text-slate-500 dark:text-purple-200 text-[9px] font-bold mt-1.5 mb-6 leading-relaxed px-6 uppercase tracking-widest opacity-60">Atur kategori kartu yang ingin di-review.</p>
+                    <h2 id="status-title" class="text-lg font-black uppercase">Sesi Belajar</h2>
+                    <p id="status-desc" class="text-purple-200 text-[10px] mb-6 opacity-60">Pilih kategori lalu tekan Mulai.</p>
                     
-                    <div id="session-buttons" class="w-full max-w-[260px] flex flex-col items-center">
-                        <div class="glass p-3.5 rounded-[1.5rem] w-full space-y-2 mb-5 border-white/60 dark:border-purple-800/40">
-                            <button onclick="toggleSession('vocab')" id="btn-ses-vocab" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 text-[10px] font-black transition-all bg-white/40 dark:bg-slate-800/40 dark:text-slate-300 active:scale-95 duration-200 hover:border-indigo-400 dark:hover:border-purple-400">
-                                <span>Kanji & Vocab</span> <span id="icon-ses-vocab" class="hidden text-indigo-600 dark:text-pink-400">✓</span>
+                    <div id="session-buttons" class="w-full max-w-[280px] space-y-3">
+                        <button onclick="startKanjiQuiz()" class="w-full py-4 rounded-2xl bg-emerald-600/20 border border-emerald-500/50 text-emerald-400 font-black text-xs uppercase shadow-lg shadow-emerald-900/20 hover:bg-emerald-600/30 transition-all">
+                            🔥 Kuis Kanji (Yang Sudah Dipelajari)
+                        </button>
+
+                        <div class="glass p-3 rounded-3xl space-y-2 border-purple-800/40">
+                            <button onclick="toggleSession('vocab')" id="btn-ses-vocab" class="w-full flex justify-between p-3 rounded-xl border border-slate-700/50 text-[10px] font-black bg-slate-800/40">
+                                <span>KANJI & VOCAB</span> <span id="icon-ses-vocab" class="hidden text-pink-400">✓</span>
                             </button>
-                            <button onclick="toggleSession('hira')" id="btn-ses-hira" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 text-[10px] font-black transition-all bg-white/40 dark:bg-slate-800/40 dark:text-slate-300 active:scale-95 duration-200 hover:border-indigo-400 dark:hover:border-purple-400">
-                                <span>Hiragana</span> <span id="icon-ses-hira" class="hidden text-indigo-600 dark:text-pink-400">✓</span>
+                            <button onclick="toggleSession('hira')" id="btn-ses-hira" class="w-full flex justify-between p-3 rounded-xl border border-slate-700/50 text-[10px] font-black bg-slate-800/40">
+                                <span>HIRAGANA</span> <span id="icon-ses-hira" class="hidden text-pink-400">✓</span>
                             </button>
-                            <button onclick="toggleSession('kata')" id="btn-ses-kata" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 text-[10px] font-black transition-all bg-white/40 dark:bg-slate-800/40 dark:text-slate-300 active:scale-95 duration-200 hover:border-indigo-400 dark:hover:border-purple-400">
-                                <span>Katakana</span> <span id="icon-ses-kata" class="hidden text-indigo-600 dark:text-pink-400">✓</span>
+                            <button onclick="toggleSession('kata')" id="btn-ses-kata" class="w-full flex justify-between p-3 rounded-xl border border-slate-700/50 text-[10px] font-black bg-slate-800/40">
+                                <span>KATAKANA</span> <span id="icon-ses-kata" class="hidden text-pink-400">✓</span>
                             </button>
                         </div>
 
-                        <button onclick="startSession()" class="w-full glass bg-slate-900 dark:bg-gradient-to-r dark:from-purple-600 dark:to-pink-600 text-white text-[11px] font-black uppercase tracking-[0.2em] py-4 rounded-2xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 relative overflow-hidden dark:border-pink-500/50">
-                            <div class="absolute inset-0 bg-white/10 animate-[pulse_2s_ease-in-out_infinite] opacity-50"></div>
-                            <span class="relative z-10">Mulai Sesi</span>
+                        <button onclick="startSession()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black text-xs uppercase shadow-xl">
+                            Mulai Belajar Kartu Baru
                         </button>
                         
-                        <div class="h-px bg-slate-200 dark:bg-purple-800/50 w-1/3 mx-auto my-4 opacity-50"></div>
-                        <button onclick="switchView('quiz')" class="w-full glass bg-white/60 dark:bg-slate-800/60 text-indigo-600 dark:text-pink-400 text-[9px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-purple-900/30 dark:border-purple-500/30 active:scale-95 transition-all duration-300">Daily Quiz (Campur)</button>
+                        <button onclick="switchView('quiz')" class="w-full py-3 rounded-xl glass text-pink-400 font-black text-[10px] uppercase">
+                            Daily Quiz (Campur Semua)
+                        </button>
                     </div>
                 </div>
 
-                <div id="study-active" class="flex-1 flex flex-col hidden overflow-hidden">
-                    <div class="flex items-center gap-3 mb-4 px-1 shrink-0">
-                        
-                        <!-- ANKI STYLE QUEUE COUNTERS -->
-                        <div class="flex gap-2.5 text-[9px] font-black tracking-widest bg-white/50 dark:bg-slate-800/50 px-3.5 py-1.5 rounded-full border border-white/40 dark:border-slate-700/50 shadow-sm">
-                            <span class="text-blue-500 dark:text-sky-400" id="count-new">NEW: 0</span>
-                            <span class="text-rose-500 dark:text-rose-400" id="count-learn">LRN: 0</span>
-                            <span class="text-emerald-600 dark:text-emerald-400" id="count-due">DUE: 0</span>
+                <div id="study-active" class="flex-1 flex flex-col hidden">
+                    <div class="flex items-center gap-3 mb-4 shrink-0">
+                        <div class="flex gap-2 text-[9px] font-black bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700/50">
+                            <span class="text-sky-400" id="count-new">NEW: 0</span>
+                            <span class="text-rose-400" id="count-learn">LRN: 0</span>
+                            <span class="text-emerald-400" id="count-due">DUE: 0</span>
                         </div>
-
-                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40 interactive-bar cursor-pointer">
-                            <div id="session-progress" class="h-full bg-indigo-500 dark:bg-pink-500 transition-all duration-500 w-0 relative">
-                                <div class="absolute inset-0 bg-white/30 animate-[pulse_1.5s_ease-in-out_infinite]"></div>
-                            </div>
+                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden">
+                            <div id="session-progress" class="h-full bg-pink-500 w-0 transition-all"></div>
                         </div>
-                        <button onclick="endSessionEarly()" class="text-slate-400 dark:text-slate-500 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 dark:hover:text-rose-400 active:scale-90 transition-all">Batal</button>
+                        <button onclick="endSessionEarly()" class="text-[9px] font-black uppercase text-slate-500">Batal</button>
                     </div>
                     <div class="flex-1 perspective relative">
                         <div id="flashcard" class="card-inner w-full h-full relative cursor-pointer" onclick="flipCard()">
-                            <div class="card-front glass absolute inset-0 rounded-[2.5rem] flex flex-col items-center justify-center p-6 shadow-sm border-white/80 dark:border-purple-500/30">
-                                <span id="card-label-front" class="text-[9px] font-black text-slate-400 dark:text-purple-300 uppercase tracking-widest mb-6">Flashcard</span>
-                                <div id="display-front" class="text-3xl md:text-4xl font-bold text-slate-800 dark-text-main tracking-tighter text-center px-4 leading-tight transition-all duration-300">--</div>
-                                <div class="absolute bottom-10 text-indigo-400 dark:text-purple-400 text-[9px] font-black uppercase animate-pulse tracking-widest">Tap to flip</div>
+                            <div class="card-front glass rounded-[2.5rem] flex flex-col items-center justify-center p-6 border-purple-500/30">
+                                <span id="card-label-front" class="text-[9px] font-black text-purple-300 uppercase mb-6">Flashcard</span>
+                                <div id="display-front" class="text-4xl font-bold text-center leading-tight">--</div>
+                                <div class="absolute bottom-10 text-purple-400 text-[9px] font-black uppercase animate-pulse">Tap to flip</div>
                             </div>
-                            <div class="card-back glass absolute inset-0 rounded-[2.5rem] flex flex-col items-center justify-center p-6 text-center border-indigo-200 dark:border-purple-500/30 shadow-sm">
-                                <span class="text-[9px] font-black text-indigo-400 dark:text-purple-300 uppercase tracking-widest mb-3">Detail</span>
-                                <div id="display-reading" class="text-xl text-indigo-500 dark:text-pink-400 font-bold mb-2 tracking-tight">--</div>
-                                <div id="display-meaning" class="text-2xl font-black text-slate-800 dark-text-main leading-tight px-4">--</div>
+                            <div class="card-back glass rounded-[2.5rem] flex flex-col items-center justify-center p-6 border-purple-500/30">
+                                <span class="text-[9px] font-black text-purple-300 uppercase mb-3">Detail</span>
+                                <div id="display-reading" class="text-xl text-pink-400 font-bold mb-2">--</div>
+                                <div id="display-meaning" class="text-2xl font-black leading-tight">--</div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- SRS ACTIONS WITH DYNAMIC INTERVAL LABELS -->
-                    <div id="srs-actions" class="mt-6 grid grid-cols-4 gap-2 opacity-0 pointer-events-none translate-y-6 transition-all duration-300 shrink-0">
-                        <button onclick="handleRate(0)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-rose-100 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-900/30 active:scale-95 transition-all">
-                            <span class="text-rose-500 dark:text-rose-400 font-black text-[9px] uppercase">Lupa</span>
-                            <span id="lbl-lupa" class="text-[7px] font-bold text-slate-400 mt-1 tracking-widest">&lt;1m</span>
+                    <div id="srs-actions" class="mt-6 grid grid-cols-4 gap-2 opacity-0 pointer-events-none transition-all">
+                        <button onclick="handleRate(0)" class="glass py-3 rounded-xl flex flex-col items-center border-rose-900/50">
+                            <span class="text-rose-400 font-black text-[9px]">LUPA</span>
+                            <span class="text-[7px] text-slate-400">&lt;1m</span>
                         </button>
-                        <button onclick="handleRate(1)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-orange-100 dark:border-orange-900/50 hover:bg-orange-50 dark:hover:bg-orange-900/30 active:scale-95 transition-all">
-                            <span class="text-orange-500 dark:text-orange-400 font-black text-[9px] uppercase">Sulit</span>
-                            <span id="lbl-sulit" class="text-[7px] font-bold text-slate-400 mt-1 tracking-widest">--</span>
+                        <button onclick="handleRate(1)" class="glass py-3 rounded-xl flex flex-col items-center border-orange-900/50">
+                            <span class="text-orange-400 font-black text-[9px]">SULIT</span>
+                            <span id="lbl-sulit" class="text-[7px] text-slate-400">--</span>
                         </button>
-                        <button onclick="handleRate(2)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-indigo-100 dark:border-purple-900/50 hover:bg-indigo-50 dark:hover:bg-purple-900/30 active:scale-95 transition-all">
-                            <span class="text-indigo-600 dark:text-purple-400 font-black text-[9px] uppercase">Bagus</span>
-                            <span id="lbl-bagus" class="text-[7px] font-bold text-slate-400 mt-1 tracking-widest">--</span>
+                        <button onclick="handleRate(2)" class="glass py-3 rounded-xl flex flex-col items-center border-purple-900/50">
+                            <span class="text-purple-400 font-black text-[9px]">BAGUS</span>
+                            <span id="lbl-bagus" class="text-[7px] text-slate-400">--</span>
                         </button>
-                        <button onclick="handleRate(3)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-emerald-100 dark:border-emerald-900/50 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 active:scale-95 transition-all">
-                            <span class="text-emerald-600 dark:text-emerald-400 font-black text-[9px] uppercase">Mudah</span>
-                            <span id="lbl-mudah" class="text-[7px] font-bold text-slate-400 mt-1 tracking-widest">--</span>
+                        <button onclick="handleRate(3)" class="glass py-3 rounded-xl flex flex-col items-center border-emerald-900/50">
+                            <span class="text-emerald-400 font-black text-[9px]">MUDAH</span>
+                            <span id="lbl-mudah" class="text-[7px] text-slate-400">--</span>
                         </button>
                     </div>
                 </div>
             </section>
 
-            <section id="view-quiz" class="view h-full flex flex-col hidden animate-fade">
-                <div id="quiz-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
-                    <div class="text-5xl mb-6 hover:scale-110 transition-transform">⚡</div>
-                    <h2 class="text-xl font-black text-slate-800 dark-text-main uppercase tracking-tight">Vocab Quiz</h2>
-                    <p class="text-[10px] text-slate-500 dark:text-purple-200 font-bold mt-2 mb-10 leading-relaxed px-10 uppercase tracking-widest opacity-60">Uji ingatanmu dengan kartu yang sudah pernah kamu review.</p>
-                    <button onclick="startDailyQuiz()" class="glass bg-indigo-600 dark:bg-pink-600 text-white text-[11px] font-black uppercase tracking-[0.2em] px-12 py-4 rounded-2xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 dark:border-pink-400/50">Mulai Quiz</button>
+            <section id="view-quiz" class="view h-full flex flex-col hidden">
+                <div id="quiz-setup" class="h-full flex flex-col items-center justify-center text-center">
+                    <div class="text-5xl mb-6">⚡</div>
+                    <h2 id="quiz-type-title" class="text-xl font-black uppercase">Kuis</h2>
+                    <p class="text-[10px] text-purple-200 mb-10 opacity-60">Uji ingatanmu dari kartu yang sudah dipelajari.</p>
+                    <button onclick="startDailyQuiz()" class="glass bg-pink-600 px-12 py-4 rounded-2xl font-black text-xs uppercase border-pink-400/50">Mulai</button>
                 </div>
-
                 <div id="quiz-active" class="h-full flex flex-col hidden">
-                    <div class="flex items-center gap-3 mb-6 px-1 shrink-0">
-                        <span id="quiz-q-count" class="glass px-3 py-1.5 rounded-full text-[8px] font-black uppercase text-slate-600 dark:text-purple-200 shrink-0 shadow-sm">Soal 1</span>
-                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40 interactive-bar cursor-pointer">
-                            <div id="quiz-progress" class="h-full bg-indigo-500 dark:bg-pink-500 transition-all duration-500 w-0 relative">
-                                <div class="absolute inset-0 bg-white/30 animate-[pulse_1.5s_ease-in-out_infinite]"></div>
-                            </div>
+                    <div class="flex items-center gap-3 mb-6 shrink-0">
+                        <span id="quiz-q-count" class="glass px-3 py-1.5 rounded-full text-[8px] font-black uppercase text-purple-200">Soal 1</span>
+                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden">
+                            <div id="quiz-progress" class="h-full bg-pink-500 w-0"></div>
                         </div>
-                        <button onclick="switchView('study')" class="text-slate-400 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 active:scale-90 transition-all">Batal</button>
+                        <button onclick="switchView('study')" class="text-[9px] font-black uppercase text-slate-400">Batal</button>
                     </div>
-                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 mb-6 text-center shadow-sm dark:border-purple-500/30">
-                        <div id="quiz-display" class="text-3xl md:text-4xl font-black text-slate-800 dark-text-main leading-tight transition-all duration-300">--</div>
+                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 mb-6 text-center border-purple-500/30">
+                        <div id="quiz-display" class="text-3xl font-black">--</div>
                     </div>
-                    <div id="quiz-options" class="grid grid-cols-2 gap-3 mb-4 shrink-0">
-                    </div>
+                    <div id="quiz-options" class="grid grid-cols-2 gap-3 mb-4"></div>
                 </div>
-
-                <div id="quiz-result" class="h-full flex flex-col items-center justify-center text-center p-6 hidden">
-                    <div class="text-5xl mb-4 animate-bounce">🏆</div>
-                    <h2 class="text-xl font-black text-slate-800 dark-text-main uppercase mb-6">Hasil Quiz</h2>
-                    <div class="glass w-full p-6 rounded-3xl space-y-4 mb-8 dark:border-purple-500/30">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-black text-slate-400 dark:text-purple-300 uppercase">Skor Akhir</span>
-                            <span id="quiz-final-score" class="text-xl font-black text-indigo-600 dark:text-pink-400">0/0</span>
-                        </div>
+                <div id="quiz-result" class="h-full flex flex-col items-center justify-center text-center hidden">
+                    <div class="text-5xl mb-4">🏆</div>
+                    <h2 class="text-xl font-black mb-6 uppercase">Hasil Quiz</h2>
+                    <div class="glass w-full p-6 rounded-3xl mb-8 border-purple-500/30">
+                        <span class="text-[10px] text-purple-300 uppercase">Skor Akhir</span>
+                        <div id="quiz-final-score" class="text-2xl font-black text-pink-400 mt-1">0/0</div>
                     </div>
-                    <button onclick="switchView('study')" class="w-full bg-slate-900 dark:bg-purple-600 dark:border-purple-400/50 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Kembali ke Menu</button>
+                    <button onclick="switchView('study')" class="w-full bg-purple-600 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest">Kembali</button>
                 </div>
             </section>
 
-            <section id="view-kana" class="view h-full flex flex-col hidden animate-fade">
-                <div id="kana-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
-                    <div class="w-16 h-16 glass rounded-[1.5rem] flex items-center justify-center mb-6 text-3xl shadow-sm border-white dark:border-purple-500/30 dark-text-main">あ</div>
-                    <h2 class="text-lg font-black text-slate-800 dark-text-main tracking-tight">Kana Blitz</h2>
-                    <p class="text-[10px] text-slate-400 dark:text-purple-200 font-bold px-12 mt-1 mb-8 uppercase tracking-widest">Latih kecepatan membaca Kana.</p>
-                    <div class="glass p-3.5 rounded-3xl w-full space-y-2 mb-8 border-white/60 dark:border-purple-800/40">
-                        <button onclick="toggleKana('hira')" id="btn-hira" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 text-[11px] font-black transition-all bg-white/40 dark:bg-slate-800/40 active:scale-95 dark:text-slate-300">
-                            <span>HIRAGANA (あ)</span> <span id="icon-hira" class="hidden text-indigo-600 dark:text-pink-400">✓</span>
-                        </button>
-                        <button onclick="toggleKana('kata')" id="btn-kata" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 dark:border-slate-700/50 text-[11px] font-black transition-all bg-white/40 dark:bg-slate-800/40 active:scale-95 dark:text-slate-300">
-                            <span>KATAKANA (ア)</span> <span id="icon-kata" class="hidden text-indigo-600 dark:text-pink-400">✓</span>
-                        </button>
+            <section id="view-kana" class="view h-full flex flex-col hidden">
+                <div id="kana-setup" class="h-full flex flex-col items-center justify-center text-center">
+                    <div class="text-4xl mb-6">あ</div>
+                    <h2 class="text-lg font-black uppercase">Kana Blitz</h2>
+                    <div class="glass p-3 rounded-3xl w-full my-6 space-y-2">
+                        <button onclick="toggleKana('hira')" id="btn-hira" class="w-full flex justify-between p-3 rounded-xl border border-slate-700/50 text-[11px] font-black bg-slate-800/40">HIRAGANA <span id="icon-hira" class="hidden text-pink-400">✓</span></button>
+                        <button onclick="toggleKana('kata')" id="btn-kata" class="w-full flex justify-between p-3 rounded-xl border border-slate-700/50 text-[11px] font-black bg-slate-800/40">KATAKANA <span id="icon-kata" class="hidden text-pink-400">✓</span></button>
                     </div>
-                    <button onclick="startKanaQuiz()" class="w-full bg-slate-900 dark:bg-gradient-to-r dark:from-purple-600 dark:to-pink-600 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-md dark:border-pink-500/50">Mulai Kuis</button>
+                    <button onclick="startKanaQuiz()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-4 rounded-2xl font-black text-xs uppercase">Mulai Kuis Kana</button>
                 </div>
-                
-                <div id="kana-active" class="h-full flex flex-col hidden relative">
-                    <div class="flex justify-between items-center mb-4 px-1 shrink-0">
-                        <div class="flex gap-2">
-                            <span id="kana-q-count" class="glass px-3 py-1.5 rounded-full text-[8px] font-black uppercase text-slate-600 dark:text-purple-200 shadow-sm">Q #1</span>
-                            <span id="kana-timer" class="glass px-3 py-1.5 rounded-full text-[8px] font-black text-indigo-600 dark:text-pink-400 tabular-nums shadow-sm">0:00</span>
-                        </div>
-                        <button onclick="stopKanaQuiz()" class="text-rose-500 dark:text-rose-400 active:scale-90 p-1 flex items-center gap-1 transition-transform">
-                            <span class="text-[9px] font-black uppercase">Selesai</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
-                        </button>
+                <div id="kana-active" class="h-full flex flex-col hidden">
+                    <div class="flex justify-between items-center mb-4 px-1">
+                        <span id="kana-timer" class="glass px-3 py-1.5 rounded-full text-[8px] font-black text-pink-400">0:00</span>
+                        <button onclick="stopKanaQuiz()" class="text-rose-400 font-black text-[9px] uppercase">Selesai</button>
                     </div>
-                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 relative overflow-hidden shadow-sm dark:border-purple-500/30">
-                        <div id="kana-display" class="text-8xl font-black text-slate-800 dark-text-main z-10">--</div>
+                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 border-purple-500/30">
+                        <div id="kana-display" class="text-8xl font-black">--</div>
                     </div>
-                    <div id="kana-options" class="grid grid-cols-2 gap-3 mt-6 shrink-0"></div>
+                    <div id="kana-options" class="grid grid-cols-2 gap-3 mt-6"></div>
                 </div>
-
-                <div id="kana-result" class="h-full flex flex-col items-center justify-center text-center px-6 py-4 hidden overflow-y-auto custom-scrollbar">
-                    <div class="text-4xl mb-3 animate-bounce">📈</div>
-                    <h2 class="text-lg font-black text-slate-800 dark-text-main uppercase tracking-tight mb-2">Statistik Akhir</h2>
-                    <div class="glass w-full p-4 rounded-[2rem] space-y-3 mb-6 dark:border-purple-500/30">
-                        <div class="flex justify-between items-center text-indigo-600 dark:text-pink-400">
-                            <span class="text-[9px] font-black uppercase">Waktu</span>
-                            <span id="res-time" class="font-bold text-sm">0:00</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-black text-slate-400 dark:text-purple-300 uppercase">Total Soal</span>
-                            <span id="res-total" class="font-bold text-slate-800 dark-text-main text-sm">0</span>
-                        </div>
-                        <div class="flex justify-between items-center text-emerald-600 dark:text-emerald-400">
-                            <span class="text-[9px] font-black uppercase">Benar</span>
-                            <span id="res-correct" class="font-bold text-sm">0</span>
-                        </div>
-                        <div class="flex justify-between items-center text-rose-500 dark:text-rose-400">
-                            <span class="text-[9px] font-black uppercase">Salah</span>
-                            <span id="res-wrong" class="font-bold text-sm">0</span>
-                        </div>
-                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 flex justify-between items-center">
-                            <span class="text-[10px] font-black text-indigo-500 dark:text-purple-400 uppercase tracking-widest">Akurasi</span>
-                            <span id="res-accuracy" class="text-lg font-black text-indigo-600 dark:text-pink-400">0%</span>
-                        </div>
+                <div id="kana-result" class="h-full flex flex-col items-center justify-center text-center hidden">
+                    <h2 class="text-lg font-black uppercase mb-4">Statistik Akhir</h2>
+                    <div class="glass w-full p-4 rounded-[2rem] space-y-3 mb-6">
+                        <div class="flex justify-between text-xs"><span>Benar</span><span id="res-correct" class="text-emerald-400">0</span></div>
+                        <div class="flex justify-between text-xs"><span>Salah</span><span id="res-wrong" class="text-rose-400">0</span></div>
+                        <div class="pt-3 border-t border-slate-700/50 flex justify-between font-black"><span>Akurasi</span><span id="res-accuracy" class="text-pink-400">0%</span></div>
                     </div>
-                    <button onclick="switchView('kana')" class="w-full bg-slate-900 dark:bg-purple-600 dark:border-purple-400/50 text-white py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all mb-4 shrink-0">Kembali ke Menu</button>
+                    <button onclick="switchView('kana')" class="w-full bg-purple-600 py-4 rounded-2xl text-[10px] font-black uppercase">Kembali</button>
                 </div>
             </section>
 
-            <section id="view-list" class="view h-full flex flex-col hidden animate-fade">
-                <div class="mb-2 shrink-0 px-1">
-                    <h2 class="text-sm font-black text-slate-800 dark-text-main mb-3">Statistik & Riwayat</h2>
-                    <div class="grid grid-cols-4 gap-2">
-                        <div class="glass p-2.5 rounded-2xl border-indigo-100 dark:border-purple-900/50 text-center hover:scale-105 transition-transform">
-                            <div id="stat-mature" class="text-indigo-600 dark:text-purple-400 font-black text-sm leading-none">0</div>
-                            <div class="text-[6px] font-black uppercase text-slate-400 dark:text-purple-300 mt-1.5">Mature</div>
-                        </div>
-                        <div class="glass p-2.5 rounded-2xl border-orange-100 dark:border-orange-900/50 text-center hover:scale-105 transition-transform">
-                            <div id="stat-young" class="text-orange-500 dark:text-orange-400 font-black text-sm leading-none">0</div>
-                            <div class="text-[6px] font-black uppercase text-slate-400 dark:text-purple-300 mt-1.5">Young</div>
-                        </div>
-                        <div class="glass p-2.5 rounded-2xl border-slate-100 dark:border-slate-700/50 text-center hover:scale-105 transition-transform">
-                            <div id="stat-unseen" class="text-slate-400 dark:text-slate-400 font-black text-sm leading-none">0</div>
-                            <div class="text-[6px] font-black uppercase text-slate-400 dark:text-purple-300 mt-1.5">Unseen</div>
-                        </div>
-                        <div class="glass p-2.5 rounded-2xl border-emerald-100 dark:border-emerald-900/50 text-center bg-emerald-50/30 dark:bg-emerald-900/20 hover:scale-105 transition-transform">
-                            <div id="stat-total-reviewed" class="text-emerald-600 dark:text-emerald-400 font-black text-sm leading-none">0</div>
-                            <div class="text-[6px] font-black uppercase text-emerald-500 dark:text-emerald-500 mt-1.5">Di-review</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mb-3 shrink-0 px-1 mt-2">
-                    <input type="text" id="search-input" oninput="renderList()" placeholder="Cari vocab/kanji/kana..." class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-3 text-[10px] font-bold outline-none ring-1 ring-slate-200 dark:ring-slate-700 focus:ring-indigo-500 dark:focus:ring-pink-500 transition-all shadow-sm dark:text-white dark:placeholder-slate-400">
-                </div>
-
-                <div id="card-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar"></div>
+            <section id="view-list" class="view h-full flex flex-col hidden">
+                <input type="text" id="search-input" oninput="renderList()" placeholder="Cari..." class="w-full bg-slate-800/50 rounded-xl p-3 text-xs mb-4 outline-none border border-slate-700">
+                <div id="card-list" class="flex-1 overflow-y-auto space-y-2 custom-scrollbar"></div>
             </section>
 
-            <section id="view-settings" class="view h-full flex flex-col hidden animate-fade">
-                <h2 class="text-sm font-black text-slate-800 dark-text-main mb-6 px-1 uppercase tracking-wider">Pengaturan</h2>
-                <div class="space-y-4">
-                    <div class="glass p-5 rounded-3xl space-y-5 border-white/60 dark:border-purple-800/40">
-                        <div>
-                            <label class="text-[9px] font-black text-slate-400 dark:text-purple-300 uppercase mb-2 block tracking-widest">Target Kartu Baru / Hari</label>
-                            <input type="number" id="input-new-limit" class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-3 text-[12px] font-bold outline-none ring-1 ring-slate-100 dark:ring-slate-700 focus:ring-indigo-500 dark:focus:ring-pink-500 transition-all dark:text-white">
-                        </div>
-                        <div>
-                            <label class="text-[9px] font-black text-slate-400 dark:text-purple-300 uppercase mb-2 block tracking-widest">Maksimal Review / Hari</label>
-                            <input type="number" id="input-rev-limit" class="w-full bg-white/50 dark:bg-slate-800/50 border-none rounded-xl p-3 text-[12px] font-bold outline-none ring-1 ring-slate-100 dark:ring-slate-700 focus:ring-indigo-500 dark:focus:ring-pink-500 transition-all dark:text-white">
-                        </div>
-                    </div>
-                    <button onclick="saveSettings()" class="w-full bg-indigo-600 dark:bg-pink-600 text-white text-[10px] font-black uppercase py-4 rounded-2xl shadow-lg shadow-indigo-100 dark:shadow-none active:scale-95 transition-all">Simpan Perubahan</button>
-                    <button onclick="resetAllData()" class="w-full bg-rose-50 dark:bg-rose-900/30 text-rose-500 dark:text-rose-400 border border-rose-100 dark:border-rose-900/50 text-[9px] font-black uppercase py-3 rounded-xl active:bg-rose-100 transition-all mt-4">Reset Semua Progress</button>
+            <section id="view-settings" class="view h-full flex flex-col hidden">
+                <div class="glass p-5 rounded-3xl space-y-4">
+                    <div><label class="text-[9px] font-black text-purple-300 uppercase block mb-1">Target Baru / Hari</label><input type="number" id="input-new-limit" class="w-full bg-slate-800/50 rounded-xl p-3 text-sm"></div>
+                    <div><label class="text-[9px] font-black text-purple-300 uppercase block mb-1">Review Baru / Hari</label><input type="number" id="input-rev-limit" class="w-full bg-slate-800/50 rounded-xl p-3 text-sm"></div>
                 </div>
+                <button onclick="saveSettings()" class="w-full bg-pink-600 py-4 rounded-2xl font-black text-[10px] uppercase mt-4">Simpan</button>
+                <button onclick="resetAllData()" class="w-full text-rose-400 text-[8px] font-black uppercase mt-auto">Hapus Semua Data</button>
             </section>
         </main>
 
-        <!-- Navbar di-resize lebih bersih, glow HANYA saat disentuh (Floating Modern Design) -->
-        <nav class="mt-auto mb-5 mx-auto w-[92%] glass rounded-full p-1 flex gap-1 shrink-0 z-30 shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
-            <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5 nav-active">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span class="text-[8px] font-black uppercase tracking-tighter mt-0.5">Study</span>
+        <nav class="mt-auto mb-5 mx-auto w-full glass rounded-full p-1 flex gap-1 z-30">
+            <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center nav-active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="text-[8px] font-black uppercase mt-1">Study</span>
             </button>
-            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span class="text-[8px] font-black uppercase tracking-tighter mt-0.5">Kana</span>
+            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span class="text-[8px] font-black uppercase mt-1">Kana</span>
             </button>
-            <button onclick="switchView('list')" id="nav-list" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center justify-center gap-0.5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                <span class="text-[8px] font-black uppercase tracking-tighter mt-0.5">List</span>
+            <button onclick="switchView('list')" id="nav-list" class="nav-btn flex-1 py-2.5 rounded-full flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <span class="text-[8px] font-black uppercase mt-1">List</span>
             </button>
         </nav>
-
-        <div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all opacity-0 pointer-events-none z-50 whitespace-nowrap"></div>
+        <div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full text-[9px] font-black uppercase text-white transition-all opacity-0 pointer-events-none z-50"></div>
     </div>
 
     <script>
-        // Tema Logika
-        const toggleTheme = () => {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.setItem('jmaster_theme', isDark ? 'dark' : 'light');
-            updateThemeIcon(isDark);
-        };
-
-        const updateThemeIcon = (isDark) => {
-            document.getElementById('icon-sun').classList.toggle('hidden', !isDark);
-            document.getElementById('icon-moon').classList.toggle('hidden', isDark);
-        };
-
-        // Cek Tema Awal
-        if (localStorage.getItem('jmaster_theme') === 'dark' || (!('jmaster_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            updateThemeIcon(true);
-        } else {
-            updateThemeIcon(false);
-        }
-
         const KANA_POOL = {
             hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
-            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro','ワ':'wa','ヲ':'wo','ン':'n' }
+            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ン':'n' }
         };
 
-        // SUPER MASSIF DATABASE: ~1000 KOSAKATA LENGKAP DARI PDF + KAIGO
         const BASE_VOCAB = [
-            {f:'こんにちは',r:'Konnichiwa',m:'Halo / Selamat siang'},{f:'おはようございます',r:'Ohayou gozaimasu',m:'Selamat pagi'},{f:'こんばんは',r:'Konbanwa',m:'Selamat malam'},{f:'おやすみなさい',r:'Oyasuminasai',m:'Selamat tidur'},{f:'ばいばい',r:'Bye-bye',m:'Dahh!'},{f:'さようなら',r:'Sayounara',m:'Sampai jumpa'},{f:'私',r:'わたし',m:'Saya'},{f:'私たち',r:'わたしたち',m:'Kami'},{f:'あなた',r:'あなた',m:'Kamu'},{f:'あなたがた',r:'あなたがた',m:'Kamu sekalian'},{f:'彼',r:'かれ',m:'Dia (laki)'},{f:'彼女',r:'かのじょ',m:'Dia (perempuan)'},{f:'これ',r:'kore',m:'Ini'},{f:'それ',r:'sore',m:'Itu'},{f:'あれ',r:'are',m:'Itu (jauh)'},
-            {f:'月曜日',r:'げつようび',m:'Senin'},{f:'火曜日',r:'かようび',m:'Selasa'},{f:'水曜日',r:'すいようび',m:'Rabu'},{f:'木曜日',r:'もくようび',m:'Kamis'},{f:'金曜日',r:'きんようび',m:'Jumat'},{f:'土曜日',r:'どようび',m:'Sabtu'},{f:'日曜日',r:'にちようび',m:'Minggu'},{f:'今日',r:'きょう',m:'Hari ini'},{f:'昨日',r:'きのう',m:'Kemarin'},{f:'明後日',r:'あさって',m:'Lusa'},{f:'一昨日',r:'おととい',m:'Kemarin dulu'},{f:'朝',r:'あさ',m:'Pagi'},{f:'今朝',r:'けさ',m:'Tadi pagi'},{f:'晩/夜',r:'ばん/よる',m:'Malam'},{f:'夕べ',r:'ゆうべ',m:'Tadi malam'},{f:'今晩',r:'こんばん',m:'Malam ini'},{f:'明日',r:'あした',m:'Besok'},{f:'毎日',r:'まいにち',m:'Setiap hari'},{f:'毎朝',r:'まいあさ',m:'Setiap pagi'},{f:'毎晩',r:'まいばん',m:'Setiap malam'},{f:'今週',r:'こんしゅう',m:'Minggu ini'},{f:'先週',r:'せんしゅう',m:'Minggu lalu'},{f:'来週',r:'らいしゅう',m:'Minggu depan'},{f:'一月',r:'いちがつ',m:'Januari'},{f:'二月',r:'にがつ',m:'Februari'},{f:'三月',r:'さんがつ',m:'Maret'},{f:'四月',r:'しがつ',m:'April'},{f:'五月',r:'ごがつ',m:'Mei'},{f:'六月',r:'ろくがつ',m:'Juni'},{f:'七月',r:'しちがつ',m:'Juli'},{f:'八月',r:'はちがつ',m:'Agustus'},{f:'九月',r:'くがつ',m:'September'},{f:'十月',r:'じゅうがつ',m:'Oktober'},{f:'十一月',r:'じゅういちがつ',m:'November'},{f:'十二月',r:'じゅうにがつ',m:'Desember'},{f:'春',r:'はる',m:'Musim Semi'},{f:'夏',r:'なつ',m:'Musim Panas'},{f:'秋',r:'あき',m:'Musim Gugur'},{f:'冬',r:'ふゆ',m:'Musim Dingin'},{f:'季節',r:'きせつ',m:'Musim'},
-            {f:'ピンク',r:'pinku',m:'Pink'},{f:'暗色',r:'あんしょく',m:'Gelap'},{f:'明色',r:'めいしょく',m:'Cerah'},{f:'黄色',r:'きいろ',m:'Kuning'},{f:'金色',r:'きんいろ',m:'Emas'},{f:'銀色',r:'ぎんいろ',m:'Perak'},{f:'黒い',r:'くろい',m:'Hitam'},{f:'紫',r:'むらさき',m:'Ungu'},{f:'青い',r:'あおい',m:'Biru'},{f:'水色',r:'みずいろ',m:'Biru muda'},{f:'赤い',r:'あかい',m:'Merah'},{f:'赤紫',r:'あかむらさき',m:'Merah keunguan'},{f:'茶色',r:'ちゃいろ',m:'Coklat'},{f:'白い',r:'しろい',m:'Putih'},{f:'緑',r:'みどり',m:'Hijau'},{f:'オレンジ色',r:'orenji-iro',m:'Orange'},{f:'橙色',r:'だいだいいろ',m:'Jingga'},{f:'桃色',r:'ももいろ',m:'Peach'},{f:'真っ赤',r:'まっか',m:'Merah tua'},{f:'真っ白',r:'まっしろ',m:'Putih jernih'},{f:'真っ黒',r:'まっくろ',m:'Hitam legam'},{f:'真っ青',r:'まっさお',m:'Biru tua'},{f:'灰色',r:'はいいろ',m:'Abu-abu'},{f:'紺',r:'こん',m:'Biru laut'},{f:'紅',r:'くれない',m:'Merah terang'},
-            {f:'零',r:'れい',m:'Nol'},{f:'一',r:'いち',m:'1'},{f:'二',r:'に',m:'2'},{f:'三',r:'さん',m:'3'},{f:'四',r:'よん/し',m:'4'},{f:'五',r:'ご',m:'5'},{f:'六',r:'ろく',m:'6'},{f:'七',r:'なな/しち',m:'7'},{f:'八',r:'はち',m:'8'},{f:'九',r:'きゅう',m:'9'},{f:'十',r:'じゅう',m:'10'},{f:'百',r:'ひゃく',m:'100'},{f:'千',r:'せん',m:'1.000'},{f:'万',r:'まん',m:'10.000'},{f:'十万',r:'じゅうまん',m:'100.000'},{f:'百万',r:'ひゃくまん',m:'1.000.000'},{f:'千万',r:'せんまん',m:'10.000.000'},{f:'億',r:'おく',m:'100.000.000'},{f:'兆',r:'ちょう',m:'1 Triliun'},
-            {f:'人体',r:'じんたい',m:'Tubuh manusia'},{f:'肩',r:'かた',m:'Bahu'},{f:'喉',r:'のど',m:'Tenggorokan'},{f:'顔',r:'かお',m:'Muka'},{f:'頬',r:'ほほ',m:'Pipi'},{f:'歯',r:'は',m:'Gigi'},{f:'指',r:'ゆび',m:'Jari'},{f:'お腹',r:'おなか',m:'Perut'},{f:'爪',r:'つめ',m:'Kuku'},{f:'額',r:'ひたい',m:'Dahi'},{f:'顎',r:'あご',m:'Dagu'},{f:'鼻',r:'はな',m:'Hidung'},{f:'口',r:'くち',m:'Mulut'},{f:'唇',r:'くちびる',m:'Bibir'},{f:'首',r:'くび',m:'Leher'},{f:'掌',r:'てのひら',m:'Telapak tangan'},{f:'体',r:'からだ',m:'Badan'},{f:'頭',r:'あたま',m:'Kepala'},{f:'手',r:'て',m:'Tangan'},{f:'足',r:'あし',m:'Kaki'},{f:'腕',r:'うで',m:'Lengan'},{f:'膝',r:'ひざ',m:'Lutut'},{f:'髪',r:'かみ',m:'Rambut'},{f:'背中',r:'せなか',m:'Punggung'},{f:'腰',r:'こし',m:'Pinggang'},{f:'目',r:'め',m:'Mata'},{f:'耳',r:'みみ',m:'Telinga'},{f:'踵',r:'かかと',m:'Tumit'},{f:'足指',r:'あしゆび',m:'Jari kaki'},{f:'親指',r:'おやゆび',m:'Jempol'},{f:'人差し指',r:'ひとさしゆび',m:'Telunjuk'},{f:'中指',r:'なかゆび',m:'Jari tengah'},{f:'薬指',r:'くすりゆび',m:'Jari manis'},{f:'小指',r:'こゆび',m:'Kelingking'},{f:'顎鬚',r:'あごひげ',m:'Janggut'},{f:'髭',r:'ひげ',m:'Kumis'},{f:'太股',r:'ふともも',m:'Paha'},{f:'皮膚',r:'ひふ',m:'Kulit'},{f:'血液',r:'けつえき',m:'Darah'},{f:'眉',r:'まゆ',m:'Alis'},{f:'胸',r:'むね',m:'Dada'},{f:'肘',r:'ひじ',m:'Siku'},{f:'臍',r:'へそ',m:'Pusar'},{f:'腋の下',r:'わきのした',m:'Ketiak'},{f:'足首',r:'あしくび',m:'Pergelangan kaki'},{f:'手首',r:'てくび',m:'Pergelangan tangan'},{f:'眼球',r:'がんきゅう',m:'Bola mata'},{f:'内臓',r:'ないぞう',m:'Organ dalam'},{f:'腎臓',r:'じんぞう',m:'Ginjal'},{f:'肝臓',r:'かんぞう',m:'Hati'},{f:'肋骨',r:'ろっこつ',m:'Tulang rusuk'},{f:'卵巣',r:'らんそう',m:'Indung telur'},{f:'胎児',r:'たいじ',m:'Janin'},{f:'心臓',r:'しんぞう',m:'Jantung'},{f:'脾臓',r:'ひぞう',m:'Limpa'},{f:'脳',r:'のう',m:'Otak'},{f:'筋肉',r:'きんにく',m:'Otot'},{f:'肺',r:'はい',m:'Paru-paru'},{f:'血管',r:'けっかん',m:'Pembuluh darah'},{f:'動脈',r:'どうみゃく',m:'Nadi'},{f:'静脈',r:'じょうみゃく',m:'Urat'},{f:'子宮',r:'しきゅう',m:'Rahim'},{f:'網膜',r:'もうまく',m:'Retina'},{f:'精子',r:'せいし',m:'Sperma'},{f:'頭蓋骨',r:'ずがいこつ',m:'Tengkorak'},{f:'腸',r:'ちょう',m:'Usus'},{f:'大腸',r:'だいちょう',m:'Usus besar'},
-            {f:'ボールペン',r:'Boorupen',m:'Pulpen'},{f:'本',r:'ほん',m:'Buku'},{f:'分度器',r:'ぶんどき',m:'Busur Derajat'},{f:'教科書',r:'きょうかしょ',m:'Buku Pelajaran'},{f:'百科事典',r:'ひゃっかじてん',m:'Ensiklopedia'},{f:'鋏',r:'はさみ',m:'Gunting'},{f:'電卓',r:'でんたく',m:'Kalkulator'},{f:'チョーク',r:'Chooku',m:'Kapur'},{f:'椅子',r:'いす',m:'Kursi'},{f:'コンピューター',r:'Konpyu-ta',m:'Komputer'},{f:'辞書',r:'じしょ',m:'Kamus'},{f:'紙',r:'かみ',m:'Kertas'},{f:'机',r:'つくえ',m:'Meja'},{f:'教卓',r:'きょうたく',m:'Meja guru'},{f:'黒板',r:'こくばん',m:'Papan Tulis'},{f:'定規',r:'じょうぎ',m:'Penggaris'},{f:'黒板消し',r:'こくばんけし',m:'Penghapus Papan'},{f:'鉛筆',r:'えんぴつ',m:'Pensil'},{f:'シャーペン',r:'Sha-pen',m:'Pensil Mekanik'},{f:'地図',r:'ちず',m:'Peta'},{f:'本棚',r:'ほんだな',m:'Rak Buku'},{f:'鉛筆削り',r:'えんぴつけずり',m:'Rautan'},{f:'制服',r:'せいふく',m:'Seragam'},{f:'ホチキス',r:'Hochikisu',m:'Staples'},{f:'マーカー',r:'Ma-ka',m:'Spidol'},{f:'通学鞄',r:'つうがくかばん',m:'Tas Sekolah'},{f:'筆箱',r:'ふでばこ',m:'Tempat Pensil'},{f:'ノート',r:'nooto',m:'Buku Catatan'},
-            {f:'包丁',r:'ほうちょう',m:'Pisau dapur'},{f:'まな板',r:'まないた',m:'Talenan'},{f:'浄水器',r:'じょうすいき',m:'Penyuling air'},{f:'鍋',r:'なべ',m:'Panci'},{f:'フライパン',r:'furaipan',m:'Wajan'},{f:'やかん',r:'yakan',m:'Ketel'},{f:'おたま',r:'otama',m:'Sendok sayur'},{f:'排水溝',r:'はいすいこう',m:'Saringan'},{f:'ボウル',r:'bouru',m:'Mangkuk'},{f:'ミキサー',r:'mikisaa',m:'Blender'},{f:'おろし金',r:'おろしがね',m:'Parutan'},{f:'皮むき機',r:'かわむきき',m:'Alat pengupas'},{f:'栓抜き',r:'せんぬき',m:'Pembuka botol'},{f:'缶切り',r:'かんきり',m:'Pembuka kaleng'},{f:'コルク抜き',r:'korukunuki',m:'Kotrek'},
-            {f:'果物',r:'くだもの',m:'Buah'},{f:'苺',r:'いちご',m:'Strawberry'},{f:'蜜柑',r:'みかん',m:'Jeruk mandarin'},{f:'オレンジ',r:'orenji',m:'Jeruk'},{f:'レモン',r:'remon',m:'Lemon'},{f:'西瓜',r:'すいか',m:'Semangka'},{f:'葡萄',r:'ぶどう',m:'Anggur'},{f:'パイナップル',r:'painappuru',m:'Nanas'},{f:'林檎',r:'りんご',m:'Apel'},{f:'ドリアン',r:'dorian',m:'Durian'},{f:'パパイヤ',r:'papaiya',m:'Pepaya'},{f:'桃',r:'もも',m:'Persik'},{f:'梅',r:'うめ',m:'Plum'},{f:'マンゴー',r:'mangoo',m:'Mangga'},{f:'キウイ',r:'kiui',m:'Kiwi'},{f:'グアバ',r:'guaba',m:'Jambu biji'},{f:'干し葡萄',r:'ほしぶどう',m:'Kismis'},{f:'栗',r:'くり',m:'Coklat/Kastanye'},{f:'ザクロ',r:'ざくろ',m:'Delima'},{f:'ココナッツ',r:'kokonattsu',m:'Kelapa'},{f:'柿',r:'かき',m:'Kesemek'},{f:'アボカド',r:'abokado',m:'Alpukat'},{f:'梨',r:'なし',m:'Pir'},{f:'野菜',r:'やさい',m:'Sayur'},{f:'大根',r:'だいこん',m:'Lobak'},{f:'レタス',r:'retasu',m:'Selada'},{f:'トマト',r:'tomato',m:'Tomat'},{f:'じゃが芋',r:'じゃがいも',m:'Kentang'},{f:'キャベツ',r:'kyabetsu',m:'Kubis'},{f:'生姜',r:'しょうが',m:'Jahe'},{f:'茄子',r:'なす',m:'Terong'},{f:'人参',r:'にんじん',m:'Wortel'},{f:'玉葱',r:'たまねぎ',m:'Bawang'},{f:'大蒜',r:'にんにく',m:'Bawang putih'},{f:'胡瓜',r:'きゅうり',m:'Mentimun'},{f:'ピーマン',r:'piiman',m:'Cabe/Paprika'},{f:'豆',r:'まめ',m:'Kacang'},{f:'マッシュルーム',r:'masshuruumu',m:'Jamur'},{f:'白菜',r:'はくさい',m:'Sawi putih'},{f:'南瓜',r:'かぼちゃ',m:'Labu'},{f:'ブロッコリー',r:'burokkorii',m:'Brokoli'},{f:'大豆',r:'だいず',m:'Kedelai'},{f:'ご飯',r:'ごはん',m:'Nasi/Makan'},{f:'パン',r:'ぱん',m:'Roti'},{f:'肉',r:'にく',m:'Daging'},{f:'牛肉',r:'ぎゅうにく',m:'Daging Sapi'},{f:'豚肉',r:'ぶたにく',m:'Daging Babi'},{f:'鶏肉',r:'とりにく',m:'Daging Ayam'},{f:'魚',r:'さかな',m:'Ikan'},{f:'卵',r:'たまご',m:'Telur'},{f:'塩',r:'しお',m:'Garam'},{f:'砂糖',r:'さとう',m:'Gula'},{f:'醤油',r:'しょうゆ',m:'Kecap asin'},{f:'お茶',r:'おちゃ',m:'Teh hijau'},{f:'紅茶',r:'こうちゃ',m:'Teh hitam'},{f:'牛乳',r:'ぎゅうにゅう',m:'Susu sapi'},{f:'水',r:'みず',m:'Air'},{f:'お湯',r:'おゆ',m:'Air panas'},{f:'コーヒー',r:'こーひー',m:'Kopi'},{f:'ジュース',r:'じゅーす',m:'Jus'},{f:'お酒',r:'おさけ',m:'Sake/Alkohol'},{f:'ビール',r:'びーる',m:'Bir'},{f:'ワイン',r:'わいん',m:'Wine'},{f:'氷',r:'こおり',m:'Es'},{f:'お菓子',r:'おかし',m:'Camilan/Permen'},{f:'ケーキ',r:'けーき',m:'Kue'},{f:'弁当',r:'べんとう',m:'Kotak bekal'},{f:'味噌',r:'みそ',m:'Miso'},{f:'油',r:'あぶら',m:'Minyak'},{f:'胡椒',r:'こしょう',m:'Lada'},
-            {f:'犬',r:'いぬ',m:'Anjing'},{f:'猫',r:'ねこ',m:'Kucing'},{f:'鳥',r:'とり',m:'Burung'},{f:'魚',r:'さかな',m:'Ikan'},{f:'牛',r:'うし',m:'Sapi'},{f:'馬',r:'うま',m:'Kuda'},{f:'豚',r:'ぶた',m:'Babi'},{f:'羊',r:'ひつじ',m:'Domba'},{f:'猿',r:'さる',m:'Monyet'},{f:'熊',r:'くま',m:'Beruang'},{f:'象',r:'ぞう',m:'Gajah'},{f:'虎',r:'とら',m:'Harimau'},{f:'蛇',r:'へび',m:'Ular'},{f:'鼠',r:'ねずみ',m:'Tikus'},{f:'兎',r:'うさぎ',m:'Kelinci'},{f:'狐',r:'きつね',m:'Rubah'},{f:'鹿',r:'しか',m:'Rusa'},{f:'蛙',r:'かえる',m:'Katak'},{f:'虫',r:'むし',m:'Serangga'},{f:'蝶',r:'ちょう',m:'Kupu-kupu'},{f:'蜂',r:'はち',m:'Lebah'},{f:'蜘蛛',r:'くも',m:'Laba-laba'},{f:'蚊',r:'か',m:'Nyamuk'},{f:'蠅',r:'はえ',m:'Lalat'},{f:'蟻',r:'あり',m:'Semut'},
-            {f:'家族',r:'かぞく',m:'Keluarga'},{f:'父',r:'ちち',m:'Ayah (sendiri)'},{f:'母',r:'はは',m:'Ibu (sendiri)'},{f:'お父さん',r:'おとうさん',m:'Ayah (orang lain)'},{f:'お母さん',r:'おかあさん',m:'Ibu (orang lain)'},{f:'兄',r:'あに',m:'Kakak Laki-laki'},{f:'お兄さん',r:'おにいさん',m:'Kakak Laki-laki (orang lain)'},{f:'姉',r:'あね',m:'Kakak Perempuan'},{f:'お姉さん',r:'おねえさん',m:'Kakak Perempuan (orang lain)'},{f:'弟',r:'おとうと',m:'Adik Laki-laki'},{f:'妹',r:'いもうと',m:'Adik Perempuan'},{f:'祖父',r:'そふ',m:'Kakek'},{f:'おじいさん',r:'おじいさん',m:'Kakek (orang lain)'},{f:'祖母',r:'そぼ',m:'Nenek'},{f:'おばあさん',r:'おばあさん',m:'Nenek (orang lain)'},{f:'夫',r:'おっと',m:'Suami'},{f:'ご主人',r:'ごしゅじん',m:'Suami (orang lain)'},{f:'妻',r:'つま',m:'Istri'},{f:'奥さん',r:'おくさん',m:'Istri (orang lain)'},{f:'息子',r:'むすこ',m:'Anak Laki-laki'},{f:'娘',r:'むすめ',m:'Anak Perempuan'},{f:'孫',r:'まご',m:'Cucu'},{f:'叔父',r:'おじ',m:'Paman'},{f:'叔母',r:'おば',m:'Bibi'},{f:'従兄弟',r:'いとこ',m:'Sepupu'},{f:'男',r:'おとこ',m:'Laki-laki'},{f:'女',r:'おんな',m:'Perempuan'},{f:'子供',r:'こども',m:'Anak'},{f:'大人',r:'おとな',m:'Orang dewasa'},{f:'友達',r:'ともだち',m:'Teman'},
-            {f:'学校',r:'がっこう',m:'Sekolah'},{f:'病院',r:'びょういん',m:'Rumah Sakit'},{f:'銀行',r:'ぎんこう',m:'Bank'},{f:'郵便局',r:'ゆうびんきょく',m:'Kantor Pos'},{f:'図書館',r:'としょかん',m:'Perpustakaan'},{f:'駅',r:'えき',m:'Stasiun'},{f:'空港',r:'くうこう',m:'Bandara'},{f:'公園',r:'こうえん',m:'Taman'},{f:'スーパー',r:'すーぱー',m:'Supermarket'},{f:'デパート',r:'でぱーと',m:'Department Store'},{f:'映画館',r:'えいがかん',m:'Bioskop'},{f:'美術館',r:'びじゅつかん',m:'Museum Seni'},{f:'警察署',r:'けいさつしょ',m:'Kantor Polisi'},{f:'交番',r:'こうばん',m:'Pos Polisi'},{f:'消防署',r:'しょうぼうしょ',m:'Pemadam Kebakaran'},{f:'寺',r:'てら',m:'Kuil Buddha'},{f:'神社',r:'じんじゃ',m:'Kuil Shinto'},{f:'教会',r:'きょうかい',m:'Gereja'},{f:'海',r:'うみ',m:'Laut'},{f:'山',r:'やま',m:'Gunung'},{f:'川',r:'かわ',m:'Sungai'},{f:'森',r:'もり',m:'Hutan'},{f:'村',r:'むら',m:'Desa'},{f:'町',r:'まち',m:'Kota Kecil'},{f:'国',r:'くに',m:'Negara'},{f:'世界',r:'せかい',m:'Dunia'},{f:'会社',r:'かいしゃ',m:'Perusahaan'},{f:'工場',r:'こうじょう',m:'Pabrik'},{f:'店',r:'みせ',m:'Toko'},{f:'レストラン',r:'れすとらん',m:'Restoran'},{f:'ホテル',r:'ほてる',m:'Hotel'},{f:'道',r:'みち',m:'Jalan'},{f:'橋',r:'はし',m:'Jembatan'},{f:'家',r:'いえ',m:'Rumah'},{f:'部屋',r:'へや',m:'Kamar/Ruangan'},
-            {f:'車',r:'くるま',m:'Mobil'},{f:'自転車',r:'じてんしゃ',m:'Sepeda'},{f:'バイク',r:'ばいく',m:'Motor'},{f:'飛行機',r:'ひこうき',m:'Pesawat'},{f:'船',r:'ふね',m:'Kapal'},{f:'電車',r:'でんしゃ',m:'Kereta Listrik'},{f:'地下鉄',r:'ちかてつ',m:'Kereta Bawah Tanah'},{f:'新幹線',r:'しんかんせん',m:'Kereta Peluru'},{f:'バス',r:'ばす',m:'Bus'},{f:'タクシー',r:'たくしー',m:'Taksi'},{f:'トラック',r:'とらっく',m:'Truk'},{f:'救急車',r:'きゅうきゅうしゃ',m:'Ambulans'},{f:'パトカー',r:'ぱとかー',m:'Mobil Polisi'},{f:'消防車',r:'しょうぼうしゃ',m:'Mobil Pemadam'},{f:'駅',r:'えき',m:'Stasiun'},
-            {f:'テレビ',r:'てれび',m:'TV'},{f:'ラジオ',r:'らじお',m:'Radio'},{f:'パソコン',r:'ぱそこん',m:'PC / Laptop'},{f:'携帯電話',r:'けいたいでんわ',m:'HP'},{f:'スマホ',r:'すまほ',m:'Smartphone'},{f:'冷蔵庫',r:'れいぞうこ',m:'Kulkas'},{f:'洗濯機',r:'せんたくき',m:'Mesin Cuci'},{f:'掃除機',r:'そうじき',m:'Vacuum Cleaner'},{f:'電子レンジ',r:'でんしれんじ',m:'Microwave'},{f:'エアコン',r:'えあこん',m:'AC'},{f:'時計',r:'とけい',m:'Jam'},{f:'カメラ',r:'かめら',m:'Kamera'},{f:'眼鏡',r:'めがね',m:'Kacamata'},{f:'傘',r:'かさ',m:'Payung'},{f:'財布',r:'さいふ',m:'Dompet'},{f:'鞄',r:'かばん',m:'Tas'},{f:'靴',r:'くつ',m:'Sepatu'},{f:'靴下',r:'くつした',m:'Kaos Kaki'},{f:'服',r:'ふく',m:'Pakaian'},{f:'帽子',r:'ぼうし',m:'Topi'},{f:'ネクタイ',r:'ねくたい',m:'Dasi'},{f:'薬',r:'くすり',m:'Obat'},{f:'鍵',r:'かぎ',m:'Kunci'},{f:'鏡',r:'かがみ',m:'Cermin'},{f:'タオル',r:'たおる',m:'Handuk'},{f:'石鹸',r:'せっけん',m:'Sabun'},{f:'シャンプー',r:'しゃんぷー',m:'Shampoo'},{f:'歯ブラシ',r:'はぶらし',m:'Sikat gigi'},{f:'歯磨き粉',r:'はみがきこ',m:'Pasta gigi'},{f:'トイレットペーパー',r:'といれっとぺーぱー',m:'Tisu toilet'},{f:'ゴミ箱',r:'ごみばこ',m:'Tempat sampah'},{f:'ベッド',r:'べっど',m:'Tempat tidur'},{f:'布団',r:'ふとん',m:'Futon'},{f:'毛布',r:'もうふ',m:'Selimut'},{f:'枕',r:'まくら',m:'Bantal'},{f:'ドア',r:'どあ',m:'Pintu'},{f:'窓',r:'まど',m:'Jendela'},{f:'壁',r:'かべ',m:'Dinding'},{f:'床',r:'ゆか',m:'Lantai'},{f:'天井',r:'てんじょう',m:'Langit-langit'},
-            {f:'天気',r:'てんき',m:'Cuaca'},{f:'晴れ',r:'はれ',m:'Cerah'},{f:'曇り',r:'くもり',m:'Berawan'},{f:'雨',r:'あめ',m:'Hujan'},{f:'雪',r:'ゆき',m:'Salju'},{f:'風',r:'かぜ',m:'Angin'},{f:'雷',r:'かみなり',m:'Petir'},{f:'台風',r:'たいふう',m:'Topan'},{f:'地震',r:'じしん',m:'Gempa Bumi'},{f:'空',r:'そら',m:'Langit'},{f:'太陽',r:'たいよう',m:'Matahari'},{f:'月',r:'つき',m:'Bulan (Satelit)'},{f:'星',r:'ほし',m:'Bintang'},{f:'光',r:'ひかり',m:'Cahaya'},{f:'水',r:'みず',m:'Air'},{f:'氷',r:'こおり',m:'Es'},{f:'火',r:'ひ',m:'Api'},{f:'花',r:'はな',m:'Bunga'},{f:'木',r:'き',m:'Pohon'},{f:'草',r:'くさ',m:'Rumput'},
-            {f:'上',r:'うえ',m:'Atas'},{f:'下',r:'した',m:'Bawah'},{f:'左',r:'ひだり',m:'Kiri'},{f:'右',r:'みぎ',m:'Kanan'},{f:'前',r:'まえ',m:'Depan'},{f:'後ろ',r:'うしろ',m:'Belakang'},{f:'中',r:'なか',m:'Dalam'},{f:'外',r:'そと',m:'Luar'},{f:'隣',r:'となり',m:'Sebelah'},{f:'近く',r:'ちかく',m:'Dekat'},{f:'遠く',r:'とおく',m:'Jauh'},{f:'東',r:'ひがし',m:'Timur'},{f:'西',r:'にし',m:'Barat'},{f:'南',r:'みなみ',m:'Selatan'},{f:'北',r:'きた',m:'Utara'},{f:'横',r:'よこ',m:'Samping'},{f:'間',r:'あいだ',m:'Antara'},{f:'真ん中',r:'まんなか',m:'Tengah'},
-            {f:'医者',r:'いしゃ',m:'Dokter'},{f:'看護師',r:'かんごし',m:'Perawat'},{f:'先生',r:'せんせい',m:'Guru/Dokter'},{f:'学生',r:'がくせい',m:'Siswa/Mahasiswa'},{f:'警察官',r:'けいさつかん',m:'Polisi'},{f:'消防士',r:'しょうぼうし',m:'Pemadam kebakaran'},{f:'会社員',r:'かいしゃいん',m:'Pegawai perusahaan'},{f:'銀行員',r:'ぎんこういん',m:'Pegawai bank'},{f:'店員',r:'てんいん',m:'Pelayan toko'},{f:'駅員',r:'えきいん',m:'Petugas stasiun'},{f:'運転手',r:'うんてんしゅ',m:'Sopir'},{f:'社長',r:'しゃちょう',m:'Presiden Direktur'},{f:'部長',r:'ぶちょう',m:'Manajer'},{f:'歌手',r:'うたしゅ',m:'Penyanyi'},{f:'俳優',r:'はいゆう',m:'Aktor'},{f:'農家',r:'のうか',m:'Petani'},{f:'漁師',r:'りょうし',m:'Nelayan'},{f:'政治家',r:'せいじか',m:'Politikus'},{f:'研究者',r:'けんきゅうしゃ',m:'Peneliti'},{f:'弁護士',r:'べんごし',m:'Pengacara'},
-            {f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'長い',r:'ながい',m:'Panjang'},{f:'短い',r:'みじかい',m:'Pendek'},{f:'多い',r:'おおい',m:'Banyak'},{f:'少ない',r:'すくない',m:'Sedikit'},{f:'太い',r:'ふとい',m:'Gemuk/Tebal'},{f:'細い',r:'ほそい',m:'Ramping/Tipis'},{f:'厚い',r:'あつい',m:'Tebal'},{f:'薄い',r:'うすい',m:'Tipis'},{f:'固い',r:'かたい',m:'Keras'},{f:'柔らかい',r:'やわらかい',m:'Lunak'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'古い',r:'ふるい',m:'Lama/Tua'},{f:'高い',r:'たかい',m:'Tinggi/Mahal'},{f:'安い',r:'やすい',m:'Murah'},{f:'早い',r:'はやい',m:'Cepat (waktu)'},{f:'遠い',r:'とおい',m:'Jauh'},{f:'近い',r:'ちかい',m:'Dekat'},{f:'強い',r:'つよい',m:'Kuat'},{f:'弱い',r:'よわい',m:'Lemah'},{f:'暑い',r:'あつい',m:'Panas (suhu)'},{f:'寒い',r:'さむい',m:'Dingin (suhu)'},{f:'明るい',r:'あかるい',m:'Terang'},{f:'暗い',r:'くらい',m:'Gelap'},{f:'汚い',r:'きたない',m:'Kotor'},{f:'きれい',r:'きれい',m:'Cantik / Bersih'},{f:'難しい',r:'むずかしい',m:'Sulit'},{f:'易しい',r:'やさしい',m:'Mudah'},{f:'危ない',r:'あぶない',m:'Bahaya'},{f:'安全',r:'あんぜん',m:'Aman'},{f:'うれしい',r:'うれしい',m:'Senang'},{f:'悲しい',r:'かなしい',m:'Sedih'},{f:'寂しい',r:'さびしい',m:'Sepi'},{f:'怖い',r:'こわい',m:'Takut'},{f:'眠い',r:'ねむい',m:'Ngantuk'},{f:'痛い',r:'いたい',m:'Sakit'},{f:'甘い',r:'あまい',m:'Manis'},{f:'辛い',r:'からい',m:'Pedas'},{f:'苦い',r:'にがい',m:'Pahit'},{f:'酸っぱい',r:'すっぱい',m:'Asam'},{f:'塩辛い',r:'しおからい',m:'Asin'},{f:'美味しい',r:'おいしい',m:'Enak'},{f:'不味い',r:'まずい',m:'Tidak enak'},{f:'重い',r:'おもい',m:'Berat'},{f:'軽い',r:'かるい',m:'Ringan'},{f:'広い',r:'ひろい',m:'Luas'},{f:'狭い',r:'せまい',m:'Sempit'},{f:'いい',r:'いい/よい',m:'Bagus / Baik'},{f:'悪い',r:'わるい',m:'Buruk'},{f:'面白い',r:'おもしろい',m:'Menarik / Lucu'},{f:'つまらない',r:'つまらない',m:'Membosankan'},{f:'楽しい',r:'たのしい',m:'Menyenangkan'},{f:'厳しい',r:'きびしい',m:'Ketat / Tegas'},{f:'親切',r:'しんせつ',m:'Ramah'},{f:'元気',r:'げんき',m:'Sehat'},{f:'便利',r:'べんり',m:'Praktis'},{f:'不便',r:'ふべん',m:'Tidak praktis'},{f:'複雑',r:'ふくざつ',m:'Rumit'},{f:'簡単',r:'かんたん',m:'Mudah / Gampang'},{f:'好き',r:'すき',m:'Suka'},{f:'嫌い',r:'きらい',m:'Benci'},{f:'有名',r:'ゆうめい',m:'Terkenal'},{f:'暇',r:'ひま',m:'Senggang'},{f:'忙しい',r:'いそがしい',m:'Sibuk'},{f:'恥ずかしい',r:'はずかしい',m:'Malu'},{f:'熱い',r:'あつい',m:'Panas (benda)'},{f:'冷たい',r:'つめたい',m:'Dingin (benda)'},{f:'温かい',r:'あたたかい',m:'Hangat (benda)'},{f:'涼しい',r:'すずしい',m:'Sejuk'},{f:'素晴らしい',r:'すばらしい',m:'Luar biasa'},{f:'すごい',r:'すごい',m:'Hebat'},{f:'ひどい',r:'ひどい',m:'Mengerikan/Kejam'},{f:'うるさい',r:'うるさい',m:'Berisik'},{f:'静か',r:'しずか',m:'Tenang'},{f:'にぎやか',r:'にぎやか',m:'Ramai'},{f:'可愛い',r:'かわいい',m:'Imut/Lucu'},{f:'かっこいい',r:'かっこいい',m:'Keren'},{f:'珍しい',r:'めずらしい',m:'Langka/Unik'},{f:'正しい',r:'ただしい',m:'Benar'},{f:'大丈夫',r:'だいじょうぶ',m:'Tidak apa-apa'},{f:'大切',r:'たいせつ',m:'Penting/Berharga'},{f:'大事',r:'だいじ',m:'Penting'},{f:'だめ',r:'だめ',m:'Tidak boleh/Gagal'},{f:'変',r:'へん',m:'Aneh'},{f:'無駄',r:'むだ',m:'Sia-sia'},{f:'上手',r:'じょうず',m:'Mahir/Pintar'},{f:'下手',r:'へた',m:'Tidak mahir'},{f:'得意',r:'とくい',m:'Keahlian'},{f:'苦手',r:'にがて',m:'Kelemahan/Tidak suka'},{f:'立派',r:'りっぱ',m:'Megah/Hebat'},{f:'大変',r:'たいへん',m:'Berat/Sulit'},{f:'楽',r:'らく',m:'Mudah/Nyaman'},{f:'無理',r:'むり',m:'Mustahil'},{f:'丁寧',r:'ていねい',m:'Sopan/Teliti'},{f:'真面目',r:'まじめ',m:'Serius/Rajin'},{f:'一生懸命',r:'いっしょうけんめい',m:'Sungguh-sungguh'},{f:'同じ',r:'おなじ',m:'Sama'},
-            {f:'有る',r:'ある',m:'Ada (Benda)'},{f:'居る',r:'いる',m:'Ada (Mahluk)'},{f:'作業する',r:'さぎょうする',m:'Bekerja'},{f:'働く',r:'はたらく',m:'Bekerja'},{f:'勉強する',r:'べんきょうする',m:'Belajar'},{f:'思う',r:'おもう',m:'Berpikir'},{f:'掃除する',r:'そうじする',m:'Bersih-bersih'},{f:'行く',r:'いく',m:'Pergi'},{f:'来る',r:'くる',m:'Datang'},{f:'帰る',r:'かえる',m:'Pulang'},{f:'見る',r:'みる',m:'Melihat'},{f:'守る',r:'まもる',m:'Melindungi'},{f:'食べる',r:'たべる',m:'Makan'},{f:'飲む',r:'のむ',m:'Minum'},{f:'寝る',r:'ねる',m:'Tidur'},{f:'起きる',r:'おきる',m:'Bangun'},{f:'待つ',r:'まつ',m:'Menunggu'},{f:'話す',r:'はなす',m:'Berbicara'},{f:'聞く',r:'きく',m:'Mendengar'},{f:'書く',r:'かく',m:'Menulis'},{f:'読む',r:'よむ',m:'Membaca'},{f:'歩く',r:'あるく',m:'Berjalan'},{f:'走る',r:'はしる',m:'Berlari'},{f:'泳ぐ',r:'およぐ',m:'Berenang'},{f:'会う',r:'あう',m:'Bertemu'},{f:'買う',r:'かう',m:'Membeli'},{f:'売る',r:'うる',m:'Menjual'},{f:'出す',r:'だす',m:'Mengeluarkan'},{f:'入れる',r:'いれる',m:'Memasukkan'},{f:'教える',r:'おしえる',m:'Mengajar'},{f:'習う',r:'ならう',m:'Belajar / Menerima ilmu'},{f:'借りる',r:'かりる',m:'Meminjam'},{f:'貸す',r:'かす',m:'Meminjamkan'},{f:'返す',r:'かえす',m:'Mengembalikan'},{f:'分かる',r:'わかる',m:'Mengerti'},{f:'知る',r:'しる',m:'Tahu'},{f:'疲れる',r:'つかれる',m:'Lelah'},{f:'遊ぶ',r:'あそぶ',m:'Bermain'},{f:'急ぐ',r:'いそぐ',m:'Bergegas'},{f:'洗う',r:'あらう',m:'Mencuci'},{f:'乗る',r:'のる',m:'Naik (kendaraan)'},{f:'降りる',r:'おりる',m:'Turun'},{f:'歌う',r:'うたう',m:'Menyanyi'},{f:'踊る',r:'おどる',m:'Menari'},{f:'作る',r:'つくる',m:'Membuat'},{f:'使う',r:'つかう',m:'Menggunakan'},{f:'死ぬ',r:'しぬ',m:'Mati'},{f:'住む',r:'すむ',m:'Tinggal'},{f:'終わる',r:'おわる',m:'Selesai'},{f:'始まる',r:'はじまる',m:'Mulai'},{f:'忘れる',r:'わすれる',m:'Lupa'},{f:'覚える',r:'おぼえる',m:'Mengingat / Menghafal'},{f:'着る',r:'きる',m:'Mengenakan (Baju)'},{f:'脱ぐ',r:'ぬぐ',m:'Melepas (Baju)'},{f:'開ける',r:'あける',m:'Membuka'},{f:'閉める',r:'しめる',m:'Menutup'},{f:'消す',r:'けす',m:'Menghapus / Mematikan'},{f:'点ける',r:'つける',m:'Menyalakan'},{f:'呼ぶ',r:'よぶ',m:'Memanggil'},{f:'答える',r:'こたえる',m:'Menjawab'},{f:'頑張る',r:'がんばる',m:'Berjuang / Berusaha'},{f:'休む',r:'やすむ',m:'Istirahat'},{f:'座る',r:'すわる',m:'Duduk'},{f:'立つ',r:'たつ',m:'Berdiri'},{f:'泣く',r:'なく',m:'Menangis'},{f:'笑う',r:'わらう',m:'Tertawa'},{f:'怒る',r:'おこる',m:'Marah'},{f:'喜ぶ',r:'よろこぶ',m:'Gembira'},{f:'助ける',r:'たすける',m:'Menolong'},{f:'手伝う',r:'てつだう',m:'Membantu'},{f:'探す',r:'さがす',m:'Mencari'},{f:'見つける',r:'みつける',m:'Menemukan'},{f:'なくす',r:'なくす',m:'Kehilangan'},{f:'払う',r:'はらう',m:'Membayar'},{f:'送る',r:'おくる',m:'Mengirim'},{f:'もらう',r:'もらう',m:'Menerima'},{f:'あげる',r:'あげる',m:'Memberi'},{f:'くれる',r:'くれる',m:'Memberi (ke saya)'},{f:'持つ',r:'もつ',m:'Membawa / Memiliki'},{f:'取る',r:'とる',m:'Mengambil'},{f:'選ぶ',r:'えらぶ',m:'Memilih'},{f:'決める',r:'きめる',m:'Memutuskan'},{f:'変わる',r:'かわる',m:'Berubah'},{f:'変える',r:'かえる',m:'Mengubah'},{f:'開く',r:'あく',m:'Terbuka'},{f:'閉まる',r:'しまる',m:'Tertutup'},{f:'つく',r:'つく',m:'Menyala'},{f:'消える',r:'きえる',m:'Padam'},{f:'落ちる',r:'おちる',m:'Jatuh'},{f:'落とす',r:'おとす',m:'Menjatuhkan'},{f:'割れる',r:'われる',m:'Pecah'},{f:'割る',r:'わる',m:'Memecahkan'},{f:'壊れる',r:'こわれる',m:'Rusak'},{f:'壊す',r:'こわす',m:'Merusak'},{f:'直す',r:'なおす',m:'Memperbaiki'},{f:'治る',r:'なおる',m:'Sembuh'},{f:'続く',r:'つづく',m:'Berlanjut'},{f:'続ける',r:'つづける',m:'Melanjutkan'},{f:'集まる',r:'あつまる',m:'Berkumpul'},{f:'集める',r:'あつめる',m:'Mengumpulkan'},{f:'増える',r:'ふえる',m:'Bertambah'},{f:'増やす',r:'ふやす',m:'Menambah'},{f:'減る',r:'へる',m:'Berkurang'},{f:'減らす',r:'へらす',m:'Mengurangi'},{f:'生まれる',r:'うまれる',m:'Lahir'},{f:'生む',r:'うむ',m:'Melahirkan'},{f:'信じる',r:'しんじる',m:'Percaya'},{f:'疑う',r:'うたがう',m:'Meragukan'},{f:'許す',r:'ゆるす',m:'Memaafkan'},{f:'謝る',r:'あやまる',m:'Meminta maaf'},{f:'祈る',r:'いのる',m:'Berdoa'},{f:'願う',r:'ねがう',m:'Berharap'},{f:'頼む',r:'たのむ',m:'Meminta tolong'},{f:'断る',r:'ことわる',m:'Menolak'},{f:'驚く',r:'おどろく',m:'Terkejut'},{f:'慌てる',r:'あわてる',m:'Panik'},{f:'慣れる',r:'なれる',m:'Terbiasa'},{f:'諦める',r:'あきらめる',m:'Menyerah'},{f:'戦う',r:'たたかう',m:'Bertarung'},{f:'勝つ',r:'かつ',m:'Menang'},{f:'負ける',r:'まける',m:'Kalah'},{f:'逃げる',r:'にげる',m:'Melarikan diri'},{f:'隠れる',r:'かくれる',m:'Bersembunyi'},{f:'探検する',r:'たんけんする',m:'Menjelajah'},
-            {f:'いつも',r:'いつも',m:'Selalu'},{f:'たいてい',r:'たいてい',m:'Biasanya'},{f:'よく',r:'よく',m:'Sering'},{f:'時々',r:'ときどき',m:'Kadang-kadang'},{f:'たまに',r:'たまに',m:'Sesekali'},{f:'あまり',r:'あまり',m:'Jarang (diikuti negatif)'},{f:'全然',r:'ぜんぜん',m:'Sama sekali tidak'},{f:'とても',r:'とても',m:'Sangat'},{f:'大抵',r:'たいてい',m:'Kebanyakan'},{f:'一番',r:'いちばん',m:'Paling'},{f:'もっと',r:'もっと',m:'Lebih'},{f:'少し',r:'すこし',m:'Sedikit'},{f:'ちょっと',r:'ちょっと',m:'Sebentar/Sedikit'},{f:'たくさん',r:'たくさん',m:'Banyak'},{f:'全部',r:'ぜんぶ',m:'Semua'},{f:'多分',r:'たぶん',m:'Mungkin'},{f:'きっと',r:'きっと',m:'Pasti'},{f:'絶対',r:'ぜったい',m:'Mutlak'},{f:'本当に',r:'ほんとうに',m:'Benar-benar'},{f:'すぐ',r:'すぐ',m:'Segera'},{f:'もう',r:'もう',m:'Sudah'},{f:'まだ',r:'まだ',m:'Belum'},{f:'また',r:'また',m:'Lagi'},{f:'一緒に',r:'いっしょに',m:'Bersama-sama'},{f:'一人で',r:'ひとりで',m:'Sendirian'},
-            {f:'介護',r:'かいご',m:'Perawatan (Kaigo)'},{f:'高齢者',r:'こうれいしゃ',m:'Lansia'},{f:'患者',r:'かんじゃ',m:'Pasien'},{f:'施設',r:'しせつ',m:'Fasilitas (Panti)'},{f:'車椅子',r:'くるまいす',m:'Kursi roda'},{f:'杖',r:'つえ',m:'Tongkat jalan'},{f:'手すり',r:'てすり',m:'Pegangan tangga'},{f:'ベッド',r:'べっど',m:'Kasur'},{f:'毛布',r:'もうふ',m:'Selimut'},{f:'枕',r:'まくら',m:'Bantal'},{f:'シーツ',r:'しーつ',m:'Sprei'},{f:'おむつ',r:'おむつ',m:'Popok'},{f:'尿',r:'にょう',m:'Urine / Air kencing'},{f:'便',r:'べん',m:'Feses / BAB'},{f:'排泄',r:'はいせつ',m:'Ekskresi (Buang air)'},{f:'入浴',r:'にゅうよく',m:'Mandi'},{f:'洗身',r:'せんしん',m:'Mencuci badan'},{f:'洗髪',r:'せんぱつ',m:'Mencuci rambut'},{f:'食事',r:'しょくじ',m:'Makan'},{f:'水分',r:'すいぶん',m:'Cairan'},{f:'血圧',r:'けつあつ',m:'Tekanan darah'},{f:'体温',r:'たいおん',m:'Suhu tubuh'},{f:'脈拍',r:'みゃくはく',m:'Denyut nadi'},{f:'呼吸',r:'こきゅう',m:'Pernapasan'},{f:'薬',r:'くすり',m:'Obat'},{f:'注射',r:'ちゅうしゃ',m:'Suntikan'},{f:'点滴',r:'てんてき',m:'Infus'},{f:'包帯',r:'ほうたい',m:'Perban'},{f:'絆創膏',r:'ばんそうこう',m:'Plester'},{f:'怪我',r:'けが',m:'Luka'},{f:'病気',r:'びょうき',m:'Penyakit'},{f:'症状',r:'しょうじょう',m:'Gejala'},{f:'熱',r:'ねつ',m:'Demam'},{f:'咳',r:'せき',m:'Batuk'},{f:'風邪',r:'かぜ',m:'Masuk angin'},{f:'頭痛',r:'ずつう',m:'Sakit kepala'},{f:'腹痛',r:'ふくつう',m:'Sakit perut'},{f:'吐き気',r:'はきけ',m:'Mual'},{f:'めまい',r:'めまい',m:'Pusing'},{f:'骨折',r:'こっせつ',m:'Patah tulang'},{f:'出血',r:'しゅっけつ',m:'Pendarahan'},{f:'麻痺',r:'まひ',m:'Lumpuh/Mati rasa'},{f:'認知症',r:'にんちしょう',m:'Demensia (Pikun)'},{f:'うつ病',r:'うつびょう',m:'Depresi'},{f:'車椅子を押す',r:'くるまいすをおす',m:'Mendorong kursi roda'},{f:'支える',r:'ささえる',m:'Menopang'},{f:'助ける',r:'たすける',m:'Menolong'},{f:'見守る',r:'まもる',m:'Mengawasi'},{f:'着替える',r:'きがえる',m:'Ganti baju'},{f:'寝返り',r:'ねがえり',m:'Ganti posisi tidur'},{f:'起き上がる',r:'おきあがる',m:'Bangun (dari tempat tidur)'},{f:'立ち上がる',r:'たちあがる',m:'Berdiri'},{f:'歩行',r:'ほこう',m:'Berjalan'},{f:'転倒',r:'てんとう',m:'Terjatuh'},{f:'予防',r:'よぼう',m:'Pencegahan'},{f:'記録',r:'きろく',m:'Catatan / Rekam medis'},{f:'報告',r:'ほうこく',m:'Laporan'},{f:'連絡',r:'れんらく',m:'Komunikasi/Hubungi'},{f:'相談',r:'そうだん',m:'Konsultasi'},{f:'夜勤',r:'やきん',m:'Shift malam'}
+            {f:'おはようございます',r:'Ohayou gozaimasu',m:'Selamat pagi'},{f:'こんにちは',r:'Konnichiwa',m:'Selamat siang / Halo'},{f:'こんばんは',r:'Konbanwa',m:'Selamat malam'},{f:'おやすみなさい',r:'Oyasuminasai',m:'Selamat tidur'},{f:'さようなら',r:'Sayounara',m:'Sampai jumpa'},{f:'ありがとうございます',r:'Arigatou gozaimasu',m:'Terima kasih'},
+            {f:'私',r:'わたし',m:'Saya'},{f:'あなた',r:'anata',m:'Kamu'},{f:'これ',r:'kore',m:'Ini'},{f:'それ',r:'sore',m:'Itu'},{f:'あれ',r:'are',m:'Itu jauh'},
+            {f:'今日',r:'きょう',m:'Hari ini'},{f:'明日',r:'あした',m:'Besok'},{f:'昨日',r:'きのう',m:'Kemarin'},{f:'毎日',r:'まいにち',m:'Setiap hari'},{f:'今週',r:'こんしゅう',m:'Minggu ini'},{f:'先週',r:'せんしゅう',m:'Minggu lalu'},{f:'来週',r:'らいしゅう',m:'Minggu depan'},{f:'朝',r:'あさ',m:'Pagi'},{f:'昼',r:'ひる',m:'Siang'},{f:'晩・夜',r:'ばん・よる',m:'Malam'},
+            {f:'一',r:'いち',m:'1'},{f:'二',r:'に',m:'2'},{f:'三',r:'さん',m:'3'},{f:'四',r:'よん/し',m:'4'},{f:'五',r:'ご',m:'5'},{f:'六',r:'ろく',m:'6'},{f:'七',r:'なな/しち',m:'7'},{f:'八',r:'はち',m:'8'},{f:'九',r:'きゅう',m:'9'},{f:'十',r:'じゅう',m:'10'},{f:'百',r:'ひゃく',m:'100'},{f:'千',r:'せん',m:'1,000'},{f:'万',r:'まん',m:'10,000'},
+            {f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'高い',r:'たかい',m:'Mahal / Tinggi'},{f:'安い',r:'やすい',m:'Murah'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'古い',r:'ふるい',m:'Lama'},{f:'暑い',r:'あつい',m:'Panas (suhu)'},{f:'寒い',r:'さむい',m:'Dingin (suhu)'},{f:'良い',r:'いい',m:'Bagus'},{f:'悪い',r:'わるい',m:'Jelek'},{f:'難しい',r:'むずかしい',m:'Sulit'},{f:'易しい',r:'やさしい',m:'Mudah'},{f:'きれい',r:'kirei',m:'Cantik / Bersih'},{f:'暇',r:'ひま',m:'Senggang'},{f:'忙しい',r:'いそがしい',m:'Sibuk'},
+            {f:'行く',r:'いく',m:'Pergi'},{f:'来る',r:'くる',m:'Datang'},{f:'食べる',r:'たべる',m:'Makan'},{f:'飲む',r:'のむ',m:'Minum'},{f:'見る',r:'みる',m:'Melihat'},{f:'勉強する',r:'べんきょうする',m:'Belajar'},{f:'出来る',r:'できる',m:'Bisa'},
+            {f:'頭',r:'あたま',m:'Kepala'},{f:'手',r:'て',m:'Tangan'},{f:'足',r:'あし',m:'Kaki'},{f:'お腹',r:'おなか',m:'Perut'},{f:'のど',r:'nodo',m:'Tenggorokan'}
         ];
-
-        const ALL_VOCAB = [...BASE_VOCAB];
-        Object.entries(KANA_POOL.hira).forEach(([kana, romaji]) => {
-            ALL_VOCAB.push({ f: kana, r: romaji, m: 'Hiragana' });
-        });
-        Object.entries(KANA_POOL.kata).forEach(([kana, romaji]) => {
-            ALL_VOCAB.push({ f: kana, r: romaji, m: 'Katakana' });
-        });
-
-        // --- STATE ---
-        const STORAGE_CARDS_KEY = 'jmaster_v21_cards'; 
-        const STORAGE_SETTINGS_KEY = 'jmaster_v21_settings';
 
         let cards = [];
         let settings = { newLimit: 20, reviewLimit: 50, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
-        
-        // --- QUEUES ANKI STYLE ---
-        let activeNew = [];
-        let activeDue = [];
-        let activeLearn = [];
-        let currentCard = null;
-        let currentCardType = ''; // 'new', 'due', 'learn'
-        
-        let quizQueue = [];
-        let quizScore = 0;
-        let totalQuizQuestions = 0;
-        let totalQueueSize = 0;
-        let isFlipped = false;
-        
-        let sessionConfig = { vocab: true, hira: false, kata: false };
-        let kanaConfig = { hira: true, kata: false };
-        
-        let kanaCorrect = 0;
-        let kanaWrong = 0;
-        let kanaTime = 0;
-        let kanaInterval = null;
-        let currentKanaTarget = null;
-        let kanaQuestionCount = 0;
-        let isProcessing = false;
-
-        // FUNGSI UNTUK KANA BLITZ OPSI & UI
-        window.toggleKana = (type) => { 
-            kanaConfig[type] = !kanaConfig[type]; 
-            updateKanaSelectionUI(); 
-        };
-
-        const updateKanaSelectionUI = () => {
-            const bh = document.getElementById('btn-hira'); 
-            const bk = document.getElementById('btn-kata');
-            const inactiveClass = 'bg-white/40 border-slate-200 text-slate-400 hover:border-indigo-400 hover:shadow-[0_0_12px_rgba(79,70,229,0.3)] hover:text-indigo-500 dark:bg-slate-800/40 dark:border-slate-700/50 dark:text-slate-300 dark:hover:border-purple-400';
-            
-            if (bh) bh.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[11px] font-black transition-all duration-300 active:scale-95 ${kanaConfig.hira ? 'btn-glow-active' : inactiveClass}`;
-            if (bk) bk.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[11px] font-black transition-all duration-300 active:scale-95 ${kanaConfig.kata ? 'btn-glow-active' : inactiveClass}`;
-            
-            const iconHira = document.getElementById('icon-hira');
-            const iconKata = document.getElementById('icon-kata');
-            if (iconHira) iconHira.classList.toggle('hidden', !kanaConfig.hira);
-            if (iconKata) iconKata.classList.toggle('hidden', !kanaConfig.kata);
-        };
+        let activeNew = [], activeDue = [], activeLearn = [], currentCard = null, currentCardType = '';
+        let quizQueue = [], quizScore = 0, totalQuizQuestions = 0, isFlipped = false;
+        let sessionConfig = { vocab: true, hira: false, kata: false }, kanaConfig = { hira: true, kata: false };
+        let kanaCorrect = 0, kanaWrong = 0, kanaTime = 0, kanaInterval = null, currentKanaTarget = null, isProcessing = false;
 
         const getWIBDate = () => new Date().toLocaleDateString("en-US", {timeZone: "Asia/Jakarta"});
 
         const init = () => {
-            const storedCards = localStorage.getItem(STORAGE_CARDS_KEY);
-            const storedSettings = localStorage.getItem(STORAGE_SETTINGS_KEY);
-            const todayWIB = getWIBDate();
+            const storedCards = localStorage.getItem('jmaster_cards_v3');
+            const storedSets = localStorage.getItem('jmaster_settings_v3');
+            const today = getWIBDate();
+            
+            const allVocabPlusKana = [...BASE_VOCAB];
+            Object.entries(KANA_POOL.hira).forEach(([k,r]) => allVocabPlusKana.push({f:k, r:r, m:'Hiragana'}));
+            Object.entries(KANA_POOL.kata).forEach(([k,r]) => allVocabPlusKana.push({f:k, r:r, m:'Katakana'}));
 
             if (storedCards) {
-                cards = JSON.parse(storedCards);
-                const existingIds = cards.map(c => c.f);
-                ALL_VOCAB.forEach(v => {
-                    if(!existingIds.includes(v.f)) {
-                        cards.push({ ...v, repetitions: 0, interval: 0, ease: 2.5, nextReview: 0, id: Math.random().toString(36).substr(2, 9) });
-                    }
+                const existing = JSON.parse(storedCards);
+                cards = allVocabPlusKana.map(v => {
+                    const match = existing.find(c => c.f === v.f);
+                    return match ? { ...v, ...match } : { ...v, repetitions: 0, interval: 0, ease: 2.5, nextReview: 0, id: Math.random().toString(36).substr(2,9) };
                 });
-                saveCards();
             } else {
-                cards = ALL_VOCAB.map(k => ({ ...k, repetitions: 0, interval: 0, ease: 2.5, nextReview: 0, id: Math.random().toString(36).substr(2, 9) }));
-                saveCards();
+                cards = allVocabPlusKana.map(v => ({ ...v, repetitions: 0, interval: 0, ease: 2.5, nextReview: 0, id: Math.random().toString(36).substr(2,9) }));
             }
+            saveCards();
 
-            if (storedSettings) {
-                settings = JSON.parse(storedSettings);
-                if (settings.dailyReset !== todayWIB) {
-                    settings.dailyReset = todayWIB;
-                    settings.newDoneToday = 0;
-                    settings.reviewDoneToday = 0;
-                    saveSettings(false);
-                }
-            } else {
-                settings.dailyReset = todayWIB;
-                saveSettings(false);
-            }
-            updateSessionSelectionUI();
-            updateKanaSelectionUI();
-            updateUI();
+            if (storedSets) {
+                settings = JSON.parse(storedSets);
+                if (settings.dailyReset !== today) { settings.dailyReset = today; settings.newDoneToday = 0; settings.reviewDoneToday = 0; saveSettings(false); }
+            } else { settings.dailyReset = today; saveSettings(false); }
+            
+            updateSessionSelectionUI(); updateKanaSelectionUI(); updateUI();
         };
 
-        window.toggleSession = (type) => {
-            sessionConfig[type] = !sessionConfig[type];
-            updateSessionSelectionUI();
-        };
-
+        window.toggleSession = (t) => { sessionConfig[t] = !sessionConfig[t]; updateSessionSelectionUI(); };
         const updateSessionSelectionUI = () => {
-            const bv = document.getElementById('btn-ses-vocab');
-            const bh = document.getElementById('btn-ses-hira');
-            const bk = document.getElementById('btn-ses-kata');
-            const activeClass = 'btn-glow-active';
-            const inactiveClass = 'bg-white/40 border-slate-200 text-slate-400 hover:border-indigo-400 hover:shadow-[0_0_12px_rgba(79,70,229,0.3)] hover:text-indigo-500 dark:bg-slate-800/40 dark:border-slate-700/50 dark:text-slate-300 dark:hover:border-purple-400';
-
-            if(bv) bv.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[10px] font-black transition-all active:scale-95 duration-300 ${sessionConfig.vocab ? activeClass : inactiveClass}`;
-            if(bh) bh.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[10px] font-black transition-all active:scale-95 duration-300 ${sessionConfig.hira ? activeClass : inactiveClass}`;
-            if(bk) bk.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[10px] font-black transition-all active:scale-95 duration-300 ${sessionConfig.kata ? activeClass : inactiveClass}`;
-
-            document.getElementById('icon-ses-vocab')?.classList.toggle('hidden', !sessionConfig.vocab);
-            document.getElementById('icon-ses-hira')?.classList.toggle('hidden', !sessionConfig.hira);
-            document.getElementById('icon-ses-kata')?.classList.toggle('hidden', !sessionConfig.kata);
+            ['vocab','hira','kata'].forEach(t => {
+                const btn = document.getElementById('btn-ses-'+t);
+                if (sessionConfig[t]) btn.classList.add('btn-glow-active'); else btn.classList.remove('btn-glow-active');
+                document.getElementById('icon-ses-'+t).classList.toggle('hidden', !sessionConfig[t]);
+            });
         };
 
-        const startSession = () => {
-            if (!sessionConfig.vocab && !sessionConfig.hira && !sessionConfig.kata) {
-                return showToast("Pilih minimal 1 kategori!", "error");
-            }
-
+        window.startSession = () => {
+            if (!sessionConfig.vocab && !sessionConfig.hira && !sessionConfig.kata) return showToast("Pilih kategori!", "error");
             const now = Date.now();
-            let targetCards = cards.filter(c => {
-                const isHira = c.m === 'Hiragana';
-                const isKata = c.m === 'Katakana';
-                const isVocab = !isHira && !isKata;
-
+            let pool = cards.filter(c => {
+                const isVocab = (c.m !== 'Hiragana' && c.m !== 'Katakana');
                 if (isVocab && sessionConfig.vocab) return true;
-                if (isHira && sessionConfig.hira) return true;
-                if (isKata && sessionConfig.kata) return true;
+                if (c.m === 'Hiragana' && sessionConfig.hira) return true;
+                if (c.m === 'Katakana' && sessionConfig.kata) return true;
                 return false;
             });
-
-            const dueRev = targetCards.filter(c => c.repetitions > 0 && c.nextReview <= now);
-            const newCards = targetCards.filter(c => c.repetitions === 0);
-            
-            const remNew = Math.max(0, settings.newLimit - settings.newDoneToday);
-            const remRev = Math.max(0, settings.reviewLimit - settings.reviewDoneToday);
-            
-            activeNew = newCards.slice(0, remNew).sort(() => Math.random() - 0.5);
-            activeDue = dueRev.slice(0, remRev).sort(() => Math.random() - 0.5);
-            activeLearn = [];
-            
-            totalQueueSize = activeNew.length + activeDue.length;
-            
-            if (totalQueueSize === 0) {
-                return showToast("Target harian untuk kategori yang dipilih sudah terpenuhi!", "success");
-            }
+            activeNew = pool.filter(c => c.repetitions === 0).slice(0, settings.newLimit - settings.newDoneToday).sort(()=>Math.random()-0.5);
+            activeDue = pool.filter(c => c.repetitions > 0 && c.nextReview <= now).slice(0, settings.reviewLimit - settings.reviewDoneToday).sort(()=>Math.random()-0.5);
+            if (activeNew.length + activeDue.length === 0) return showToast("Sudah selesai untuk hari ini!", "success");
             nextCard();
         };
 
         const nextCard = () => {
-            // PRIORITAS ANKI: Selesaikan New dulu, lalu Due, baru kemudian Learn
-            if (activeNew.length > 0) {
-                currentCard = activeNew[0];
-                currentCardType = 'new';
-            } else if (activeDue.length > 0) {
-                currentCard = activeDue[0];
-                currentCardType = 'due';
-            } else if (activeLearn.length > 0) {
-                currentCard = activeLearn[0];
-                currentCardType = 'learn';
-            } else {
-                currentCard = null;
-                updateUI();
-                return;
-            }
-            setIsFlipped(false);
-            updateUI();
+            if (activeNew.length > 0) { currentCard = activeNew[0]; currentCardType = 'new'; }
+            else if (activeDue.length > 0) { currentCard = activeDue[0]; currentCardType = 'due'; }
+            else if (activeLearn.length > 0) { currentCard = activeLearn[0]; currentCardType = 'learn'; }
+            else { currentCard = null; updateUI(); return; }
+            setIsFlipped(false); updateUI();
         };
 
-        const handleRate = (evalScore) => {
+        window.handleRate = (s) => {
             if (!currentCard) return;
-            setIsFlipped(false);
-            
-            setTimeout(() => {
-                const original = cards.find(c => c.id === currentCard.id);
-                const isOriginallyNew = original.repetitions === 0;
+            const original = cards.find(c => c.id === currentCard.id);
+            if (currentCardType === 'learn') activeLearn.shift();
+            else if (currentCardType === 'new') activeNew.shift();
+            else activeDue.shift();
 
-                // Remove dari antrean saat ini
-                if (currentCardType === 'learn') activeLearn.shift();
-                else if (currentCardType === 'new') activeNew.shift();
-                else if (currentCardType === 'due') activeDue.shift();
-
-                if (evalScore === 0) {
-                    // LUPA (Merah) -> Masuk ke antrean Learn
-                    original.interval = 0;
-                    original.ease = Math.max(1.3, original.ease - 0.2);
-                    activeLearn.push(currentCard); // Tetap di sesi hari ini!
-                } else {
-                    // LULUS (Bagus/Mudah/Sulit) -> Keluar dari sesi hari ini
-                    if (isOriginallyNew) settings.newDoneToday++; 
-                    else settings.reviewDoneToday++;
-                    
-                    if (evalScore === 1) { 
-                        original.interval = original.interval === 0 ? 1 : Math.max(1, Math.round(original.interval * 1.2)); 
-                        original.ease = Math.max(1.3, original.ease - 0.15); 
-                    }
-                    else if (evalScore === 2) { 
-                        original.interval = original.interval === 0 ? 2 : Math.max(1, Math.round(original.interval * original.ease)); 
-                    }
-                    else if (evalScore === 3) { 
-                        original.interval = original.interval === 0 ? 4 : Math.max(4, Math.round(original.interval * original.ease * 1.3)); 
-                        original.ease = Math.min(3.0, original.ease + 0.15); 
-                    }
-                    
-                    original.repetitions++;
-                    original.nextReview = Date.now() + (original.interval * 24 * 60 * 60 * 1000);
-                }
-                
-                saveCards(); 
-                saveSettings(false); 
-                nextCard();
-            }, 300);
+            if (s === 0) { original.interval = 0; activeLearn.push(currentCard); }
+            else {
+                if (original.repetitions === 0) settings.newDoneToday++; else settings.reviewDoneToday++;
+                if (s === 1) original.interval = 1;
+                else if (s === 2) original.interval = original.interval === 0 ? 2 : Math.round(original.interval * 2.5);
+                else original.interval = original.interval === 0 ? 4 : Math.round(original.interval * 4);
+                original.repetitions++; original.nextReview = Date.now() + (original.interval * 86400000);
+            }
+            saveCards(); saveSettings(false); nextCard();
         };
 
-        const setIsFlipped = (val) => {
-            isFlipped = val;
-            const card = document.getElementById('flashcard');
-            const actions = document.getElementById('srs-actions');
-            if(val) { card.classList.add('flipped'); actions.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-6'); }
-            else { card.classList.remove('flipped'); actions.classList.add('opacity-0', 'pointer-events-none', 'translate-y-6'); }
+        // KUIS KANJI & DAILY QUIZ
+        window.startKanjiQuiz = () => {
+            const pool = cards.filter(c => c.repetitions > 0 && c.m !== 'Hiragana' && c.m !== 'Katakana');
+            if (pool.length < 1) return showToast("Belum ada Kanji yang dipelajari!", "error");
+            document.getElementById('quiz-type-title').innerText = "Kuis Kanji";
+            startQuizBase(pool);
         };
-
-        window.flipCard = () => { if(!isFlipped && currentCard) setIsFlipped(true); };
-
-        window.endSessionEarly = () => {
-            activeNew = [];
-            activeDue = [];
-            activeLearn = [];
-            currentCard = null;
-            updateUI();
-        };
-
         window.startDailyQuiz = () => {
-            const available = cards.filter(c => c.repetitions > 0);
-            if(available.length === 0) return showToast("Review dulu kartunya!", "error");
-            
-            const quizLimit = Math.min(10, available.length);
-            quizQueue = available.sort(() => Math.random() - 0.5).slice(0, quizLimit);
-            totalQuizQuestions = quizQueue.length;
-            quizScore = 0;
-            
-            document.getElementById('quiz-setup').classList.add('hidden');
+            const pool = cards.filter(c => c.repetitions > 0);
+            if (pool.length < 1) return showToast("Review dulu kartunya!", "error");
+            document.getElementById('quiz-type-title').innerText = "Daily Quiz (Campur)";
+            startQuizBase(pool);
+        };
+        const startQuizBase = (pool) => {
+            quizQueue = pool.sort(() => Math.random() - 0.5).slice(0, 10);
+            totalQuizQuestions = quizQueue.length; quizScore = 0;
+            switchView('quiz'); document.getElementById('quiz-setup').classList.add('hidden');
             document.getElementById('quiz-result').classList.add('hidden');
             document.getElementById('quiz-active').classList.remove('hidden');
             nextQuizQuestion();
         };
-
         const nextQuizQuestion = () => {
-            if(quizQueue.length === 0) return showQuizResult();
-            const current = quizQueue[0];
-            const qCount = totalQuizQuestions - quizQueue.length + 1;
-            const displayEl = document.getElementById('quiz-display');
-            displayEl.innerText = current.f;
-            
-            displayEl.className = "font-black text-slate-800 dark-text-main leading-tight transition-all duration-300";
-            if(current.f.length > 12) displayEl.classList.add('text-base', 'md:text-lg');
-            else if(current.f.length > 8) displayEl.classList.add('text-lg', 'md:text-xl');
-            else if(current.f.length > 5) displayEl.classList.add('text-xl', 'md:text-2xl');
-            else displayEl.classList.add('text-3xl', 'md:text-4xl');
-            
-            document.getElementById('quiz-q-count').innerText = `Soal ${qCount}`;
-            const progressPercent = ((qCount - 1) / totalQuizQuestions) * 100;
-            document.getElementById('quiz-progress').style.width = `${progressPercent}%`;
-            
-            let opts = [current.m];
-            const pool = cards.map(k => k.m);
-            while(opts.length < 4) {
-                const r = pool[Math.floor(Math.random() * pool.length)];
-                if(!opts.includes(r)) opts.push(r);
-            }
-            opts = opts.sort(() => Math.random() - 0.5);
-            
-            document.getElementById('quiz-options').innerHTML = opts.map(o => `
-                <button onclick="handleQuizAnswer(event, '${o}')" class="quiz-opt-btn glass p-3 h-20 rounded-2xl font-black text-slate-700 dark:text-slate-300 text-[10px] uppercase flex items-center justify-center leading-tight shadow-sm">${o}</button>
-            `).join('');
-            isProcessing = false;
-        };
-
-        window.handleQuizAnswer = (e, ans) => {
-            if(isProcessing) return;
-            isProcessing = true;
-            const correct = quizQueue[0].m;
-            if(ans === correct) { quizScore++; e.currentTarget.classList.add('ans-correct'); }
-            else { e.currentTarget.classList.add('ans-wrong'); }
-            setTimeout(() => { quizQueue.shift(); nextQuizQuestion(); }, 600);
-        };
-
-        const showQuizResult = () => {
-            document.getElementById('quiz-progress').style.width = `100%`;
-            setTimeout(() => {
+            if (quizQueue.length === 0) {
                 document.getElementById('quiz-active').classList.add('hidden');
                 document.getElementById('quiz-result').classList.remove('hidden');
                 document.getElementById('quiz-final-score').innerText = `${quizScore}/${totalQuizQuestions}`;
-            }, 500);
-        };
-
-        // KANA BLITZ LOGIC
-        window.startKanaQuiz = () => {
-            if (!kanaConfig.hira && !kanaConfig.kata) return showToast("Pilih Kana!", "error");
-            kanaCorrect = 0; kanaWrong = 0; kanaTime = 0; kanaQuestionCount = 0;
-            document.getElementById('kana-setup').classList.add('hidden');
-            document.getElementById('kana-result').classList.add('hidden');
-            document.getElementById('kana-active').classList.remove('hidden');
-            clearInterval(kanaInterval);
-            kanaInterval = setInterval(() => {
-                kanaTime++;
-                const m = Math.floor(kanaTime/60); const s = kanaTime%60;
-                document.getElementById('kana-timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-            }, 1000);
-            nextKana();
-        };
-
-        const nextKana = () => {
-            kanaQuestionCount++;
-            document.getElementById('kana-q-count').innerText = `Q #${kanaQuestionCount}`;
-            let pool = {};
-            if (kanaConfig.hira) pool = {...pool, ...KANA_POOL.hira};
-            if (kanaConfig.kata) pool = {...pool, ...KANA_POOL.kata};
-            const chars = Object.keys(pool); const char = chars[Math.floor(Math.random() * chars.length)];
-            const ans = pool[char]; const allPossible = [...new Set(Object.values(pool))];
-            let opts = [ans];
-            while(opts.length < 4) { const r = allPossible[Math.floor(Math.random()*allPossible.length)]; if(!opts.includes(r)) opts.push(r); }
-            opts = opts.sort(() => Math.random() - 0.5);
-            currentKanaTarget = ans;
-            document.getElementById('kana-display').innerText = char;
-            document.getElementById('kana-options').innerHTML = opts.map(o => `
-                <button onclick="checkKana(event, '${o}')" class="quiz-opt-btn glass py-5 rounded-2xl font-black text-slate-700 dark:text-slate-300 text-sm uppercase shadow-sm">${o}</button>
-            `).join('');
+                return;
+            }
+            const cur = quizQueue[0];
+            document.getElementById('quiz-display').innerText = cur.f;
+            document.getElementById('quiz-q-count').innerText = `Soal ${totalQuizQuestions - quizQueue.length + 1}`;
+            document.getElementById('quiz-progress').style.width = `${((totalQuizQuestions - quizQueue.length) / totalQuizQuestions) * 100}%`;
+            let opts = [cur.m]; const allM = cards.map(k => k.m);
+            while(opts.length < 4) { const r = allM[Math.floor(Math.random() * allM.length)]; if(!opts.includes(r)) opts.push(r); }
+            opts.sort(() => Math.random() - 0.5);
+            document.getElementById('quiz-options').innerHTML = opts.map(o => `<button onclick="handleQuizAnswer(event, '${o}')" class="glass p-4 rounded-2xl text-[10px] font-black uppercase">${o}</button>`).join('');
             isProcessing = false;
         };
-
-        window.checkKana = (event, choice) => {
+        window.handleQuizAnswer = (e, ans) => {
             if (isProcessing) return; isProcessing = true;
-            if (choice === currentKanaTarget) { kanaCorrect++; event.currentTarget.classList.add('ans-correct'); }
-            else { kanaWrong++; event.currentTarget.classList.add('ans-wrong'); }
-            setTimeout(() => nextKana(), 500);
+            if (ans === quizQueue[0].m) { quizScore++; e.currentTarget.classList.add('ans-correct'); }
+            else e.currentTarget.classList.add('ans-wrong');
+            setTimeout(() => { quizQueue.shift(); nextQuizQuestion(); }, 600);
         };
 
+        // KANA BLITZ
+        window.toggleKana = (t) => { kanaConfig[t] = !kanaConfig[t]; updateKanaSelectionUI(); };
+        const updateKanaSelectionUI = () => {
+            ['hira','kata'].forEach(t => {
+                const btn = document.getElementById('btn-'+t);
+                if (kanaConfig[t]) btn.classList.add('btn-glow-active'); else btn.classList.remove('btn-glow-active');
+                document.getElementById('icon-'+t).classList.toggle('hidden', !kanaConfig[t]);
+            });
+        };
+        window.startKanaQuiz = () => {
+            kanaCorrect = 0; kanaWrong = 0; kanaTime = 0;
+            document.getElementById('kana-setup').classList.add('hidden');
+            document.getElementById('kana-active').classList.remove('hidden');
+            kanaInterval = setInterval(() => { kanaTime++; document.getElementById('kana-timer').innerText = `${Math.floor(kanaTime/60)}:${(kanaTime%60).toString().padStart(2,'0')}`; }, 1000);
+            nextKana();
+        };
+        const nextKana = () => {
+            let p = {}; if (kanaConfig.hira) p = {...p, ...KANA_POOL.hira}; if (kanaConfig.kata) p = {...p, ...KANA_POOL.kata};
+            const chars = Object.keys(p); const char = chars[Math.floor(Math.random() * chars.length)];
+            const ans = p[char]; const allAns = Object.values(p);
+            let opts = [ans]; while(opts.length < 4) { const r = allAns[Math.floor(Math.random()*allAns.length)]; if(!opts.includes(r)) opts.push(r); }
+            opts.sort(() => Math.random() - 0.5); currentKanaTarget = ans;
+            document.getElementById('kana-display').innerText = char;
+            document.getElementById('kana-options').innerHTML = opts.map(o => `<button onclick="checkKana(event, '${o}')" class="glass py-5 rounded-2xl text-sm font-black">${o}</button>`).join('');
+            isProcessing = false;
+        };
+        window.checkKana = (e, c) => {
+            if (isProcessing) return; isProcessing = true;
+            if (c === currentKanaTarget) { kanaCorrect++; e.currentTarget.classList.add('ans-correct'); }
+            else { kanaWrong++; e.currentTarget.classList.add('ans-wrong'); }
+            setTimeout(nextKana, 500);
+        };
         window.stopKanaQuiz = () => {
             clearInterval(kanaInterval);
-            const total = kanaCorrect + kanaWrong;
-            const accuracy = total > 0 ? Math.round((kanaCorrect / total) * 100) : 0;
-            
-            const m = Math.floor(kanaTime / 60); 
-            const s = kanaTime % 60;
-            
-            document.getElementById('res-time').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-            document.getElementById('res-total').innerText = total;
             document.getElementById('res-correct').innerText = kanaCorrect;
             document.getElementById('res-wrong').innerText = kanaWrong;
-            document.getElementById('res-accuracy').innerText = accuracy + "%";
+            document.getElementById('res-accuracy').innerText = (kanaCorrect + kanaWrong > 0) ? Math.round((kanaCorrect/(kanaCorrect+kanaWrong))*100)+"%" : "0%";
             document.getElementById('kana-active').classList.add('hidden');
             document.getElementById('kana-result').classList.remove('hidden');
         };
 
-        window.switchView = (target) => {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(`view-${target}`).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('nav-active');
-            });
-            const map = { 'study': 'nav-study', 'quiz': 'nav-study', 'settings': 'nav-study', 'kana': 'nav-kana', 'list': 'nav-list' };
-            const btn = document.getElementById(map[target]);
-            if(btn) {
-                btn.classList.add('nav-active');
-            }
-
-            if(target === 'kana') {
-                document.getElementById('kana-setup').classList.remove('hidden');
-                document.getElementById('kana-active').classList.add('hidden');
-                document.getElementById('kana-result').classList.add('hidden');
-                clearInterval(kanaInterval);
-            }
-            if(target === 'quiz') {
-                document.getElementById('quiz-setup').classList.remove('hidden');
-                document.getElementById('quiz-active').classList.add('hidden');
-                document.getElementById('quiz-result').classList.add('hidden');
-            }
-            if(target === 'list') { document.getElementById('search-input').value = ""; renderList(); }
-            if(target === 'study') {
-                updateSessionSelectionUI();
-                updateUI();
-            }
+        // UTILS
+        const setIsFlipped = (v) => {
+            isFlipped = v; const card = document.getElementById('flashcard'); const actions = document.getElementById('srs-actions');
+            if(v) { card.classList.add('flipped'); actions.classList.remove('opacity-0', 'pointer-events-none'); }
+            else { card.classList.remove('flipped'); actions.classList.add('opacity-0', 'pointer-events-none'); }
         };
-
-        const getIntervalString = (days) => {
-            if (days === 0) return '<1m';
-            if (days < 30) return `${days}d`;
-            if (days < 365) return `${Math.round(days/30)}mo`;
-            return `${Math.round(days/365)}y`;
+        window.flipCard = () => { if(!isFlipped && currentCard) setIsFlipped(true); };
+        window.endSessionEarly = () => { activeNew = []; activeDue = []; activeLearn = []; currentCard = null; updateUI(); };
+        window.switchView = (t) => {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden')); document.getElementById('view-'+t).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
+            const map = {'study':'nav-study','quiz':'nav-study','settings':'nav-study','kana':'nav-kana','list':'nav-list'};
+            if(map[t]) document.getElementById(map[t]).classList.add('nav-active');
+            if(t === 'list') renderList(); if(t === 'study') updateUI();
         };
-
         const updateUI = () => {
-            const remNew = Math.max(0, settings.newLimit - settings.newDoneToday);
-            const remRev = Math.max(0, settings.reviewLimit - settings.reviewDoneToday);
-            document.getElementById('stat-new').innerText = `NEW: ${remNew}`;
-            document.getElementById('stat-rev').innerText = `DUE: ${remRev}`;
+            const now = Date.now();
+            const absLeft = cards.filter(c => c.repetitions === 0 || (c.repetitions > 0 && c.nextReview <= now)).length;
+            document.getElementById('stat-new').innerText = `NEW: ${Math.max(0, settings.newLimit - settings.newDoneToday)}`;
+            document.getElementById('stat-rev').innerText = `DUE: ${Math.max(0, settings.reviewLimit - settings.reviewDoneToday)}`;
             document.getElementById('input-new-limit').value = settings.newLimit;
             document.getElementById('input-rev-limit').value = settings.reviewLimit;
-            
             if(!currentCard) {
-                document.getElementById('study-status').classList.remove('hidden');
-                document.getElementById('study-active').classList.add('hidden');
-                
-                if(remNew === 0 && remRev === 0) {
-                    document.getElementById('status-icon').innerText = "🎉";
-                    document.getElementById('status-title').innerText = "お疲れ様でした！";
-                    document.getElementById('status-title').classList.add('text-indigo-600', 'dark:text-pink-400');
-                    document.getElementById('status-desc').innerHTML = "Selamat! Limit kartu harianmu sudah terpenuhi.<br/><br/>Terus semangat belajarnya ya, ingat tujuan besarmu!";
-                    document.getElementById('session-buttons').classList.add('hidden'); 
+                document.getElementById('study-status').classList.remove('hidden'); document.getElementById('study-active').classList.add('hidden');
+                if (absLeft === 0 && cards.length > 0) {
+                    document.getElementById('status-icon').innerText = "🏆"; document.getElementById('status-title').innerText = "おめでとう！";
+                    document.getElementById('status-desc').innerHTML = "<span class='text-pink-400 font-black'>SELAMAT KARTU SUDAH SEMUA DI REVIEW!</span>";
                 } else {
-                    document.getElementById('status-icon').innerText = "📚";
-                    document.getElementById('status-title').innerText = "Sesi Belajar";
-                    document.getElementById('status-title').classList.remove('text-indigo-600', 'dark:text-pink-400');
-                    document.getElementById('status-desc').innerHTML = "Atur kategori kartu yang ingin di-review.";
-                    document.getElementById('session-buttons').classList.remove('hidden');
+                    document.getElementById('status-icon').innerText = "📚"; document.getElementById('status-title').innerText = "Sesi Belajar";
+                    document.getElementById('status-desc').innerText = "Pilih kategori lalu tekan Mulai.";
                 }
             } else {
-                document.getElementById('study-status').classList.add('hidden');
-                document.getElementById('study-active').classList.remove('hidden');
-                
-                const displayFront = document.getElementById('display-front');
-                const labelFront = document.getElementById('card-label-front');
-                
-                displayFront.innerText = currentCard.f;
-                
-                if (currentCard.m === 'Hiragana') labelFront.innerText = "Hiragana";
-                else if (currentCard.m === 'Katakana') labelFront.innerText = "Katakana";
-                else labelFront.innerText = "Vocab / Kanji";
-
-                displayFront.className = "font-bold text-slate-800 dark-text-main tracking-tighter text-center px-4 leading-tight transition-all duration-300";
-                if(currentCard.f.length > 12) displayFront.classList.add('text-base', 'md:text-lg');
-                else if(currentCard.f.length > 8) displayFront.classList.add('text-lg', 'md:text-xl');
-                else if(currentCard.f.length > 5) displayFront.classList.add('text-xl', 'md:text-2xl');
-                else displayFront.classList.add('text-3xl', 'md:text-4xl');
-
+                document.getElementById('study-status').classList.add('hidden'); document.getElementById('study-active').classList.remove('hidden');
+                document.getElementById('display-front').innerText = currentCard.f;
+                document.getElementById('card-label-front').innerText = (currentCard.m === 'Hiragana' || currentCard.m === 'Katakana') ? currentCard.m : "Vocab / Kanji";
                 document.getElementById('display-reading').innerText = currentCard.r;
                 document.getElementById('display-meaning').innerText = currentCard.m;
-                
-                // UPDATE ANKI QUEUE NUMBERS
                 document.getElementById('count-new').innerText = `NEW: ${activeNew.length}`;
                 document.getElementById('count-learn').innerText = `LRN: ${activeLearn.length}`;
                 document.getElementById('count-due').innerText = `DUE: ${activeDue.length}`;
-
-                const totalLeft = activeNew.length + activeDue.length + activeLearn.length;
-                const progressPercent = totalQueueSize > 0 ? ((totalQueueSize - totalLeft) / totalQueueSize) * 100 : 0;
-                document.getElementById('session-progress').style.width = `${progressPercent}%`;
-
-                // UPDATE DYNAMIC INTERVAL LABELS FOR SRS BUTTONS
-                const ivl = currentCard.interval;
-                const ease = currentCard.ease;
-                const isNew = currentCard.repetitions === 0;
-
-                const ivlHard = ivl === 0 ? 1 : Math.max(1, Math.round(ivl * 1.2));
-                const ivlGood = ivl === 0 ? 2 : Math.max(1, Math.round(ivl * ease));
-                const ivlEasy = ivl === 0 ? 4 : Math.max(4, Math.round(ivl * ease * 1.3));
-
-                document.getElementById('lbl-lupa').innerText = '<1m';
-                document.getElementById('lbl-sulit').innerText = getIntervalString(ivlHard);
-                document.getElementById('lbl-bagus').innerText = getIntervalString(ivlGood);
-                document.getElementById('lbl-mudah').innerText = getIntervalString(ivlEasy);
             }
         };
-
-        window.saveSettings = (sh = true) => {
-            settings.newLimit = parseInt(document.getElementById('input-new-limit').value) || 20;
-            settings.reviewLimit = parseInt(document.getElementById('input-rev-limit').value) || 50;
-            localStorage.setItem(STORAGE_SETTINGS_KEY, JSON.stringify(settings));
-            if(sh) { showToast("Simpan!", "success"); switchView('study'); }
+        const saveCards = () => localStorage.setItem('jmaster_cards_v3', JSON.stringify(cards));
+        window.saveSettings = (s = true) => {
+            settings.newLimit = parseInt(document.getElementById('input-new-limit').value);
+            settings.reviewLimit = parseInt(document.getElementById('input-rev-limit').value);
+            localStorage.setItem('jmaster_settings_v3', JSON.stringify(settings));
+            if(s) { showToast("Tersimpan", "success"); switchView('study'); }
         };
-
-        const saveCards = () => localStorage.setItem(STORAGE_CARDS_KEY, JSON.stringify(cards));
-        window.resetCard = (id) => { if(confirm("Reset kartu?")) { const c = cards.find(x => x.id === id); c.repetitions = 0; c.interval = 0; c.ease = 2.5; c.nextReview = 0; saveCards(); renderList(); } };
-        window.resetAllData = () => { if(confirm("Hapus semua data?")) { localStorage.clear(); location.reload(); } };
-
         window.renderList = () => {
-            const list = document.getElementById('card-list');
-            const searchTerm = (document.getElementById('search-input')?.value || '').toLowerCase();
-            const mature = cards.filter(c => c.interval >= 21).length;
-            const young = cards.filter(c => c.repetitions > 0 && c.interval < 21).length;
-            const unseen = cards.filter(c => c.repetitions === 0).length;
-            const totalReviewed = cards.filter(c => c.repetitions > 0).length;
-            document.getElementById('stat-mature').innerText = mature;
-            document.getElementById('stat-young').innerText = young;
-            document.getElementById('stat-unseen').innerText = unseen;
-            document.getElementById('stat-total-reviewed').innerText = totalReviewed;
-
-            const filteredCards = cards.filter(c => c.f.toLowerCase().includes(searchTerm) || c.r.toLowerCase().includes(searchTerm) || c.m.toLowerCase().includes(searchTerm));
-            
-            const displayLimit = 200; 
-            const displayCards = filteredCards.slice(0, displayLimit);
-            
-            list.innerHTML = displayCards.map(c => {
-                let color = "text-slate-300 border-slate-100 dark:border-slate-700/50 dark:text-slate-400"; let label = "NEW";
-                if(c.interval >= 21) { color = "text-indigo-600 bg-indigo-50/50 border-indigo-100 dark:text-purple-300 dark:bg-purple-900/30 dark:border-purple-800/50"; label = "MATURE"; }
-                else if(c.repetitions > 0) { color = "text-orange-500 bg-orange-50/50 border-orange-100 dark:text-orange-300 dark:bg-orange-900/30 dark:border-orange-800/50"; label = "YOUNG"; }
-                return `<div class="glass p-4 rounded-3xl flex justify-between items-center hover:scale-[1.01] hover:shadow-md transition-all cursor-default dark:border-purple-500/20"><div class="flex-1 pr-2"><div class="font-bold text-slate-800 dark-text-main text-sm md:text-md">${c.f}</div><div class="text-[8px] text-slate-400 dark:text-slate-500 font-black tracking-tight uppercase">${c.r} • ${c.m}</div></div><div class="flex items-center gap-2"><div class="text-[6px] font-black px-2.5 py-1.5 rounded-full border ${color}">${label}</div><button onclick="resetCard('${c.id}')" class="p-2 text-slate-300 dark:text-slate-500 hover:text-rose-500 dark:hover:text-rose-400 active:scale-90 transition-all"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button></div></div>`;
-            }).join('');
-            
-            if (filteredCards.length > displayLimit) {
-                list.innerHTML += `<div class="text-center text-[9px] font-bold text-slate-400 dark:text-slate-500 py-4 uppercase tracking-widest">+ ${filteredCards.length - displayLimit} lainnya (Gunakan fitur cari)</div>`;
-            }
+            const list = document.getElementById('card-list'); const term = (document.getElementById('search-input')?.value || '').toLowerCase();
+            const filtered = cards.filter(c => c.f.toLowerCase().includes(term) || c.m.toLowerCase().includes(term));
+            list.innerHTML = filtered.slice(0, 50).map(c => `<div class="glass p-4 rounded-3xl flex justify-between border-purple-500/20"><div><div class="font-bold text-sm">${c.f}</div><div class="text-[8px] text-slate-500">${c.r} • ${c.m}</div></div><div class="text-[7px] font-black uppercase text-pink-400">${c.repetitions > 0 ? 'Young' : 'New'}</div></div>`).join('');
         };
-
-        const showToast = (msg, type) => {
-            const t = document.getElementById('toast'); t.innerText = msg;
-            t.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all z-50 whitespace-nowrap ${type === 'error' ? 'bg-rose-500' : 'bg-slate-900 dark:bg-pink-600'}`;
-            t.classList.remove('opacity-0'); setTimeout(() => t.classList.add('opacity-0'), 2500);
+        window.resetAllData = () => { if(confirm("Hapus semua?")) { localStorage.clear(); location.reload(); } };
+        const showToast = (m, t) => {
+            const el = document.getElementById('toast'); el.innerText = m;
+            el.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full text-[9px] font-black uppercase text-white ${t === 'error' ? 'bg-rose-500' : 'bg-pink-600'}`;
+            el.classList.remove('opacity-0'); setTimeout(() => el.classList.add('opacity-0'), 2000);
         };
-
         init();
     </script>
 </body>

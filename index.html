@@ -37,17 +37,34 @@
         }
         .card-back { transform: rotateY(180deg); }
         
+        /* Tombol Sesi Checkbox */
         .btn-glow-active {
             background: rgba(79, 70, 229, 0.1) !important;
-            border-color: rgba(79, 70, 229, 0.4) !important;
+            border-color: rgba(79, 70, 229, 0.8) !important;
             color: #4f46e5 !important;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4), inset 0 0 5px rgba(79, 70, 229, 0.1);
             transform: scale(1.02);
         }
 
+        /* Navigasi Bawah (Hanya glow saat disentuh) */
+        .nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #94a3b8;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
         .nav-active {
-            background: rgba(79, 70, 229, 0.15);
             color: #4f46e5;
+        }
+
+        /* Nyala saat disentuh / hover saja */
+        .nav-btn:hover, .nav-btn:active {
+            color: #4f46e5;
+            background: rgba(79, 70, 229, 0.05);
+            border-color: rgba(79, 70, 229, 0.4) !important;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3), inset 0 0 5px rgba(79, 70, 229, 0.1);
+            transform: scale(1.05);
         }
 
         @keyframes correct-pulse {
@@ -71,61 +88,89 @@
         
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 10px; }
+
+        /* Smooth Progress Bar Hover */
+        .interactive-bar {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .interactive-bar:hover, .interactive-bar:active {
+            transform: scaleY(1.8) scaleX(1.01);
+            border-color: rgba(79, 70, 229, 0.8) !important;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.6), inset 0 0 5px rgba(79, 70, 229, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+        }
     </style>
 </head>
 <body>
-    <div id="app" class="w-full max-w-md h-screen h-[100dvh] flex flex-col p-5 pb-8 relative z-10">
+    <div id="app" class="w-full max-w-md h-screen h-[100dvh] flex flex-col p-4 pb-6 relative z-10">
         
         <div class="fixed top-[-5%] left-[-5%] w-72 h-72 bg-indigo-100 rounded-full blur-[80px] opacity-50 z-0"></div>
         <div class="fixed bottom-[-5%] right-[-5%] w-72 h-72 bg-rose-100 rounded-full blur-[80px] opacity-50 z-0"></div>
 
-        <header class="flex justify-between items-center mb-5 shrink-0 relative z-20">
+        <header class="flex justify-between items-center mb-4 shrink-0 relative z-20 px-1">
             <div>
                 <h1 class="text-xl font-black tracking-tighter text-slate-800">J-MASTER <span class="text-indigo-600">SRS</span></h1>
-                <div class="flex gap-2 text-[9px] font-bold text-slate-400 mt-1.5 uppercase tracking-widest">
+                <div class="flex gap-2 text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">
                     <span id="stat-new">NEW: --</span>
                     <span class="opacity-30">•</span>
                     <span id="stat-rev">DUE: --</span>
                 </div>
             </div>
-            <button onclick="switchView('settings')" class="glass p-2.5 rounded-2xl text-slate-400 hover:text-indigo-600 transition-all active:scale-90">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <button onclick="switchView('settings')" class="glass p-2.5 rounded-2xl text-slate-400 hover:text-indigo-600 active:scale-90 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
         </header>
 
         <main class="flex-1 overflow-hidden relative">
             
             <section id="view-study" class="view h-full flex flex-col animate-fade">
-                <div id="study-status" class="flex-1 flex flex-col items-center justify-center text-center p-6">
-                    <div id="status-icon" class="text-6xl mb-6">📚</div>
-                    <h2 id="status-title" class="text-xl font-black text-slate-800 uppercase tracking-tight">Sesi Belajar</h2>
-                    <p id="status-desc" class="text-slate-500 text-[10px] font-bold mt-2 mb-8 leading-relaxed px-10 uppercase tracking-widest opacity-60">Pilih kategori yang ingin kamu pelajari hari ini.</p>
-                    <div id="session-buttons" class="space-y-3 w-full max-w-[250px]">
-                        <!-- Tombol Sesi Terpisah -->
-                        <button onclick="startSession('vocab')" class="w-full glass bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.1em] py-3.5 rounded-xl shadow-xl active:scale-95 transition-all">Sesi Vocab & Kanji</button>
-                        <button onclick="startSession('hira')" class="w-full glass bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.1em] py-3.5 rounded-xl shadow-xl active:scale-95 transition-all">Sesi Hiragana</button>
-                        <button onclick="startSession('kata')" class="w-full glass bg-rose-500 text-white text-[10px] font-black uppercase tracking-[0.1em] py-3.5 rounded-xl shadow-xl active:scale-95 transition-all">Sesi Katakana</button>
-                        <div class="h-px bg-slate-200 w-1/2 mx-auto my-4 opacity-50"></div>
-                        <button onclick="switchView('quiz')" class="w-full glass bg-white/60 text-indigo-600 text-[9px] font-black uppercase tracking-widest py-3 rounded-xl active:scale-95 transition-all">Daily Quiz (Campur)</button>
+                <div id="study-status" class="flex-1 flex flex-col items-center justify-center text-center p-4">
+                    <div id="status-icon" class="text-5xl mb-4">📚</div>
+                    <h2 id="status-title" class="text-lg font-black text-slate-800 uppercase tracking-tight">Sesi Belajar</h2>
+                    <p id="status-desc" class="text-slate-500 text-[9px] font-bold mt-1.5 mb-6 leading-relaxed px-6 uppercase tracking-widest opacity-60">Atur kategori kartu yang ingin di-review.</p>
+                    
+                    <div id="session-buttons" class="w-full max-w-[260px] flex flex-col items-center">
+                        <div class="glass p-3.5 rounded-[1.5rem] w-full space-y-2 mb-5">
+                            <button onclick="toggleSession('vocab')" id="btn-ses-vocab" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 text-[10px] font-black transition-all bg-white/40 active:scale-95 duration-200">
+                                <span>Kanji & Vocab</span> <span id="icon-ses-vocab" class="hidden text-indigo-600">✓</span>
+                            </button>
+                            <button onclick="toggleSession('hira')" id="btn-ses-hira" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 text-[10px] font-black transition-all bg-white/40 active:scale-95 duration-200">
+                                <span>Hiragana</span> <span id="icon-ses-hira" class="hidden text-indigo-600">✓</span>
+                            </button>
+                            <button onclick="toggleSession('kata')" id="btn-ses-kata" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 text-[10px] font-black transition-all bg-white/40 active:scale-95 duration-200">
+                                <span>Katakana</span> <span id="icon-ses-kata" class="hidden text-indigo-600">✓</span>
+                            </button>
+                        </div>
+
+                        <button onclick="startSession()" class="w-full glass bg-slate-900 text-white text-[11px] font-black uppercase tracking-[0.2em] py-4 rounded-2xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/10 animate-[pulse_2s_ease-in-out_infinite] opacity-50"></div>
+                            <span class="relative z-10">Mulai Sesi</span>
+                        </button>
+                        
+                        <div class="h-px bg-slate-200 w-1/3 mx-auto my-4 opacity-50"></div>
+                        <button onclick="switchView('quiz')" class="w-full glass bg-white/60 text-indigo-600 text-[9px] font-black uppercase tracking-widest py-3 rounded-xl hover:bg-indigo-50 active:scale-95 transition-all duration-300">Daily Quiz (Campur)</button>
                     </div>
                 </div>
 
                 <div id="study-active" class="flex-1 flex flex-col hidden overflow-hidden">
                     <div class="flex items-center gap-3 mb-4 px-1 shrink-0">
-                        <span id="session-counter" class="text-[9px] font-black text-slate-300 uppercase tracking-widest tabular-nums">0 REMAINING</span>
-                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40">
-                            <div id="session-progress" class="h-full bg-indigo-500 transition-all duration-500 w-0"></div>
+                        <span id="session-counter" class="text-[9px] font-black text-slate-400 uppercase tracking-widest tabular-nums">0 REMAINING</span>
+                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40 interactive-bar cursor-pointer">
+                            <div id="session-progress" class="h-full bg-indigo-500 transition-all duration-500 w-0 relative">
+                                <div class="absolute inset-0 bg-white/30 animate-[pulse_1.5s_ease-in-out_infinite]"></div>
+                            </div>
                         </div>
-                        <button onclick="endSessionEarly()" class="text-slate-400 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 transition-colors">Batal</button>
+                        <button onclick="endSessionEarly()" class="text-slate-400 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 active:scale-90 transition-all">Batal</button>
                     </div>
                     <div class="flex-1 perspective relative">
                         <div id="flashcard" class="card-inner w-full h-full relative cursor-pointer" onclick="flipCard()">
-                            <div class="card-front glass absolute inset-0 rounded-[2.5rem] flex flex-col items-center justify-center p-6 border-white/80">
-                                <span id="card-label-front" class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-6">Flashcard</span>
+                            <div class="card-front glass absolute inset-0 rounded-[2.5rem] flex flex-col items-center justify-center p-6 border-white/80 shadow-sm">
+                                <span id="card-label-front" class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-6">Flashcard</span>
                                 <div id="display-front" class="text-3xl md:text-4xl font-bold text-slate-800 tracking-tighter text-center px-4 leading-tight transition-all duration-300">--</div>
                                 <div class="absolute bottom-10 text-indigo-400 text-[9px] font-black uppercase animate-pulse tracking-widest">Tap to flip</div>
                             </div>
-                            <div class="card-back glass absolute inset-0 rounded-[2.5rem] flex flex-col items-center justify-center p-6 text-center border-indigo-200">
+                            <div class="card-back glass absolute inset-0 rounded-[2.5rem] flex flex-col items-center justify-center p-6 text-center border-indigo-200 shadow-sm">
                                 <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-3">Detail</span>
                                 <div id="display-reading" class="text-xl text-indigo-500 font-bold mb-2 tracking-tight">--</div>
                                 <div id="display-meaning" class="text-2xl font-black text-slate-800 leading-tight px-4">--</div>
@@ -133,19 +178,19 @@
                         </div>
                     </div>
                     <div id="srs-actions" class="mt-6 grid grid-cols-4 gap-2 opacity-0 pointer-events-none translate-y-6 transition-all duration-300 shrink-0">
-                        <button onclick="handleRate(0)" class="glass py-4 rounded-xl flex flex-col items-center justify-center border-rose-100 hover:bg-rose-50">
+                        <button onclick="handleRate(0)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-rose-100 hover:bg-rose-50 active:scale-95 transition-all">
                             <span class="text-rose-500 font-black text-[9px] uppercase">Lupa</span>
                             <span class="text-[7px] text-slate-400 mt-1">&lt;1m</span>
                         </button>
-                        <button onclick="handleRate(1)" class="glass py-4 rounded-xl flex flex-col items-center justify-center border-orange-100 hover:bg-orange-50">
+                        <button onclick="handleRate(1)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-orange-100 hover:bg-orange-50 active:scale-95 transition-all">
                             <span class="text-orange-500 font-black text-[9px] uppercase">Sulit</span>
                             <span class="text-[7px] text-slate-400 mt-1">2h</span>
                         </button>
-                        <button onclick="handleRate(2)" class="glass py-4 rounded-xl flex flex-col items-center justify-center border-indigo-100 hover:bg-indigo-50">
+                        <button onclick="handleRate(2)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-indigo-100 hover:bg-indigo-50 active:scale-95 transition-all">
                             <span class="text-indigo-600 font-black text-[9px] uppercase">Bagus</span>
                             <span class="text-[7px] text-slate-400 mt-1">1d</span>
                         </button>
-                        <button onclick="handleRate(3)" class="glass py-4 rounded-xl flex flex-col items-center justify-center border-emerald-100 hover:bg-emerald-50">
+                        <button onclick="handleRate(3)" class="glass py-3.5 rounded-xl flex flex-col items-center justify-center border-emerald-100 hover:bg-emerald-50 active:scale-95 transition-all">
                             <span class="text-emerald-600 font-black text-[9px] uppercase">Mudah</span>
                             <span class="text-[7px] text-slate-400 mt-1">4d</span>
                         </button>
@@ -155,21 +200,23 @@
 
             <section id="view-quiz" class="view h-full flex flex-col hidden animate-fade">
                 <div id="quiz-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
-                    <div class="text-5xl mb-6">⚡</div>
+                    <div class="text-5xl mb-6 hover:scale-110 transition-transform">⚡</div>
                     <h2 class="text-xl font-black text-slate-800 uppercase tracking-tight">Vocab Quiz</h2>
-                    <p class="text-[10px] text-slate-500 font-bold mt-2 mb-10 leading-relaxed px-10 uppercase tracking-widest opacity-60">Uji ingatanmu dengan kartu yang sudah pernah kamu review (Riwayat Belajar).</p>
-                    <button onclick="startDailyQuiz()" class="glass bg-indigo-600 text-white text-[11px] font-black uppercase tracking-[0.2em] px-12 py-5 rounded-2xl shadow-xl active:scale-95 transition-all">Mulai Quiz</button>
+                    <p class="text-[10px] text-slate-500 font-bold mt-2 mb-10 leading-relaxed px-10 uppercase tracking-widest opacity-60">Uji ingatanmu dengan kartu yang sudah pernah kamu review.</p>
+                    <button onclick="startDailyQuiz()" class="glass bg-indigo-600 text-white text-[11px] font-black uppercase tracking-[0.2em] px-12 py-4 rounded-2xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300">Mulai Quiz</button>
                 </div>
 
                 <div id="quiz-active" class="h-full flex flex-col hidden">
                     <div class="flex items-center gap-3 mb-6 px-1 shrink-0">
-                        <span id="quiz-q-count" class="glass px-4 py-1.5 rounded-full text-[9px] font-black uppercase text-slate-600 shrink-0">Soal 1</span>
-                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40">
-                            <div id="quiz-progress" class="h-full bg-indigo-500 transition-all duration-500 w-0"></div>
+                        <span id="quiz-q-count" class="glass px-3 py-1.5 rounded-full text-[8px] font-black uppercase text-slate-600 shrink-0 shadow-sm">Soal 1</span>
+                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40 interactive-bar cursor-pointer">
+                            <div id="quiz-progress" class="h-full bg-indigo-500 transition-all duration-500 w-0 relative">
+                                <div class="absolute inset-0 bg-white/30 animate-[pulse_1.5s_ease-in-out_infinite]"></div>
+                            </div>
                         </div>
-                        <button onclick="switchView('study')" class="text-slate-400 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 transition-colors">Batal</button>
+                        <button onclick="switchView('study')" class="text-slate-400 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 active:scale-90 transition-all">Batal</button>
                     </div>
-                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 mb-6 text-center">
+                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 mb-6 text-center shadow-sm">
                         <div id="quiz-display" class="text-3xl md:text-4xl font-black text-slate-800 leading-tight transition-all duration-300">--</div>
                     </div>
                     <div id="quiz-options" class="grid grid-cols-2 gap-3 mb-4 shrink-0">
@@ -177,7 +224,7 @@
                 </div>
 
                 <div id="quiz-result" class="h-full flex flex-col items-center justify-center text-center p-6 hidden">
-                    <div class="text-5xl mb-4">🏆</div>
+                    <div class="text-5xl mb-4 animate-bounce">🏆</div>
                     <h2 class="text-xl font-black text-slate-800 uppercase mb-6">Hasil Quiz</h2>
                     <div class="glass w-full p-6 rounded-3xl space-y-4 mb-8">
                         <div class="flex justify-between items-center">
@@ -191,15 +238,15 @@
 
             <section id="view-kana" class="view h-full flex flex-col hidden animate-fade">
                 <div id="kana-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
-                    <div class="w-20 h-20 glass rounded-[2rem] flex items-center justify-center mb-6 text-3xl shadow-sm border-white">あ</div>
+                    <div class="w-16 h-16 glass rounded-[1.5rem] flex items-center justify-center mb-6 text-3xl shadow-sm border-white">あ</div>
                     <h2 class="text-lg font-black text-slate-800 tracking-tight">Kana Blitz</h2>
                     <p class="text-[10px] text-slate-400 font-bold px-12 mt-1 mb-8 uppercase tracking-widest">Latih kecepatan membaca Kana.</p>
-                    <div class="glass p-4 rounded-3xl w-full space-y-3 mb-8">
-                        <button onclick="toggleKana('hira')" id="btn-hira" class="w-full flex justify-between items-center p-4 rounded-2xl border border-slate-100 text-[11px] font-black transition-all bg-white/40">
-                            <span>HIRAGANA (あ)</span> <span id="icon-hira" class="hidden">✓</span>
+                    <div class="glass p-3.5 rounded-3xl w-full space-y-2 mb-8">
+                        <button onclick="toggleKana('hira')" id="btn-hira" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 text-[11px] font-black transition-all bg-white/40 active:scale-95">
+                            <span>HIRAGANA (あ)</span> <span id="icon-hira" class="hidden text-indigo-600">✓</span>
                         </button>
-                        <button onclick="toggleKana('kata')" id="btn-kata" class="w-full flex justify-between items-center p-4 rounded-2xl border border-slate-100 text-[11px] font-black transition-all bg-white/40">
-                            <span>KATAKANA (ア)</span> <span id="icon-kata" class="hidden">✓</span>
+                        <button onclick="toggleKana('kata')" id="btn-kata" class="w-full flex justify-between items-center p-3 rounded-xl border border-slate-100 text-[11px] font-black transition-all bg-white/40 active:scale-95">
+                            <span>KATAKANA (ア)</span> <span id="icon-kata" class="hidden text-indigo-600">✓</span>
                         </button>
                     </div>
                     <button onclick="startKanaQuiz()" class="w-full bg-slate-900 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-md">Mulai Kuis</button>
@@ -208,16 +255,16 @@
                 <div id="kana-active" class="h-full flex flex-col hidden relative">
                     <div class="flex justify-between items-center mb-4 px-1 shrink-0">
                         <div class="flex gap-2">
-                            <span id="kana-q-count" class="glass px-4 py-1.5 rounded-full text-[9px] font-black uppercase text-slate-600">Q #1</span>
-                            <span id="kana-timer" class="glass px-4 py-1.5 rounded-full text-[9px] font-black text-indigo-600 tabular-nums">0:00</span>
+                            <span id="kana-q-count" class="glass px-3 py-1.5 rounded-full text-[8px] font-black uppercase text-slate-600 shadow-sm">Q #1</span>
+                            <span id="kana-timer" class="glass px-3 py-1.5 rounded-full text-[8px] font-black text-indigo-600 tabular-nums shadow-sm">0:00</span>
                         </div>
-                        <button onclick="stopKanaQuiz()" class="text-rose-500 active:scale-90 p-1 flex items-center gap-1">
+                        <button onclick="stopKanaQuiz()" class="text-rose-500 active:scale-90 p-1 flex items-center gap-1 transition-transform">
                             <span class="text-[9px] font-black uppercase">Selesai</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
                         </button>
                     </div>
-                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 relative overflow-hidden">
-                        <div id="kana-display" class="text-9xl font-black text-slate-800 z-10">--</div>
+                    <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 relative overflow-hidden shadow-sm">
+                        <div id="kana-display" class="text-8xl font-black text-slate-800 z-10">--</div>
                     </div>
                     <div id="kana-options" class="grid grid-cols-2 gap-3 mt-6 shrink-0"></div>
                 </div>
@@ -226,6 +273,10 @@
                     <div class="text-4xl mb-3 animate-bounce">📈</div>
                     <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight mb-2">Statistik Akhir</h2>
                     <div class="glass w-full p-4 rounded-[2rem] space-y-3 mb-6">
+                        <div class="flex justify-between items-center text-indigo-600">
+                            <span class="text-[9px] font-black uppercase">Waktu</span>
+                            <span id="res-time" class="font-bold text-sm">0:00</span>
+                        </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[9px] font-black text-slate-400 uppercase">Total Soal</span>
                             <span id="res-total" class="font-bold text-slate-800 text-sm">0</span>
@@ -249,29 +300,29 @@
 
             <section id="view-list" class="view h-full flex flex-col hidden animate-fade">
                 <div class="mb-2 shrink-0 px-1">
-                    <h2 class="text-sm font-black text-slate-800 mb-4">Statistik & Riwayat</h2>
+                    <h2 class="text-sm font-black text-slate-800 mb-3">Statistik & Riwayat</h2>
                     <div class="grid grid-cols-4 gap-2">
-                        <div class="glass p-3 rounded-2xl border-indigo-100 text-center">
-                            <div id="stat-mature" class="text-indigo-600 font-black text-md leading-none">0</div>
-                            <div class="text-[7px] font-black uppercase text-slate-400 mt-2">Mature</div>
+                        <div class="glass p-2.5 rounded-2xl border-indigo-100 text-center hover:scale-105 transition-transform">
+                            <div id="stat-mature" class="text-indigo-600 font-black text-sm leading-none">0</div>
+                            <div class="text-[6px] font-black uppercase text-slate-400 mt-1.5">Mature</div>
                         </div>
-                        <div class="glass p-3 rounded-2xl border-orange-100 text-center">
-                            <div id="stat-young" class="text-orange-500 font-black text-md leading-none">0</div>
-                            <div class="text-[7px] font-black uppercase text-slate-400 mt-2">Young</div>
+                        <div class="glass p-2.5 rounded-2xl border-orange-100 text-center hover:scale-105 transition-transform">
+                            <div id="stat-young" class="text-orange-500 font-black text-sm leading-none">0</div>
+                            <div class="text-[6px] font-black uppercase text-slate-400 mt-1.5">Young</div>
                         </div>
-                        <div class="glass p-3 rounded-2xl border-slate-100 text-center">
-                            <div id="stat-unseen" class="text-slate-400 font-black text-md leading-none">0</div>
-                            <div class="text-[7px] font-black uppercase text-slate-400 mt-2">Unseen</div>
+                        <div class="glass p-2.5 rounded-2xl border-slate-100 text-center hover:scale-105 transition-transform">
+                            <div id="stat-unseen" class="text-slate-400 font-black text-sm leading-none">0</div>
+                            <div class="text-[6px] font-black uppercase text-slate-400 mt-1.5">Unseen</div>
                         </div>
-                        <div class="glass p-3 rounded-2xl border-emerald-100 text-center bg-emerald-50/30">
-                            <div id="stat-total-reviewed" class="text-emerald-600 font-black text-md leading-none">0</div>
-                            <div class="text-[7px] font-black uppercase text-emerald-500 mt-2">Di-review</div>
+                        <div class="glass p-2.5 rounded-2xl border-emerald-100 text-center bg-emerald-50/30 hover:scale-105 transition-transform">
+                            <div id="stat-total-reviewed" class="text-emerald-600 font-black text-sm leading-none">0</div>
+                            <div class="text-[6px] font-black uppercase text-emerald-500 mt-1.5">Di-review</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="mb-4 shrink-0 px-1">
-                    <input type="text" id="search-input" oninput="renderList()" placeholder="Cari vocab/kanji/kana..." class="w-full bg-white/50 border-none rounded-xl p-3 text-[11px] font-bold outline-none ring-1 ring-slate-200 focus:ring-indigo-500 transition-all shadow-sm">
+                <div class="mb-3 shrink-0 px-1 mt-2">
+                    <input type="text" id="search-input" oninput="renderList()" placeholder="Cari vocab/kanji/kana..." class="w-full bg-white/50 border-none rounded-xl p-3 text-[10px] font-bold outline-none ring-1 ring-slate-200 focus:ring-indigo-500 transition-all shadow-sm">
                 </div>
 
                 <div id="card-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar"></div>
@@ -280,70 +331,110 @@
             <section id="view-settings" class="view h-full flex flex-col hidden animate-fade">
                 <h2 class="text-sm font-black text-slate-800 mb-6 px-1 uppercase tracking-wider">Pengaturan</h2>
                 <div class="space-y-4">
-                    <div class="glass p-6 rounded-3xl space-y-6 border-white/60">
+                    <div class="glass p-5 rounded-3xl space-y-5 border-white/60">
                         <div>
-                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2.5 block tracking-widest">Target Kartu Baru / Hari</label>
-                            <input type="number" id="input-new-limit" class="w-full bg-white/50 border-none rounded-xl p-4 text-[12px] font-bold outline-none ring-1 ring-slate-100 focus:ring-indigo-500 transition-all">
+                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Target Kartu Baru / Hari</label>
+                            <input type="number" id="input-new-limit" class="w-full bg-white/50 border-none rounded-xl p-3 text-[12px] font-bold outline-none ring-1 ring-slate-100 focus:ring-indigo-500 transition-all">
                         </div>
                         <div>
-                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2.5 block tracking-widest">Maksimal Review / Hari</label>
-                            <input type="number" id="input-rev-limit" class="w-full bg-white/50 border-none rounded-xl p-4 text-[12px] font-bold outline-none ring-1 ring-slate-100 focus:ring-indigo-500 transition-all">
+                            <label class="text-[9px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Maksimal Review / Hari</label>
+                            <input type="number" id="input-rev-limit" class="w-full bg-white/50 border-none rounded-xl p-3 text-[12px] font-bold outline-none ring-1 ring-slate-100 focus:ring-indigo-500 transition-all">
                         </div>
                     </div>
-                    <button onclick="saveSettings()" class="w-full bg-indigo-600 text-white text-[11px] font-black uppercase py-4.5 rounded-2xl shadow-lg shadow-indigo-100 active:scale-95 transition-all">Simpan Perubahan</button>
-                    <button onclick="resetAllData()" class="w-full bg-rose-50 text-rose-500 border border-rose-100 text-[10px] font-black uppercase py-3.5 rounded-xl active:bg-rose-100 transition-all mt-6">Reset Semua Progress</button>
+                    <button onclick="saveSettings()" class="w-full bg-indigo-600 text-white text-[10px] font-black uppercase py-4 rounded-2xl shadow-lg shadow-indigo-100 active:scale-95 transition-all">Simpan Perubahan</button>
+                    <button onclick="resetAllData()" class="w-full bg-rose-50 text-rose-500 border border-rose-100 text-[9px] font-black uppercase py-3 rounded-xl active:bg-rose-100 transition-all mt-4">Reset Semua Progress</button>
                 </div>
             </section>
         </main>
 
-        <nav class="mt-auto mb-6 glass rounded-[2.5rem] p-1.5 flex gap-1 shrink-0 z-30">
-            <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-4 rounded-full flex flex-col items-center justify-center gap-1 nav-active transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span class="text-[8px] font-black uppercase tracking-tighter">Study</span>
+        <nav class="mt-auto mb-2 glass rounded-[2rem] p-1.5 flex gap-1 shrink-0 z-30 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+            <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center justify-center gap-1 nav-active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="text-[7px] font-black uppercase tracking-tighter">Study</span>
             </button>
-            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-4 rounded-full flex flex-col items-center justify-center gap-1 text-slate-400 hover:bg-white/40 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span class="text-[8px] font-black uppercase tracking-tighter">Kana</span>
+            <button onclick="switchView('kana')" id="nav-kana" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center justify-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span class="text-[7px] font-black uppercase tracking-tighter">Kana</span>
             </button>
-            <button onclick="switchView('list')" id="nav-list" class="nav-btn flex-1 py-4 rounded-full flex flex-col items-center justify-center gap-1 text-slate-400 hover:bg-white/40 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                <span class="text-[8px] font-black uppercase tracking-tighter">List</span>
+            <button onclick="switchView('list')" id="nav-list" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center justify-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <span class="text-[7px] font-black uppercase tracking-tighter">List</span>
             </button>
         </nav>
 
-        <div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full text-[10px] font-black uppercase text-white shadow-2xl transition-all opacity-0 pointer-events-none z-50 whitespace-nowrap"></div>
+        <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all opacity-0 pointer-events-none z-50 whitespace-nowrap"></div>
     </div>
 
     <script>
         const KANA_POOL = {
-            hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','me':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
+            hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
             kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro','ワ':'wa','ヲ':'wo','ン':'n' }
         };
 
+        // SUPER MASSIF DATABASE: ~1000 KOSAKATA LENGKAP DARI PDF + KAIGO
         const BASE_VOCAB = [
-            // Sapaan & Kata Ganti
-            {f:'こんにちは',r:'Konnichiwa',m:'Halo/Selamat siang'},{f:'おはようございます',r:'Ohayou gozaimasu',m:'Selamat pagi'},{f:'こんばんは',r:'Konbanwa',m:'Selamat sore/malam'},{f:'おやすみなさい',r:'Oyasuminasai',m:'Selamat malam'},{f:'ばいばい',r:'Bye-bye',m:'Dahh!'},{f:'さようなら',r:'Sayounara',m:'Sampai jumpa'},{f:'私',r:'わたし',m:'Saya'},{f:'私たち',r:'わたしたち',m:'Kami'},{f:'あなた',r:'あなた',m:'Kamu'},{f:'あなたがた',r:'あなたがた',m:'Kamu sekalian'},{f:'彼',r:'かれ',m:'Dia (laki)'},{f:'彼女',r:'かのじょ',m:'Dia (perempuan)'},{f:'これ',r:'kore',m:'Ini'},{f:'それ',r:'sore',m:'Itu'},
-            // Hari, Waktu & Bulan
-            {f:'月曜日',r:'げつようび',m:'Senin'},{f:'火曜日',r:'かようび',m:'Selasa'},{f:'水曜日',r:'すいようび',m:'Rabu'},{f:'木曜日',r:'もくようび',m:'Kamis'},{f:'金曜日',r:'きんようび',m:'Jumat'},{f:'土曜日',r:'どようび',m:'Sabtu'},{f:'日曜日',r:'にちようび',m:'Minggu'},{f:'今日',r:'きょう',m:'Hari ini'},{f:'昨日',r:'きのう',m:'Kemarin'},{f:'明後日',r:'あさって',m:'Lusa'},{f:'一昨日',r:'おととい',m:'Kemarin dulu'},{f:'朝',r:'あさ',m:'Pagi'},{f:'今朝',r:'けさ',m:'Tadi pagi'},{f:'晩/夜',r:'ばん/よる',m:'Malam'},{f:'夕べ',r:'ゆうべ',m:'Tadi malam'},{f:'今晩',r:'こんばん',m:'Malam ini'},{f:'明日',r:'あした',m:'Besok'},{f:'毎日',r:'まいにち',m:'Setiap hari'},{f:'毎朝',r:'まいあさ',m:'Setiap pagi'},{f:'毎晩',r:'まいばん',m:'Setiap malam'},{f:'今週',r:'こんしゅう',m:'Minggu ini'},{f:'先週',r:'せんしゅう',m:'Minggu lalu'},{f:'来週',r:'らいしゅう',m:'Minggu depan'},{f:'一月',r:'いちがつ',m:'Januari'},{f:'二月',r:'にがつ',m:'Februari'},{f:'三月',r:'さんがつ',m:'Maret'},{f:'四月',r:'しがつ',m:'April'},{f:'五月',r:'ごがつ',m:'Mei'},{f:'六月',r:'ろくがつ',m:'Juni'},{f:'七月',r:'しちがつ',m:'Juli'},{f:'八月',r:'はちがつ',m:'Agustus'},{f:'九月',r:'くがつ',m:'September'},{f:'十月',r:'じゅうがつ',m:'Oktober'},{f:'十一月',r:'じゅういちがつ',m:'November'},{f:'十二月',r:'じゅうにがつ',m:'Desember'},
-            // Warna
+            // SAPAAN & KATA GANTI (15)
+            {f:'こんにちは',r:'Konnichiwa',m:'Halo / Selamat siang'},{f:'おはようございます',r:'Ohayou gozaimasu',m:'Selamat pagi'},{f:'こんばんは',r:'Konbanwa',m:'Selamat malam'},{f:'おやすみなさい',r:'Oyasuminasai',m:'Selamat tidur'},{f:'ばいばい',r:'Bye-bye',m:'Dahh!'},{f:'さようなら',r:'Sayounara',m:'Sampai jumpa'},{f:'私',r:'わたし',m:'Saya'},{f:'私たち',r:'わたしたち',m:'Kami'},{f:'あなた',r:'あなた',m:'Kamu'},{f:'あなたがた',r:'あなたがた',m:'Kamu sekalian'},{f:'彼',r:'かれ',m:'Dia (laki)'},{f:'彼女',r:'かのじょ',m:'Dia (perempuan)'},{f:'これ',r:'kore',m:'Ini'},{f:'それ',r:'sore',m:'Itu'},{f:'あれ',r:'are',m:'Itu (jauh)'},
+            
+            // HARI, WAKTU, BULAN, MUSIM (40)
+            {f:'月曜日',r:'げつようび',m:'Senin'},{f:'火曜日',r:'かようび',m:'Selasa'},{f:'水曜日',r:'すいようび',m:'Rabu'},{f:'木曜日',r:'もくようび',m:'Kamis'},{f:'金曜日',r:'きんようび',m:'Jumat'},{f:'土曜日',r:'どようび',m:'Sabtu'},{f:'日曜日',r:'にちようび',m:'Minggu'},{f:'今日',r:'きょう',m:'Hari ini'},{f:'昨日',r:'きのう',m:'Kemarin'},{f:'明後日',r:'あさって',m:'Lusa'},{f:'一昨日',r:'おととい',m:'Kemarin dulu'},{f:'朝',r:'あさ',m:'Pagi'},{f:'今朝',r:'けさ',m:'Tadi pagi'},{f:'晩/夜',r:'ばん/よる',m:'Malam'},{f:'夕べ',r:'ゆうべ',m:'Tadi malam'},{f:'今晩',r:'こんばん',m:'Malam ini'},{f:'明日',r:'あした',m:'Besok'},{f:'毎日',r:'まいにち',m:'Setiap hari'},{f:'毎朝',r:'まいあさ',m:'Setiap pagi'},{f:'毎晩',r:'まいばん',m:'Setiap malam'},{f:'今週',r:'こんしゅう',m:'Minggu ini'},{f:'先週',r:'せんしゅう',m:'Minggu lalu'},{f:'来週',r:'らいしゅう',m:'Minggu depan'},{f:'一月',r:'いちがつ',m:'Januari'},{f:'二月',r:'にがつ',m:'Februari'},{f:'三月',r:'さんがつ',m:'Maret'},{f:'四月',r:'しがつ',m:'April'},{f:'五月',r:'ごがつ',m:'Mei'},{f:'六月',r:'ろくがつ',m:'Juni'},{f:'七月',r:'しちがつ',m:'Juli'},{f:'八月',r:'はちがつ',m:'Agustus'},{f:'九月',r:'くがつ',m:'September'},{f:'十月',r:'じゅうがつ',m:'Oktober'},{f:'十一月',r:'じゅういちがつ',m:'November'},{f:'十二月',r:'じゅうにがつ',m:'Desember'},{f:'春',r:'はる',m:'Musim Semi'},{f:'夏',r:'なつ',m:'Musim Panas'},{f:'秋',r:'あき',m:'Musim Gugur'},{f:'冬',r:'ふゆ',m:'Musim Dingin'},{f:'季節',r:'きせつ',m:'Musim'},
+            
+            // WARNA (25)
             {f:'ピンク',r:'pinku',m:'Pink'},{f:'暗色',r:'あんしょく',m:'Gelap'},{f:'明色',r:'めいしょく',m:'Cerah'},{f:'黄色',r:'きいろ',m:'Kuning'},{f:'金色',r:'きんいろ',m:'Emas'},{f:'銀色',r:'ぎんいろ',m:'Perak'},{f:'黒い',r:'くろい',m:'Hitam'},{f:'紫',r:'むらさき',m:'Ungu'},{f:'青い',r:'あおい',m:'Biru'},{f:'水色',r:'みずいろ',m:'Biru muda'},{f:'赤い',r:'あかい',m:'Merah'},{f:'赤紫',r:'あかむらさき',m:'Merah keunguan'},{f:'茶色',r:'ちゃいろ',m:'Coklat'},{f:'白い',r:'しろい',m:'Putih'},{f:'緑',r:'みどり',m:'Hijau'},{f:'オレンジ色',r:'orenji-iro',m:'Orange'},{f:'橙色',r:'だいだいいろ',m:'Jingga'},{f:'桃色',r:'ももいろ',m:'Peach'},{f:'真っ赤',r:'まっか',m:'Merah tua'},{f:'真っ白',r:'まっしろ',m:'Putih jernih'},{f:'真っ黒',r:'まっくろ',m:'Hitam legam'},{f:'真っ青',r:'まっさお',m:'Biru tua'},{f:'灰色',r:'はいいろ',m:'Abu-abu'},{f:'紺',r:'こん',m:'Biru laut'},{f:'紅',r:'くれない',m:'Merah terang'},
-            // Angka
+            
+            // ANGKA & NOMOR (19)
             {f:'零',r:'れい',m:'Nol'},{f:'一',r:'いち',m:'1'},{f:'二',r:'に',m:'2'},{f:'三',r:'さん',m:'3'},{f:'四',r:'よん/し',m:'4'},{f:'五',r:'ご',m:'5'},{f:'六',r:'ろく',m:'6'},{f:'七',r:'なな/しち',m:'7'},{f:'八',r:'はち',m:'8'},{f:'九',r:'きゅう',m:'9'},{f:'十',r:'じゅう',m:'10'},{f:'百',r:'ひゃく',m:'100'},{f:'千',r:'せん',m:'1.000'},{f:'万',r:'まん',m:'10.000'},{f:'十万',r:'じゅうまん',m:'100.000'},{f:'百万',r:'ひゃくまん',m:'1.000.000'},{f:'千万',r:'せんまん',m:'10.000.000'},{f:'億',r:'おく',m:'100.000.000'},{f:'兆',r:'ちょう',m:'1 Triliun'},
-            // Anggota Tubuh
+            
+            // ANGGOTA TUBUH (63)
             {f:'人体',r:'じんたい',m:'Tubuh manusia'},{f:'肩',r:'かた',m:'Bahu'},{f:'喉',r:'のど',m:'Tenggorokan'},{f:'顔',r:'かお',m:'Muka'},{f:'頬',r:'ほほ',m:'Pipi'},{f:'歯',r:'は',m:'Gigi'},{f:'指',r:'ゆび',m:'Jari'},{f:'お腹',r:'おなか',m:'Perut'},{f:'爪',r:'つめ',m:'Kuku'},{f:'額',r:'ひたい',m:'Dahi'},{f:'顎',r:'あご',m:'Dagu'},{f:'鼻',r:'はな',m:'Hidung'},{f:'口',r:'くち',m:'Mulut'},{f:'唇',r:'くちびる',m:'Bibir'},{f:'首',r:'くび',m:'Leher'},{f:'掌',r:'てのひら',m:'Telapak tangan'},{f:'体',r:'からだ',m:'Badan'},{f:'頭',r:'あたま',m:'Kepala'},{f:'手',r:'て',m:'Tangan'},{f:'足',r:'あし',m:'Kaki'},{f:'腕',r:'うで',m:'Lengan'},{f:'膝',r:'ひざ',m:'Lutut'},{f:'髪',r:'かみ',m:'Rambut'},{f:'背中',r:'せなか',m:'Punggung'},{f:'腰',r:'こし',m:'Pinggang'},{f:'目',r:'め',m:'Mata'},{f:'耳',r:'みみ',m:'Telinga'},{f:'踵',r:'かかと',m:'Tumit'},{f:'足指',r:'あしゆび',m:'Jari kaki'},{f:'親指',r:'おやゆび',m:'Jempol'},{f:'人差し指',r:'ひとさしゆび',m:'Telunjuk'},{f:'中指',r:'なかゆび',m:'Jari tengah'},{f:'薬指',r:'くすりゆび',m:'Jari manis'},{f:'小指',r:'こゆび',m:'Kelingking'},{f:'顎鬚',r:'あごひげ',m:'Janggut'},{f:'髭',r:'ひげ',m:'Kumis'},{f:'太股',r:'ふともも',m:'Paha'},{f:'皮膚',r:'ひふ',m:'Kulit'},{f:'血液',r:'けつえき',m:'Darah'},{f:'眉',r:'まゆ',m:'Alis'},{f:'胸',r:'むね',m:'Dada'},{f:'肘',r:'ひじ',m:'Siku'},{f:'臍',r:'へそ',m:'Pusar'},{f:'腋の下',r:'わきのした',m:'Ketiak'},{f:'足首',r:'あしくび',m:'Pergelangan kaki'},{f:'手首',r:'てくび',m:'Pergelangan tangan'},{f:'眼球',r:'がんきゅう',m:'Bola mata'},{f:'内臓',r:'ないぞう',m:'Organ dalam'},{f:'腎臓',r:'じんぞう',m:'Ginjal'},{f:'肝臓',r:'かんぞう',m:'Hati'},{f:'肋骨',r:'ろっこつ',m:'Tulang rusuk'},{f:'卵巣',r:'らんそう',m:'Indung telur'},{f:'胎児',r:'たいじ',m:'Janin'},{f:'心臓',r:'しんぞう',m:'Jantung'},{f:'脾臓',r:'ひぞう',m:'Limpa'},{f:'脳',r:'のう',m:'Otak'},{f:'筋肉',r:'きんにく',m:'Otot'},{f:'肺',r:'はい',m:'Paru-paru'},{f:'血管',r:'けっかん',m:'Pembuluh darah'},{f:'動脈',r:'どうみゃく',m:'Nadi'},{f:'静脈',r:'じょうみゃく',m:'Urat'},{f:'子宮',r:'しきゅう',m:'Rahim'},{f:'網膜',r:'もうまく',m:'Retina'},{f:'精子',r:'せいし',m:'Sperma'},{f:'頭蓋骨',r:'ずがいこつ',m:'Tengkorak'},{f:'腸',r:'ちょう',m:'Usus'},{f:'大腸',r:'だいちょう',m:'Usus besar'},
-            // Sekolah
-            {f:'ボールペン',r:'Boorupen',m:'Pulpen'},{f:'本',r:'ほん',m:'Buku'},{f:'分度器',r:'ぶんどき',m:'Busur Derajat'},{f:'教科書',r:'きょうかしょ',m:'Buku Pelajaran'},{f:'百科事典',r:'ひゃっかじてん',m:'Ensiklopedia'},{f:'鋏',r:'はさみ',m:'Gunting'},{f:'電卓',r:'でんたく',m:'Kalkulator'},{f:'チョーク',r:'Chooku',m:'Kapur'},{f:'椅子',r:'いす',m:'Kursi'},{f:'コンピューター',r:'Konpyu-ta',m:'Komputer'},{f:'辞書',r:'じしょ',m:'Kamus'},{f:'紙',r:'かみ',m:'Kertas'},{f:'机',r:'つくえ',m:'Meja'},{f:'教卓',r:'きょうたく',m:'Meja guru'},{f:'黒板',r:'こくばん',m:'Papan Tulis'},{f:'定規',r:'じょうぎ',m:'Penggaris'},{f:'黒板消し',r:'こくばんけし',m:'Penghapus Papan'},{f:'鉛筆',r:'えんぴつ',m:'Pensil'},{f:'シャーペン',r:'Sha-pen',m:'Pensil Mekanik'},{f:'地図',r:'ちず',m:'Peta'},{f:'本棚',r:'ほんだな',m:'Rak Buku'},{f:'鉛筆削り',r:'えんぴつけずり',m:'Rautan'},{f:'制服',r:'せいふく',m:'Seragam'},{f:'ホチキス',r:'Hochikisu',m:'Staples'},{f:'マーカー',r:'Ma-ka',m:'Spidol'},{f:'通学鞄',r:'つうがくかばん',m:'Tas Sekolah'},{f:'筆箱',r:'ふでばこ',m:'Tempat Pensil'},
-            // Dapur
+            
+            // PERLENGKAPAN SEKOLAH & KANTOR (28)
+            {f:'ボールペン',r:'Boorupen',m:'Pulpen'},{f:'本',r:'ほん',m:'Buku'},{f:'分度器',r:'ぶんどき',m:'Busur Derajat'},{f:'教科書',r:'きょうかしょ',m:'Buku Pelajaran'},{f:'百科事典',r:'ひゃっかじてん',m:'Ensiklopedia'},{f:'鋏',r:'はさみ',m:'Gunting'},{f:'電卓',r:'でんたく',m:'Kalkulator'},{f:'チョーク',r:'Chooku',m:'Kapur'},{f:'椅子',r:'いす',m:'Kursi'},{f:'コンピューター',r:'Konpyu-ta',m:'Komputer'},{f:'辞書',r:'じしょ',m:'Kamus'},{f:'紙',r:'かみ',m:'Kertas'},{f:'机',r:'つくえ',m:'Meja'},{f:'教卓',r:'きょうたく',m:'Meja guru'},{f:'黒板',r:'こくばん',m:'Papan Tulis'},{f:'定規',r:'じょうぎ',m:'Penggaris'},{f:'黒板消し',r:'こくばんけし',m:'Penghapus Papan'},{f:'鉛筆',r:'えんぴつ',m:'Pensil'},{f:'シャーペン',r:'Sha-pen',m:'Pensil Mekanik'},{f:'地図',r:'ちず',m:'Peta'},{f:'本棚',r:'ほんだな',m:'Rak Buku'},{f:'鉛筆削り',r:'えんぴつけずり',m:'Rautan'},{f:'制服',r:'せいふく',m:'Seragam'},{f:'ホチキス',r:'Hochikisu',m:'Staples'},{f:'マーカー',r:'Ma-ka',m:'Spidol'},{f:'通学鞄',r:'つうがくかばん',m:'Tas Sekolah'},{f:'筆箱',r:'ふでばこ',m:'Tempat Pensil'},{f:'ノート',r:'nooto',m:'Buku Catatan'},
+            
+            // DAPUR & PERALATAN MASAK (15)
             {f:'包丁',r:'ほうちょう',m:'Pisau dapur'},{f:'まな板',r:'まないた',m:'Talenan'},{f:'浄水器',r:'じょうすいき',m:'Penyuling air'},{f:'鍋',r:'なべ',m:'Panci'},{f:'フライパン',r:'furaipan',m:'Wajan'},{f:'やかん',r:'yakan',m:'Ketel'},{f:'おたま',r:'otama',m:'Sendok sayur'},{f:'排水溝',r:'はいすいこう',m:'Saringan'},{f:'ボウル',r:'bouru',m:'Mangkuk'},{f:'ミキサー',r:'mikisaa',m:'Blender'},{f:'おろし金',r:'おろしがね',m:'Parutan'},{f:'皮むき機',r:'かわむきき',m:'Alat pengupas'},{f:'栓抜き',r:'せんぬき',m:'Pembuka botol'},{f:'缶切り',r:'かんきり',m:'Pembuka kaleng'},{f:'コルク抜き',r:'korukunuki',m:'Kotrek'},
-            // Buah & Sayur
-            {f:'果物',r:'くだもの',m:'Buah'},{f:'苺',r:'いちご',m:'Strawberry'},{f:'蜜柑',r:'みかん',m:'Jeruk mandarin'},{f:'オレンジ',r:'orenji',m:'Jeruk'},{f:'レモン',r:'remon',m:'Lemon'},{f:'西瓜',r:'すいか',m:'Semangka'},{f:'葡萄',r:'ぶどう',m:'Anggur'},{f:'パイナップル',r:'painappuru',m:'Nanas'},{f:'林檎',r:'りんご',m:'Apel'},{f:'ドリアン',r:'dorian',m:'Durian'},{f:'パパイヤ',r:'papaiya',m:'Pepaya'},{f:'桃',r:'もも',m:'Persik'},{f:'梅',r:'うめ',m:'Plum'},{f:'マンゴー',r:'mangoo',m:'Mangga'},{f:'キウイ',r:'kiui',m:'Kiwi'},{f:'グアバ',r:'guaba',m:'Jambu biji'},{f:'干し葡萄',r:'ほしぶどう',m:'Kismis'},{f:'栗',r:'くり',m:'Coklat/Kastanye'},{f:'ザクロ',r:'ざくろ',m:'Delima'},{f:'ココナッツ',r:'kokonattsu',m:'Kelapa'},{f:'柿',r:'かき',m:'Kesemek'},{f:'アボカド',r:'abokado',m:'Alpukat'},{f:'梨',r:'なし',m:'Pir'},{f:'野菜',r:'やさい',m:'Sayur'},{f:'大根',r:'だいこん',m:'Lobak'},{f:'レタス',r:'retasu',m:'Selada'},{f:'トマト',r:'tomato',m:'Tomat'},{f:'じゃが芋',r:'じゃがいも',m:'Kentang'},{f:'キャベツ',r:'kyabetsu',m:'Kubis'},{f:'生姜',r:'しょうが',m:'Jahe'},{f:'茄子',r:'なす',m:'Terong'},{f:'人参',r:'にんじん',m:'Wortel'},{f:'玉葱',r:'たまねぎ',m:'Bawang merah/Bombay'},{f:'大蒜',r:'にんにく',m:'Bawang putih'},{f:'胡瓜',r:'きゅうり',m:'Mentimun'},{f:'ピーマン',r:'piiman',m:'Cabe/Paprika'},{f:'豆',r:'まめ',m:'Kacang'},{f:'マッシュルーム',r:'masshuruumu',m:'Jamur'},{f:'白菜',r:'はくさい',m:'Sawi putih'},{f:'南瓜',r:'かぼちゃ',m:'Labu'},{f:'ブロッコリー',r:'burokkorii',m:'Brokoli'},{f:'大豆',r:'だいず',m:'Kedelai'},
-            // Kata Sifat
-            {f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'長い',r:'ながい',m:'Panjang'},{f:'短い',r:'みじかい',m:'Pendek'},{f:'多い',r:'おおい',m:'Banyak'},{f:'少ない',r:'すくない',m:'Sedikit'},{f:'太い',r:'ふとい',m:'Gemuk/Tebal'},{f:'細い',r:'ほそい',m:'Ramping/Tipis'},{f:'厚い',r:'あつい',m:'Tebal'},{f:'薄い',r:'うすい',m:'Tipis'},{f:'固い',r:'かたい',m:'Keras'},{f:'柔らかい',r:'やわらかい',m:'Lunak'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'古い',r:'ふるい',m:'Lama/Tua'},{f:'高い',r:'たかい',m:'Tinggi/Mahal'},{f:'安い',r:'やすい',m:'Murah'},{f:'早い',r:'はやい',m:'Cepat (waktu)'},{f:'遠い',r:'とおい',m:'Jauh'},{f:'近い',r:'ちかい',m:'Dekat'},{f:'強い',r:'つよい',m:'Kuat'},{f:'弱い',r:'よわい',m:'Lemah'},{f:'暑い',r:'あつい',m:'Panas (suhu)'},{f:'寒い',r:'さむい',m:'Dingin (suhu)'},{f:'明るい',r:'あかるい',m:'Terang'},{f:'暗い',r:'くらい',m:'Gelap'},{f:'汚い',r:'きたない',m:'Kotor'},{f:'難しい',r:'むずかしい',m:'Sulit'},{f:'易しい',r:'やasashii',m:'Mudah'},{f:'危ない',r:'abunai',m:'Bahaya'},{f:'うれしい',r:'ureshii',m:'Senang'},{f:'悲しい',r:'kanashii',m:'Sedih'},{f:'寂しい',r:'sabishii',m:'Sepi'},{f:'怖い',r:'kowai',m:'Takut'},{f:'眠い',r:'nemui',m:'Ngantuk'},{f:'痛い',r:'itai',m:'Sakit'},
-            // Kata Kerja
-            {f:'有る',r:'ある',m:'Ada (Benda)'},{f:'居る',r:'いる',m:'Ada (Mahluk)'},{f:'作業する',r:'さぎょうする',m:'Bekerja'},{f:'勉強する',r:'べんきょうする',m:'Belajar'},{f:'思う',r:'おもう',m:'Berpikir'},{f:'掃除する',r:'そうじする',m:'Bersih-bersih'},{f:'行く',r:'いく',m:'Pergi'},{f:'見る',r:'みる',m:'Melihat'},{f:'守る',r:'まもる',m:'Melindungi'},{f:'食べる',r:'たべる',m:'Makan'},{f:'飲む',r:'のむ',m:'Minum'},{f:'寝る',r:'ねる',m:'Tidur'},{f:'起きる',r:'おきる',m:'Bangun'},{f:'待つ',r:'まつ',m:'Menunggu'},{f:'話す',r:'はなす',m:'Berbicara'},{f:'聞く',r:'きく',m:'Mendengar'},{f:'書く',r:'かく',m:'Menulis'},{f:'読む',r:'よむ',m:'Membaca'},{f:'歩く',r:'あるく',m:'Berjalan'},{f:'走る',r:'はしる',m:'Berlari'},{f:'泳ぐ',r:'およぐ',m:'Berenang'},{f:'会う',r:'あう',m:'Bertemu'},{f:'買う',r:'かう',m:'Membeli'},{f:'売る',r:'うる',m:'Menjual'},{f:'出す',r:'だす',m:'Mengeluarkan'},{f:'入れる',r:'いれる',m:'Memasukkan'}
+            
+            // BUAH, SAYUR, & MAKANAN LENGKAP (70)
+            {f:'果物',r:'くだもの',m:'Buah'},{f:'苺',r:'いちご',m:'Strawberry'},{f:'蜜柑',r:'みかん',m:'Jeruk mandarin'},{f:'オレンジ',r:'orenji',m:'Jeruk'},{f:'レモン',r:'remon',m:'Lemon'},{f:'西瓜',r:'すいか',m:'Semangka'},{f:'葡萄',r:'ぶどう',m:'Anggur'},{f:'パイナップル',r:'painappuru',m:'Nanas'},{f:'林檎',r:'りんご',m:'Apel'},{f:'ドリアン',r:'dorian',m:'Durian'},{f:'パパイヤ',r:'papaiya',m:'Pepaya'},{f:'桃',r:'もも',m:'Persik'},{f:'梅',r:'うめ',m:'Plum'},{f:'マンゴー',r:'mangoo',m:'Mangga'},{f:'キウイ',r:'kiui',m:'Kiwi'},{f:'グアバ',r:'guaba',m:'Jambu biji'},{f:'干し葡萄',r:'ほしぶどう',m:'Kismis'},{f:'栗',r:'くり',m:'Coklat/Kastanye'},{f:'ザクロ',r:'ざくろ',m:'Delima'},{f:'ココナッツ',r:'kokonattsu',m:'Kelapa'},{f:'柿',r:'かき',m:'Kesemek'},{f:'アボカド',r:'abokado',m:'Alpukat'},{f:'梨',r:'なし',m:'Pir'},{f:'野菜',r:'やさい',m:'Sayur'},{f:'大根',r:'だいこん',m:'Lobak'},{f:'レタス',r:'retasu',m:'Selada'},{f:'トマト',r:'tomato',m:'Tomat'},{f:'じゃが芋',r:'じゃがいも',m:'Kentang'},{f:'キャベツ',r:'kyabetsu',m:'Kubis'},{f:'生姜',r:'しょうが',m:'Jahe'},{f:'茄子',r:'なす',m:'Terong'},{f:'人参',r:'にんじん',m:'Wortel'},{f:'玉葱',r:'たまねぎ',m:'Bawang'},{f:'大蒜',r:'にんにく',m:'Bawang putih'},{f:'胡瓜',r:'きゅうり',m:'Mentimun'},{f:'ピーマン',r:'piiman',m:'Cabe/Paprika'},{f:'豆',r:'まめ',m:'Kacang'},{f:'マッシュルーム',r:'masshuruumu',m:'Jamur'},{f:'白菜',r:'はくさい',m:'Sawi putih'},{f:'南瓜',r:'かぼちゃ',m:'Labu'},{f:'ブロッコリー',r:'burokkorii',m:'Brokoli'},{f:'大豆',r:'だいず',m:'Kedelai'},{f:'ご飯',r:'ごはん',m:'Nasi/Makan'},{f:'パン',r:'ぱん',m:'Roti'},{f:'肉',r:'にく',m:'Daging'},{f:'牛肉',r:'ぎゅうにく',m:'Daging Sapi'},{f:'豚肉',r:'ぶたにく',m:'Daging Babi'},{f:'鶏肉',r:'とりにく',m:'Daging Ayam'},{f:'魚',r:'さかな',m:'Ikan'},{f:'卵',r:'たまご',m:'Telur'},{f:'塩',r:'しお',m:'Garam'},{f:'砂糖',r:'さとう',m:'Gula'},{f:'醤油',r:'しょうゆ',m:'Kecap asin'},{f:'お茶',r:'おちゃ',m:'Teh hijau'},{f:'紅茶',r:'こうちゃ',m:'Teh hitam'},{f:'牛乳',r:'ぎゅうにゅう',m:'Susu sapi'},{f:'水',r:'みず',m:'Air'},{f:'お湯',r:'おゆ',m:'Air panas'},{f:'コーヒー',r:'こーひー',m:'Kopi'},{f:'ジュース',r:'じゅーす',m:'Jus'},{f:'お酒',r:'おさけ',m:'Sake/Alkohol'},{f:'ビール',r:'びーる',m:'Bir'},{f:'ワイン',r:'わいん',m:'Wine'},{f:'氷',r:'こおり',m:'Es'},{f:'お菓子',r:'おかし',m:'Camilan/Permen'},{f:'ケーキ',r:'けーき',m:'Kue'},{f:'弁当',r:'べんとう',m:'Kotak bekal'},{f:'味噌',r:'みそ',m:'Miso'},{f:'油',r:'あぶら',m:'Minyak'},{f:'胡椒',r:'こしょう',m:'Lada'},
+            
+            // HEWAN (25)
+            {f:'犬',r:'いぬ',m:'Anjing'},{f:'猫',r:'ねこ',m:'Kucing'},{f:'鳥',r:'とり',m:'Burung'},{f:'魚',r:'さかな',m:'Ikan'},{f:'牛',r:'うし',m:'Sapi'},{f:'馬',r:'うま',m:'Kuda'},{f:'豚',r:'ぶた',m:'Babi'},{f:'羊',r:'ひつじ',m:'Domba'},{f:'猿',r:'さる',m:'Monyet'},{f:'熊',r:'くま',m:'Beruang'},{f:'象',r:'ぞう',m:'Gajah'},{f:'虎',r:'とら',m:'Harimau'},{f:'蛇',r:'へび',m:'Ular'},{f:'鼠',r:'ねずみ',m:'Tikus'},{f:'兎',r:'うさぎ',m:'Kelinci'},{f:'狐',r:'きつね',m:'Rubah'},{f:'鹿',r:'しか',m:'Rusa'},{f:'蛙',r:'かえる',m:'Katak'},{f:'虫',r:'むし',m:'Serangga'},{f:'蝶',r:'ちょう',m:'Kupu-kupu'},{f:'蜂',r:'はち',m:'Lebah'},{f:'蜘蛛',r:'くも',m:'Laba-laba'},{f:'蚊',r:'か',m:'Nyamuk'},{f:'蠅',r:'はえ',m:'Lalat'},{f:'蟻',r:'あり',m:'Semut'},
+            
+            // KELUARGA & ORANG (30)
+            {f:'家族',r:'かぞく',m:'Keluarga'},{f:'父',r:'ちち',m:'Ayah (sendiri)'},{f:'母',r:'はは',m:'Ibu (sendiri)'},{f:'お父さん',r:'おとうさん',m:'Ayah (orang lain)'},{f:'お母さん',r:'おかあさん',m:'Ibu (orang lain)'},{f:'兄',r:'あに',m:'Kakak Laki-laki'},{f:'お兄さん',r:'おにいさん',m:'Kakak Laki-laki (orang lain)'},{f:'姉',r:'あね',m:'Kakak Perempuan'},{f:'お姉さん',r:'おねえさん',m:'Kakak Perempuan (orang lain)'},{f:'弟',r:'おとうと',m:'Adik Laki-laki'},{f:'妹',r:'いもうと',m:'Adik Perempuan'},{f:'祖父',r:'そふ',m:'Kakek'},{f:'おじいさん',r:'おじいさん',m:'Kakek (orang lain)'},{f:'祖母',r:'そぼ',m:'Nenek'},{f:'おばあさん',r:'おばあさん',m:'Nenek (orang lain)'},{f:'夫',r:'おっと',m:'Suami'},{f:'ご主人',r:'ごしゅじん',m:'Suami (orang lain)'},{f:'妻',r:'つま',m:'Istri'},{f:'奥さん',r:'おくさん',m:'Istri (orang lain)'},{f:'息子',r:'むすこ',m:'Anak Laki-laki'},{f:'娘',r:'むすめ',m:'Anak Perempuan'},{f:'孫',r:'まご',m:'Cucu'},{f:'叔父',r:'おじ',m:'Paman'},{f:'叔母',r:'おば',m:'Bibi'},{f:'従兄弟',r:'いとこ',m:'Sepupu'},{f:'男',r:'おとこ',m:'Laki-laki'},{f:'女',r:'おんな',m:'Perempuan'},{f:'子供',r:'こども',m:'Anak'},{f:'大人',r:'おとな',m:'Orang dewasa'},{f:'友達',r:'ともだち',m:'Teman'},
+            
+            // TEMPAT & BANGUNAN (35)
+            {f:'学校',r:'がっこう',m:'Sekolah'},{f:'病院',r:'びょういん',m:'Rumah Sakit'},{f:'銀行',r:'ぎんこう',m:'Bank'},{f:'郵便局',r:'ゆうびんきょく',m:'Kantor Pos'},{f:'図書館',r:'としょかん',m:'Perpustakaan'},{f:'駅',r:'えき',m:'Stasiun'},{f:'空港',r:'くうこう',m:'Bandara'},{f:'公園',r:'こうえん',m:'Taman'},{f:'スーパー',r:'すーぱー',m:'Supermarket'},{f:'デパート',r:'でぱーと',m:'Department Store'},{f:'映画館',r:'えいがかん',m:'Bioskop'},{f:'美術館',r:'びじゅつかん',m:'Museum Seni'},{f:'警察署',r:'けいさつしょ',m:'Kantor Polisi'},{f:'交番',r:'こうばん',m:'Pos Polisi'},{f:'消防署',r:'しょうぼうしょ',m:'Pemadam Kebakaran'},{f:'寺',r:'てら',m:'Kuil Buddha'},{f:'神社',r:'じんじゃ',m:'Kuil Shinto'},{f:'教会',r:'きょうかい',m:'Gereja'},{f:'海',r:'うみ',m:'Laut'},{f:'山',r:'やま',m:'Gunung'},{f:'川',r:'かわ',m:'Sungai'},{f:'森',r:'もり',m:'Hutan'},{f:'村',r:'むら',m:'Desa'},{f:'町',r:'まち',m:'Kota Kecil'},{f:'国',r:'くに',m:'Negara'},{f:'世界',r:'せかい',m:'Dunia'},{f:'会社',r:'かいしゃ',m:'Perusahaan'},{f:'工場',r:'こうじょう',m:'Pabrik'},{f:'店',r:'みせ',m:'Toko'},{f:'レストラン',r:'れすとらん',m:'Restoran'},{f:'ホテル',r:'ほてる',m:'Hotel'},{f:'道',r:'みち',m:'Jalan'},{f:'橋',r:'はし',m:'Jembatan'},{f:'家',r:'いえ',m:'Rumah'},{f:'部屋',r:'へや',m:'Kamar/Ruangan'},
+            
+            // KENDARAAN (15)
+            {f:'車',r:'くるま',m:'Mobil'},{f:'自転車',r:'じてんしゃ',m:'Sepeda'},{f:'バイク',r:'ばいく',m:'Motor'},{f:'飛行機',r:'ひこうき',m:'Pesawat'},{f:'船',r:'ふね',m:'Kapal'},{f:'電車',r:'でんしゃ',m:'Kereta Listrik'},{f:'地下鉄',r:'ちかてつ',m:'Kereta Bawah Tanah'},{f:'新幹線',r:'しんかんせん',m:'Kereta Peluru'},{f:'バス',r:'ばす',m:'Bus'},{f:'タクシー',r:'たくしー',m:'Taksi'},{f:'トラック',r:'とらっく',m:'Truk'},{f:'救急車',r:'きゅうきゅうしゃ',m:'Ambulans'},{f:'パトカー',r:'ぱとかー',m:'Mobil Polisi'},{f:'消防車',r:'しょうぼうしゃ',m:'Mobil Pemadam'},{f:'駅',r:'えき',m:'Stasiun'},
+            
+            // BENDA SEHARI-HARI & RUMAH (40)
+            {f:'テレビ',r:'てれび',m:'TV'},{f:'ラジオ',r:'らじお',m:'Radio'},{f:'パソコン',r:'ぱそこん',m:'PC / Laptop'},{f:'携帯電話',r:'けいたいでんわ',m:'HP'},{f:'スマホ',r:'すまほ',m:'Smartphone'},{f:'冷蔵庫',r:'れいぞうこ',m:'Kulkas'},{f:'洗濯機',r:'せんたくき',m:'Mesin Cuci'},{f:'掃除機',r:'そうじき',m:'Vacuum Cleaner'},{f:'電子レンジ',r:'でんしれんじ',m:'Microwave'},{f:'エアコン',r:'えあこん',m:'AC'},{f:'時計',r:'とけい',m:'Jam'},{f:'カメラ',r:'かめら',m:'Kamera'},{f:'眼鏡',r:'めがね',m:'Kacamata'},{f:'傘',r:'かさ',m:'Payung'},{f:'財布',r:'さいふ',m:'Dompet'},{f:'鞄',r:'かばん',m:'Tas'},{f:'靴',r:'くつ',m:'Sepatu'},{f:'靴下',r:'くつした',m:'Kaos Kaki'},{f:'服',r:'ふく',m:'Pakaian'},{f:'帽子',r:'ぼうし',m:'Topi'},{f:'ネクタイ',r:'ねくたい',m:'Dasi'},{f:'薬',r:'くすり',m:'Obat'},{f:'鍵',r:'かぎ',m:'Kunci'},{f:'鏡',r:'かがみ',m:'Cermin'},{f:'タオル',r:'たおる',m:'Handuk'},{f:'石鹸',r:'せっけん',m:'Sabun'},{f:'シャンプー',r:'しゃんぷー',m:'Shampoo'},{f:'歯ブラシ',r:'はぶらし',m:'Sikat gigi'},{f:'歯磨き粉',r:'はみがきこ',m:'Pasta gigi'},{f:'トイレットペーパー',r:'といれっとぺーぱー',m:'Tisu toilet'},{f:'ゴミ箱',r:'ごみばこ',m:'Tempat sampah'},{f:'ベッド',r:'べっど',m:'Tempat tidur'},{f:'布団',r:'ふとん',m:'Futon'},{f:'毛布',r:'もうふ',m:'Selimut'},{f:'枕',r:'まくら',m:'Bantal'},{f:'ドア',r:'どあ',m:'Pintu'},{f:'窓',r:'まど',m:'Jendela'},{f:'壁',r:'かべ',m:'Dinding'},{f:'床',r:'ゆか',m:'Lantai'},{f:'天井',r:'てんじょう',m:'Langit-langit'},
+            
+            // CUACA & ALAM (20)
+            {f:'天気',r:'てんき',m:'Cuaca'},{f:'晴れ',r:'はれ',m:'Cerah'},{f:'曇り',r:'くもり',m:'Berawan'},{f:'雨',r:'あめ',m:'Hujan'},{f:'雪',r:'ゆき',m:'Salju'},{f:'風',r:'かぜ',m:'Angin'},{f:'雷',r:'かみなり',m:'Petir'},{f:'台風',r:'たいふう',m:'Topan'},{f:'地震',r:'じしん',m:'Gempa Bumi'},{f:'空',r:'そら',m:'Langit'},{f:'太陽',r:'たいよう',m:'Matahari'},{f:'月',r:'つき',m:'Bulan (Satelit)'},{f:'星',r:'ほし',m:'Bintang'},{f:'光',r:'ひかり',m:'Cahaya'},{f:'水',r:'みず',m:'Air'},{f:'氷',r:'こおり',m:'Es'},{f:'火',r:'ひ',m:'Api'},{f:'花',r:'はな',m:'Bunga'},{f:'木',r:'き',m:'Pohon'},{f:'草',r:'くさ',m:'Rumput'},
+            
+            // ARAH & POSISI (18)
+            {f:'上',r:'うえ',m:'Atas'},{f:'下',r:'した',m:'Bawah'},{f:'左',r:'ひだり',m:'Kiri'},{f:'右',r:'みぎ',m:'Kanan'},{f:'前',r:'まえ',m:'Depan'},{f:'後ろ',r:'うしろ',m:'Belakang'},{f:'中',r:'なか',m:'Dalam'},{f:'外',r:'そと',m:'Luar'},{f:'隣',r:'となり',m:'Sebelah'},{f:'近く',r:'ちかく',m:'Dekat'},{f:'遠く',r:'とおく',m:'Jauh'},{f:'東',r:'ひがし',m:'Timur'},{f:'西',r:'にし',m:'Barat'},{f:'南',r:'みなみ',m:'Selatan'},{f:'北',r:'きた',m:'Utara'},{f:'横',r:'よこ',m:'Samping'},{f:'間',r:'あいだ',m:'Antara'},{f:'真ん中',r:'まんなか',m:'Tengah'},
+            
+            // PROFESI (20)
+            {f:'医者',r:'いしゃ',m:'Dokter'},{f:'看護師',r:'かんごし',m:'Perawat'},{f:'先生',r:'せんせい',m:'Guru/Dokter'},{f:'学生',r:'がくせい',m:'Siswa/Mahasiswa'},{f:'警察官',r:'けいさつかん',m:'Polisi'},{f:'消防士',r:'しょうぼうし',m:'Pemadam kebakaran'},{f:'会社員',r:'かいしゃいん',m:'Pegawai perusahaan'},{f:'銀行員',r:'ぎんこういん',m:'Pegawai bank'},{f:'店員',r:'てんいん',m:'Pelayan toko'},{f:'駅員',r:'えきいん',m:'Petugas stasiun'},{f:'運転手',r:'うんてんしゅ',m:'Sopir'},{f:'社長',r:'しゃちょう',m:'Presiden Direktur'},{f:'部長',r:'ぶちょう',m:'Manajer'},{f:'歌手',r:'うたしゅ',m:'Penyanyi'},{f:'俳優',r:'はいゆう',m:'Aktor'},{f:'農家',r:'のうか',m:'Petani'},{f:'漁師',r:'りょうし',m:'Nelayan'},{f:'政治家',r:'せいじか',m:'Politikus'},{f:'研究者',r:'けんきゅうしゃ',m:'Peneliti'},{f:'弁護士',r:'べんごし',m:'Pengacara'},
+            
+            // KATA SIFAT (I-ADJ & NA-ADJ) LENGKAP (100)
+            {f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'長い',r:'ながい',m:'Panjang'},{f:'短い',r:'みじかい',m:'Pendek'},{f:'多い',r:'おおい',m:'Banyak'},{f:'少ない',r:'すくない',m:'Sedikit'},{f:'太い',r:'ふとい',m:'Gemuk/Tebal'},{f:'細い',r:'ほそい',m:'Ramping/Tipis'},{f:'厚い',r:'あつい',m:'Tebal'},{f:'薄い',r:'うすい',m:'Tipis'},{f:'固い',r:'かたい',m:'Keras'},{f:'柔らかい',r:'やわらかい',m:'Lunak'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'古い',r:'ふるい',m:'Lama/Tua'},{f:'高い',r:'たかい',m:'Tinggi/Mahal'},{f:'安い',r:'やすい',m:'Murah'},{f:'早い',r:'はやい',m:'Cepat (waktu)'},{f:'遠い',r:'とおい',m:'Jauh'},{f:'近い',r:'ちかい',m:'Dekat'},{f:'強い',r:'つよい',m:'Kuat'},{f:'弱い',r:'よわい',m:'Lemah'},{f:'暑い',r:'あつい',m:'Panas (suhu)'},{f:'寒い',r:'さむい',m:'Dingin (suhu)'},{f:'明るい',r:'あかるい',m:'Terang'},{f:'暗い',r:'くらい',m:'Gelap'},{f:'汚い',r:'きたない',m:'Kotor'},{f:'きれい',r:'きれい',m:'Cantik / Bersih'},{f:'難しい',r:'むずかしい',m:'Sulit'},{f:'易しい',r:'やさしい',m:'Mudah'},{f:'危ない',r:'あぶない',m:'Bahaya'},{f:'安全',r:'あんぜん',m:'Aman'},{f:'うれしい',r:'うれしい',m:'Senang'},{f:'悲しい',r:'かなしい',m:'Sedih'},{f:'寂しい',r:'さびしい',m:'Sepi'},{f:'怖い',r:'こわい',m:'Takut'},{f:'眠い',r:'ねむい',m:'Ngantuk'},{f:'痛い',r:'いたい',m:'Sakit'},{f:'甘い',r:'あまい',m:'Manis'},{f:'辛い',r:'からい',m:'Pedas'},{f:'苦い',r:'にがい',m:'Pahit'},{f:'酸っぱい',r:'すっぱい',m:'Asam'},{f:'塩辛い',r:'しおからい',m:'Asin'},{f:'美味しい',r:'おいしい',m:'Enak'},{f:'不味い',r:'まずい',m:'Tidak enak'},{f:'重い',r:'おもい',m:'Berat'},{f:'軽い',r:'かるい',m:'Ringan'},{f:'広い',r:'ひろい',m:'Luas'},{f:'狭い',r:'せまい',m:'Sempit'},{f:'いい',r:'いい/よい',m:'Bagus / Baik'},{f:'悪い',r:'わるい',m:'Buruk'},{f:'面白い',r:'おもしろい',m:'Menarik / Lucu'},{f:'つまらない',r:'つまらない',m:'Membosankan'},{f:'楽しい',r:'たのしい',m:'Menyenangkan'},{f:'厳しい',r:'きびしい',m:'Ketat / Tegas'},{f:'親切',r:'しんせつ',m:'Ramah'},{f:'元気',r:'げんき',m:'Sehat'},{f:'便利',r:'べんり',m:'Praktis'},{f:'不便',r:'ふべん',m:'Tidak praktis'},{f:'複雑',r:'ふくざつ',m:'Rumit'},{f:'簡単',r:'かんたん',m:'Mudah / Gampang'},{f:'好き',r:'すき',m:'Suka'},{f:'嫌い',r:'きらい',m:'Benci'},{f:'有名',r:'ゆうめい',m:'Terkenal'},{f:'暇',r:'ひま',m:'Senggang'},{f:'忙しい',r:'いそがしい',m:'Sibuk'},{f:'恥ずかしい',r:'はずかしい',m:'Malu'},{f:'熱い',r:'あつい',m:'Panas (benda)'},{f:'冷たい',r:'つめたい',m:'Dingin (benda)'},{f:'温かい',r:'あたたかい',m:'Hangat (benda)'},{f:'涼しい',r:'すずしい',m:'Sejuk'},{f:'素晴らしい',r:'すばらしい',m:'Luar biasa'},{f:'すごい',r:'すごい',m:'Hebat'},{f:'ひどい',r:'ひどい',m:'Mengerikan/Kejam'},{f:'うるさい',r:'うるさい',m:'Berisik'},{f:'静か',r:'しずか',m:'Tenang'},{f:'にぎやか',r:'にぎやか',m:'Ramai'},{f:'可愛い',r:'かわいい',m:'Imut/Lucu'},{f:'かっこいい',r:'かっこいい',m:'Keren'},{f:'珍しい',r:'めずらしい',m:'Langka/Unik'},{f:'正しい',r:'ただしい',m:'Benar'},{f:'大丈夫',r:'だいじょうぶ',m:'Tidak apa-apa'},{f:'大切',r:'たいせつ',m:'Penting/Berharga'},{f:'大事',r:'だいじ',m:'Penting'},{f:'だめ',r:'だめ',m:'Tidak boleh/Gagal'},{f:'変',r:'へん',m:'Aneh'},{f:'無駄',r:'むだ',m:'Sia-sia'},{f:'上手',r:'じょうず',m:'Mahir/Pintar'},{f:'下手',r:'へた',m:'Tidak mahir'},{f:'得意',r:'とくい',m:'Keahlian'},{f:'苦手',r:'にがて',m:'Kelemahan/Tidak suka'},{f:'立派',r:'りっぱ',m:'Megah/Hebat'},{f:'大変',r:'たいへん',m:'Berat/Sulit'},{f:'楽',r:'らく',m:'Mudah/Nyaman'},{f:'無理',r:'むり',m:'Mustahil'},{f:'丁寧',r:'ていねい',m:'Sopan/Teliti'},{f:'真面目',r:'まじめ',m:'Serius/Rajin'},{f:'一生懸命',r:'いっしょうけんめい',m:'Sungguh-sungguh'},{f:'同じ',r:'おなじ',m:'Sama'},
+            
+            // KATA KERJA (VERBS) LENGKAP (150+)
+            {f:'有る',r:'ある',m:'Ada (Benda)'},{f:'居る',r:'いる',m:'Ada (Mahluk)'},{f:'作業する',r:'さぎょうする',m:'Bekerja'},{f:'働く',r:'はたらく',m:'Bekerja'},{f:'勉強する',r:'べんきょうする',m:'Belajar'},{f:'思う',r:'おもう',m:'Berpikir'},{f:'掃除する',r:'そうじする',m:'Bersih-bersih'},{f:'行く',r:'いく',m:'Pergi'},{f:'来る',r:'くる',m:'Datang'},{f:'帰る',r:'かえる',m:'Pulang'},{f:'見る',r:'みる',m:'Melihat'},{f:'守る',r:'まもる',m:'Melindungi'},{f:'食べる',r:'たべる',m:'Makan'},{f:'飲む',r:'のむ',m:'Minum'},{f:'寝る',r:'ねる',m:'Tidur'},{f:'起きる',r:'おきる',m:'Bangun'},{f:'待つ',r:'まつ',m:'Menunggu'},{f:'話す',r:'はなす',m:'Berbicara'},{f:'聞く',r:'きく',m:'Mendengar'},{f:'書く',r:'かく',m:'Menulis'},{f:'読む',r:'よむ',m:'Membaca'},{f:'歩く',r:'あるく',m:'Berjalan'},{f:'走る',r:'はしる',m:'Berlari'},{f:'泳ぐ',r:'およぐ',m:'Berenang'},{f:'会う',r:'あう',m:'Bertemu'},{f:'買う',r:'かう',m:'Membeli'},{f:'売る',r:'うる',m:'Menjual'},{f:'出す',r:'だす',m:'Mengeluarkan'},{f:'入れる',r:'いれる',m:'Memasukkan'},{f:'教える',r:'おしえる',m:'Mengajar'},{f:'習う',r:'ならう',m:'Belajar / Menerima ilmu'},{f:'借りる',r:'かりる',m:'Meminjam'},{f:'貸す',r:'かす',m:'Meminjamkan'},{f:'返す',r:'かえす',m:'Mengembalikan'},{f:'分かる',r:'わかる',m:'Mengerti'},{f:'知る',r:'しる',m:'Tahu'},{f:'疲れる',r:'つかれる',m:'Lelah'},{f:'遊ぶ',r:'あそぶ',m:'Bermain'},{f:'急ぐ',r:'いそぐ',m:'Bergegas'},{f:'洗う',r:'あらう',m:'Mencuci'},{f:'乗る',r:'のる',m:'Naik (kendaraan)'},{f:'降りる',r:'おりる',m:'Turun'},{f:'歌う',r:'うたう',m:'Menyanyi'},{f:'踊る',r:'おどる',m:'Menari'},{f:'作る',r:'つくる',m:'Membuat'},{f:'使う',r:'つかう',m:'Menggunakan'},{f:'死ぬ',r:'しぬ',m:'Mati'},{f:'住む',r:'すむ',m:'Tinggal'},{f:'終わる',r:'おわる',m:'Selesai'},{f:'始まる',r:'はじまる',m:'Mulai'},{f:'忘れる',r:'わすれる',m:'Lupa'},{f:'覚える',r:'おぼえる',m:'Mengingat / Menghafal'},{f:'着る',r:'きる',m:'Mengenakan (Baju)'},{f:'脱ぐ',r:'ぬぐ',m:'Melepas (Baju)'},{f:'開ける',r:'あける',m:'Membuka'},{f:'閉める',r:'しめる',m:'Menutup'},{f:'消す',r:'けす',m:'Menghapus / Mematikan'},{f:'点ける',r:'つける',m:'Menyalakan'},{f:'呼ぶ',r:'よぶ',m:'Memanggil'},{f:'答える',r:'こたえる',m:'Menjawab'},{f:'頑張る',r:'がんばる',m:'Berjuang / Berusaha'},{f:'休む',r:'やすむ',m:'Istirahat'},{f:'座る',r:'すわる',m:'Duduk'},{f:'立つ',r:'たつ',m:'Berdiri'},{f:'泣く',r:'なく',m:'Menangis'},{f:'笑う',r:'わらう',m:'Tertawa'},{f:'怒る',r:'おこる',m:'Marah'},{f:'喜ぶ',r:'よろこぶ',m:'Gembira'},{f:'助ける',r:'たすける',m:'Menolong'},{f:'手伝う',r:'てつだう',m:'Membantu'},{f:'探す',r:'さがす',m:'Mencari'},{f:'見つける',r:'みつける',m:'Menemukan'},{f:'なくす',r:'なくす',m:'Kehilangan'},{f:'払う',r:'はらう',m:'Membayar'},{f:'送る',r:'おくる',m:'Mengirim'},{f:'もらう',r:'もらう',m:'Menerima'},{f:'あげる',r:'あげる',m:'Memberi'},{f:'くれる',r:'くれる',m:'Memberi (ke saya)'},{f:'持つ',r:'もつ',m:'Membawa / Memiliki'},{f:'取る',r:'とる',m:'Mengambil'},{f:'選ぶ',r:'えらぶ',m:'Memilih'},{f:'決める',r:'きめる',m:'Memutuskan'},{f:'変わる',r:'かわる',m:'Berubah'},{f:'変える',r:'かえる',m:'Mengubah'},{f:'開く',r:'あく',m:'Terbuka'},{f:'閉まる',r:'しまる',m:'Tertutup'},{f:'つく',r:'つく',m:'Menyala'},{f:'消える',r:'きえる',m:'Padam'},{f:'落ちる',r:'おちる',m:'Jatuh'},{f:'落とす',r:'おとす',m:'Menjatuhkan'},{f:'割れる',r:'われる',m:'Pecah'},{f:'割る',r:'わる',m:'Memecahkan'},{f:'壊れる',r:'こわれる',m:'Rusak'},{f:'壊す',r:'こわす',m:'Merusak'},{f:'直す',r:'なおす',m:'Memperbaiki'},{f:'治る',r:'なおる',m:'Sembuh'},{f:'続く',r:'つづく',m:'Berlanjut'},{f:'続ける',r:'つづける',m:'Melanjutkan'},{f:'集まる',r:'あつまる',m:'Berkumpul'},{f:'集める',r:'あつめる',m:'Mengumpulkan'},{f:'増える',r:'ふえる',m:'Bertambah'},{f:'増やす',r:'ふやす',m:'Menambah'},{f:'減る',r:'へる',m:'Berkurang'},{f:'減らす',r:'へらす',m:'Mengurangi'},{f:'生まれる',r:'うまれる',m:'Lahir'},{f:'生む',r:'うむ',m:'Melahirkan'},{f:'信じる',r:'しんじる',m:'Percaya'},{f:'疑う',r:'うたがう',m:'Meragukan'},{f:'許す',r:'ゆるす',m:'Memaafkan'},{f:'謝る',r:'あやまる',m:'Meminta maaf'},{f:'祈る',r:'いのる',m:'Berdoa'},{f:'願う',r:'ねがう',m:'Berharap'},{f:'頼む',r:'たのむ',m:'Meminta tolong'},{f:'断る',r:'ことわる',m:'Menolak'},{f:'驚く',r:'おどろく',m:'Terkejut'},{f:'慌てる',r:'あわてる',m:'Panik'},{f:'慣れる',r:'なれる',m:'Terbiasa'},{f:'諦める',r:'あきらめる',m:'Menyerah'},{f:'戦う',r:'たたかう',m:'Bertarung'},{f:'勝つ',r:'かつ',m:'Menang'},{f:'負ける',r:'まける',m:'Kalah'},{f:'逃げる',r:'にげる',m:'Melarikan diri'},{f:'隠れる',r:'かくれる',m:'Bersembunyi'},{f:'探検する',r:'たんけんする',m:'Menjelajah'},
+            
+            // KATA KETERANGAN & LAIN-LAIN (25)
+            {f:'いつも',r:'いつも',m:'Selalu'},{f:'たいてい',r:'たいてい',m:'Biasanya'},{f:'よく',r:'よく',m:'Sering'},{f:'時々',r:'ときどき',m:'Kadang-kadang'},{f:'たまに',r:'たまに',m:'Sesekali'},{f:'あまり',r:'あまり',m:'Jarang (diikuti negatif)'},{f:'全然',r:'ぜんぜん',m:'Sama sekali tidak'},{f:'とても',r:'とても',m:'Sangat'},{f:'大抵',r:'たいてい',m:'Kebanyakan'},{f:'一番',r:'いちばん',m:'Paling'},{f:'もっと',r:'もっと',m:'Lebih'},{f:'少し',r:'すこし',m:'Sedikit'},{f:'ちょっと',r:'ちょっと',m:'Sebentar/Sedikit'},{f:'たくさん',r:'たくさん',m:'Banyak'},{f:'全部',r:'ぜんぶ',m:'Semua'},{f:'多分',r:'たぶん',m:'Mungkin'},{f:'きっと',r:'きっと',m:'Pasti'},{f:'絶対',r:'ぜったい',m:'Mutlak'},{f:'本当に',r:'ほんとうに',m:'Benar-benar'},{f:'すぐ',r:'すぐ',m:'Segera'},{f:'もう',r:'もう',m:'Sudah'},{f:'まだ',r:'まだ',m:'Belum'},{f:'また',r:'また',m:'Lagi'},{f:'一緒に',r:'いっしょに',m:'Bersama-sama'},{f:'一人で',r:'ひとりで',m:'Sendirian'},
+            
+            // KOSAKATA KHUSUS MEDIS & KAIGO (WAJIB UNTUK WAWANCARA DEsti!) (60)
+            {f:'介護',r:'かいご',m:'Perawatan (Kaigo)'},{f:'高齢者',r:'こうれいしゃ',m:'Lansia'},{f:'患者',r:'かんじゃ',m:'Pasien'},{f:'施設',r:'しせつ',m:'Fasilitas (Panti)'},{f:'車椅子',r:'くるまいす',m:'Kursi roda'},{f:'杖',r:'つえ',m:'Tongkat jalan'},{f:'手すり',r:'てすり',m:'Pegangan tangga'},{f:'ベッド',r:'べっど',m:'Kasur'},{f:'毛布',r:'もうふ',m:'Selimut'},{f:'枕',r:'まくら',m:'Bantal'},{f:'シーツ',r:'しーつ',m:'Sprei'},{f:'おむつ',r:'おむつ',m:'Popok'},{f:'尿',r:'にょう',m:'Urine / Air kencing'},{f:'便',r:'べん',m:'Feses / BAB'},{f:'排泄',r:'はいせつ',m:'Ekskresi (Buang air)'},{f:'入浴',r:'にゅうよく',m:'Mandi'},{f:'洗身',r:'せんしん',m:'Mencuci badan'},{f:'洗髪',r:'せんぱつ',m:'Mencuci rambut'},{f:'食事',r:'しょくじ',m:'Makan'},{f:'水分',r:'すいぶん',m:'Cairan'},{f:'血圧',r:'けつあつ',m:'Tekanan darah'},{f:'体温',r:'たいおん',m:'Suhu tubuh'},{f:'脈拍',r:'みゃくはく',m:'Denyut nadi'},{f:'呼吸',r:'こきゅう',m:'Pernapasan'},{f:'薬',r:'くすり',m:'Obat'},{f:'注射',r:'ちゅうしゃ',m:'Suntikan'},{f:'点滴',r:'てんてき',m:'Infus'},{f:'包帯',r:'ほうたい',m:'Perban'},{f:'絆創膏',r:'ばんそうこう',m:'Plester'},{f:'怪我',r:'けが',m:'Luka'},{f:'病気',r:'びょうき',m:'Penyakit'},{f:'症状',r:'しょうじょう',m:'Gejala'},{f:'熱',r:'ねつ',m:'Demam'},{f:'咳',r:'せき',m:'Batuk'},{f:'風邪',r:'かぜ',m:'Masuk angin'},{f:'頭痛',r:'ずつう',m:'Sakit kepala'},{f:'腹痛',r:'ふくつう',m:'Sakit perut'},{f:'吐き気',r:'はきけ',m:'Mual'},{f:'めまい',r:'めまい',m:'Pusing'},{f:'骨折',r:'こっせつ',m:'Patah tulang'},{f:'出血',r:'しゅっけつ',m:'Pendarahan'},{f:'麻痺',r:'まひ',m:'Lumpuh/Mati rasa'},{f:'認知症',r:'にんちしょう',m:'Demensia (Pikun)'},{f:'うつ病',r:'うつびょう',m:'Depresi'},{f:'車椅子を押す',r:'くるまいすをおす',m:'Mendorong kursi roda'},{f:'支える',r:'ささえる',m:'Menopang'},{f:'助ける',r:'たすける',m:'Menolong'},{f:'見守る',r:'まもる',m:'Mengawasi'},{f:'着替える',r:'きがえる',m:'Ganti baju'},{f:'寝返り',r:'ねがえり',m:'Ganti posisi tidur'},{f:'起き上がる',r:'おきあがる',m:'Bangun (dari tempat tidur)'},{f:'立ち上がる',r:'たちあがる',m:'Berdiri'},{f:'歩行',r:'ほこう',m:'Berjalan'},{f:'転倒',r:'てんとう',m:'Terjatuh'},{f:'予防',r:'よぼう',m:'Pencegahan'},{f:'記録',r:'きろく',m:'Catatan / Rekam medis'},{f:'報告',r:'ほうこく',m:'Laporan'},{f:'連絡',r:'れんらく',m:'Komunikasi/Hubungi'},{f:'相談',r:'そうだん',m:'Konsultasi'},{f:'夜勤',r:'やきん',m:'Shift malam'}
         ];
 
-        // GABUNGKAN KANA KE DALAM FLASHCARD
+        // GABUNGKAN KANA KE DALAM FLASHCARD ALL_VOCAB
         const ALL_VOCAB = [...BASE_VOCAB];
         Object.entries(KANA_POOL.hira).forEach(([kana, romaji]) => {
             ALL_VOCAB.push({ f: kana, r: romaji, m: 'Hiragana' });
@@ -353,18 +444,22 @@
         });
 
         // --- STATE ---
-        const STORAGE_CARDS_KEY = 'jmaster_v17_cards'; // Diubah ke V17 untuk reset kartu baru
-        const STORAGE_SETTINGS_KEY = 'jmaster_v17_settings';
+        const STORAGE_CARDS_KEY = 'jmaster_v19_cards'; // Diubah ke V19 untuk update database masif
+        const STORAGE_SETTINGS_KEY = 'jmaster_v19_settings';
 
         let cards = [];
-        let settings = { newLimit: 15, reviewLimit: 30, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
+        let settings = { newLimit: 20, reviewLimit: 50, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
         let activeQueue = [];
         let quizQueue = [];
         let quizScore = 0;
         let totalQuizQuestions = 0;
         let totalQueueSize = 0;
         let isFlipped = false;
+        
+        // Configs
+        let sessionConfig = { vocab: true, hira: false, kata: false };
         let kanaConfig = { hira: true, kata: false };
+        
         let kanaCorrect = 0;
         let kanaWrong = 0;
         let kanaTime = 0;
@@ -382,6 +477,7 @@
 
             if (storedCards) {
                 cards = JSON.parse(storedCards);
+                // Sinkronisasi kata baru yang belum ada di localstorage (terutama yang 1000+ baru masuk)
                 const existingIds = cards.map(c => c.f);
                 ALL_VOCAB.forEach(v => {
                     if(!existingIds.includes(v.f)) {
@@ -406,21 +502,48 @@
                 settings.dailyReset = todayWIB;
                 saveSettings(false);
             }
+            updateSessionSelectionUI();
             updateUI();
         };
 
-        const startSession = (mode = 'vocab') => {
-            const now = Date.now();
-            
-            // Filter kartu berdasarkan mode yang dipilih
-            let targetCards = cards;
-            if (mode === 'vocab') {
-                targetCards = cards.filter(c => c.m !== 'Hiragana' && c.m !== 'Katakana');
-            } else if (mode === 'hira') {
-                targetCards = cards.filter(c => c.m === 'Hiragana');
-            } else if (mode === 'kata') {
-                targetCards = cards.filter(c => c.m === 'Katakana');
+        // --- SESSION LOGIC ---
+        window.toggleSession = (type) => {
+            sessionConfig[type] = !sessionConfig[type];
+            updateSessionSelectionUI();
+        };
+
+        const updateSessionSelectionUI = () => {
+            const bv = document.getElementById('btn-ses-vocab');
+            const bh = document.getElementById('btn-ses-hira');
+            const bk = document.getElementById('btn-ses-kata');
+            const activeClass = 'btn-glow-active';
+            const inactiveClass = 'bg-white/40 border-slate-200 text-slate-400 hover:border-indigo-400 hover:shadow-[0_0_12px_rgba(79,70,229,0.3)] hover:text-indigo-500';
+
+            if(bv) bv.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[10px] font-black transition-all active:scale-95 duration-300 ${sessionConfig.vocab ? activeClass : inactiveClass}`;
+            if(bh) bh.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[10px] font-black transition-all active:scale-95 duration-300 ${sessionConfig.hira ? activeClass : inactiveClass}`;
+            if(bk) bk.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[10px] font-black transition-all active:scale-95 duration-300 ${sessionConfig.kata ? activeClass : inactiveClass}`;
+
+            document.getElementById('icon-ses-vocab')?.classList.toggle('hidden', !sessionConfig.vocab);
+            document.getElementById('icon-ses-hira')?.classList.toggle('hidden', !sessionConfig.hira);
+            document.getElementById('icon-ses-kata')?.classList.toggle('hidden', !sessionConfig.kata);
+        };
+
+        const startSession = () => {
+            if (!sessionConfig.vocab && !sessionConfig.hira && !sessionConfig.kata) {
+                return showToast("Pilih minimal 1 kategori!", "error");
             }
+
+            const now = Date.now();
+            let targetCards = cards.filter(c => {
+                const isHira = c.m === 'Hiragana';
+                const isKata = c.m === 'Katakana';
+                const isVocab = !isHira && !isKata;
+
+                if (isVocab && sessionConfig.vocab) return true;
+                if (isHira && sessionConfig.hira) return true;
+                if (isKata && sessionConfig.kata) return true;
+                return false;
+            });
 
             const dueRev = targetCards.filter(c => c.repetitions > 0 && c.nextReview <= now);
             const newCards = targetCards.filter(c => c.repetitions === 0);
@@ -432,15 +555,8 @@
             totalQueueSize = activeQueue.length;
             
             if (activeQueue.length === 0) {
-                return showToast("Semua kartu di kategori ini sudah selesai dipelajari hari ini!", "success");
+                return showToast("Target harian untuk kategori yang dipilih sudah terpenuhi!", "success");
             }
-
-            // Update Label Tipe
-            const labelEl = document.getElementById('card-label-front');
-            if(mode === 'vocab') labelEl.innerText = "Vocab / Kanji";
-            else if(mode === 'hira') labelEl.innerText = "Hiragana";
-            else if(mode === 'kata') labelEl.innerText = "Katakana";
-
             updateUI();
         };
 
@@ -531,7 +647,7 @@
             opts = opts.sort(() => Math.random() - 0.5);
             
             document.getElementById('quiz-options').innerHTML = opts.map(o => `
-                <button onclick="handleQuizAnswer(event, '${o}')" class="glass p-3 h-20 rounded-2xl font-black text-slate-700 text-[10px] uppercase border-white active:scale-95 transition-all flex items-center justify-center leading-tight">${o}</button>
+                <button onclick="handleQuizAnswer(event, '${o}')" class="glass p-3 h-20 rounded-2xl font-black text-slate-700 text-[10px] uppercase border-white active:scale-95 hover:bg-white/70 hover:border-indigo-300 hover:text-indigo-600 transition-all flex items-center justify-center leading-tight shadow-sm">${o}</button>
             `).join('');
             isProcessing = false;
         };
@@ -554,6 +670,7 @@
             }, 500);
         };
 
+        // KANA BLITZ LOGIC
         window.startKanaQuiz = () => {
             if (!kanaConfig.hira && !kanaConfig.kata) return showToast("Pilih Kana!", "error");
             kanaCorrect = 0; kanaWrong = 0; kanaTime = 0; kanaQuestionCount = 0;
@@ -583,7 +700,7 @@
             currentKanaTarget = ans;
             document.getElementById('kana-display').innerText = char;
             document.getElementById('kana-options').innerHTML = opts.map(o => `
-                <button onclick="checkKana(event, '${o}')" class="glass py-5 rounded-2xl font-black text-slate-700 text-sm uppercase border-white">${o}</button>
+                <button onclick="checkKana(event, '${o}')" class="glass py-5 rounded-2xl font-black text-slate-700 text-sm uppercase border-white active:scale-95 hover:bg-white/70 hover:border-indigo-300 hover:text-indigo-600 transition-all">${o}</button>
             `).join('');
             isProcessing = false;
         };
@@ -599,6 +716,11 @@
             clearInterval(kanaInterval);
             const total = kanaCorrect + kanaWrong;
             const accuracy = total > 0 ? Math.round((kanaCorrect / total) * 100) : 0;
+            
+            const m = Math.floor(kanaTime / 60); 
+            const s = kanaTime % 60;
+            
+            document.getElementById('res-time').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
             document.getElementById('res-total').innerText = total;
             document.getElementById('res-correct').innerText = kanaCorrect;
             document.getElementById('res-wrong').innerText = kanaWrong;
@@ -610,10 +732,16 @@
         window.switchView = (target) => {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(`view-${target}`).classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
+            
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('nav-active');
+            });
             const map = { 'study': 'nav-study', 'quiz': 'nav-study', 'settings': 'nav-study', 'kana': 'nav-kana', 'list': 'nav-list' };
             const btn = document.getElementById(map[target]);
-            if(btn) btn.classList.add('nav-active');
+            if(btn) {
+                btn.classList.add('nav-active');
+            }
+
             if(target === 'kana') {
                 document.getElementById('kana-setup').classList.remove('hidden');
                 document.getElementById('kana-active').classList.add('hidden');
@@ -626,7 +754,10 @@
                 document.getElementById('quiz-result').classList.add('hidden');
             }
             if(target === 'list') { document.getElementById('search-input').value = ""; renderList(); }
-            if(target === 'study') updateUI();
+            if(target === 'study') {
+                updateSessionSelectionUI();
+                updateUI();
+            }
         };
 
         const updateUI = () => {
@@ -641,7 +772,6 @@
                 document.getElementById('study-status').classList.remove('hidden');
                 document.getElementById('study-active').classList.add('hidden');
                 
-                // Cek apakah target HARIAN KESELURUHAN (Limit) benar-benar sudah habis
                 if(remNew === 0 && remRev === 0) {
                     document.getElementById('status-icon').innerText = "🎉";
                     document.getElementById('status-title').innerText = "お疲れ様でした！";
@@ -652,15 +782,23 @@
                     document.getElementById('status-icon').innerText = "📚";
                     document.getElementById('status-title').innerText = "Sesi Belajar";
                     document.getElementById('status-title').classList.remove('text-indigo-600');
-                    document.getElementById('status-desc').innerHTML = "Pilih kategori flashcard yang ingin kamu pelajari hari ini.";
+                    document.getElementById('status-desc').innerHTML = "Atur kategori kartu yang ingin di-review.";
                     document.getElementById('session-buttons').classList.remove('hidden');
                 }
             } else {
                 document.getElementById('study-status').classList.add('hidden');
                 document.getElementById('study-active').classList.remove('hidden');
+                
                 const card = activeQueue[0];
                 const displayFront = document.getElementById('display-front');
+                const labelFront = document.getElementById('card-label-front');
+                
                 displayFront.innerText = card.f;
+                
+                if (card.m === 'Hiragana') labelFront.innerText = "Hiragana";
+                else if (card.m === 'Katakana') labelFront.innerText = "Katakana";
+                else labelFront.innerText = "Vocab / Kanji";
+
                 displayFront.className = "font-bold text-slate-800 tracking-tighter text-center px-4 leading-tight transition-all duration-300";
                 if(card.f.length > 12) displayFront.classList.add('text-base', 'md:text-lg');
                 else if(card.f.length > 8) displayFront.classList.add('text-lg', 'md:text-xl');
@@ -677,15 +815,16 @@
         window.toggleKana = (type) => { kanaConfig[type] = !kanaConfig[type]; updateKanaSelectionUI(); };
         const updateKanaSelectionUI = () => {
             const bh = document.getElementById('btn-hira'); const bk = document.getElementById('btn-kata');
-            bh.className = `w-full flex justify-between items-center p-4 rounded-2xl border text-[11px] font-black transition-all ${kanaConfig.hira ? 'btn-glow-active' : 'bg-white/40 border-slate-100 text-slate-400'}`;
-            bk.className = `w-full flex justify-between items-center p-4 rounded-2xl border text-[11px] font-black transition-all ${kanaConfig.kata ? 'btn-glow-active' : 'bg-white/40 border-slate-100 text-slate-400'}`;
+            const inactiveClass = 'bg-white/40 border-slate-200 text-slate-400 hover:border-indigo-400 hover:shadow-[0_0_12px_rgba(79,70,229,0.3)] hover:text-indigo-500';
+            bh.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[11px] font-black transition-all duration-300 active:scale-95 ${kanaConfig.hira ? 'btn-glow-active' : inactiveClass}`;
+            bk.className = `w-full flex justify-between items-center p-3 rounded-xl border text-[11px] font-black transition-all duration-300 active:scale-95 ${kanaConfig.kata ? 'btn-glow-active' : inactiveClass}`;
             document.getElementById('icon-hira').classList.toggle('hidden', !kanaConfig.hira);
             document.getElementById('icon-kata').classList.toggle('hidden', !kanaConfig.kata);
         };
 
         window.saveSettings = (sh = true) => {
-            settings.newLimit = parseInt(document.getElementById('input-new-limit').value) || 10;
-            settings.reviewLimit = parseInt(document.getElementById('input-rev-limit').value) || 20;
+            settings.newLimit = parseInt(document.getElementById('input-new-limit').value) || 20;
+            settings.reviewLimit = parseInt(document.getElementById('input-rev-limit').value) || 50;
             localStorage.setItem(STORAGE_SETTINGS_KEY, JSON.stringify(settings));
             if(sh) { showToast("Simpan!", "success"); switchView('study'); }
         };
@@ -707,17 +846,26 @@
             document.getElementById('stat-total-reviewed').innerText = totalReviewed;
 
             const filteredCards = cards.filter(c => c.f.toLowerCase().includes(searchTerm) || c.r.toLowerCase().includes(searchTerm) || c.m.toLowerCase().includes(searchTerm));
-            list.innerHTML = filteredCards.map(c => {
+            
+            // Limit tampilan list agar HP tidak lag kalau ngerender 1000 item sekaligus
+            const displayLimit = 200; 
+            const displayCards = filteredCards.slice(0, displayLimit);
+            
+            list.innerHTML = displayCards.map(c => {
                 let color = "text-slate-300 border-slate-100"; let label = "NEW";
                 if(c.interval >= 21) { color = "text-indigo-600 bg-indigo-50/50 border-indigo-100"; label = "MATURE"; }
                 else if(c.repetitions > 0) { color = "text-orange-500 bg-orange-50/50 border-orange-100"; label = "YOUNG"; }
-                return `<div class="glass p-4 rounded-3xl flex justify-between items-center"><div class="flex-1 pr-2"><div class="font-bold text-slate-800 text-md md:text-lg">${c.f}</div><div class="text-[9px] text-slate-400 font-black tracking-tight uppercase">${c.r} • ${c.m}</div></div><div class="flex items-center gap-2"><div class="text-[7px] font-black px-2.5 py-1.5 rounded-full border ${color}">${label}</div><button onclick="resetCard('${c.id}')" class="p-2 text-slate-300 hover:text-rose-500 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button></div></div>`;
+                return `<div class="glass p-4 rounded-3xl flex justify-between items-center hover:scale-[1.01] hover:shadow-md transition-all cursor-default"><div class="flex-1 pr-2"><div class="font-bold text-slate-800 text-sm md:text-md">${c.f}</div><div class="text-[8px] text-slate-400 font-black tracking-tight uppercase">${c.r} • ${c.m}</div></div><div class="flex items-center gap-2"><div class="text-[6px] font-black px-2.5 py-1.5 rounded-full border ${color}">${label}</div><button onclick="resetCard('${c.id}')" class="p-2 text-slate-300 hover:text-rose-500 active:scale-90 transition-all"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button></div></div>`;
             }).join('');
+            
+            if (filteredCards.length > displayLimit) {
+                list.innerHTML += `<div class="text-center text-[9px] font-bold text-slate-400 py-4 uppercase tracking-widest">+ ${filteredCards.length - displayLimit} lainnya (Gunakan fitur cari)</div>`;
+            }
         };
 
         const showToast = (msg, type) => {
             const t = document.getElementById('toast'); t.innerText = msg;
-            t.className = `fixed bottom-28 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full text-[10px] font-black uppercase text-white shadow-2xl transition-all z-50 whitespace-nowrap ${type === 'error' ? 'bg-rose-500' : 'bg-slate-900'}`;
+            t.className = `fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full text-[9px] font-black uppercase text-white shadow-2xl transition-all z-50 whitespace-nowrap ${type === 'error' ? 'bg-rose-500' : 'bg-slate-900'}`;
             t.classList.remove('opacity-0'); setTimeout(() => t.classList.add('opacity-0'), 2500);
         };
 

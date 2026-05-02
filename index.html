@@ -76,11 +76,9 @@
 <body>
     <div id="app" class="w-full max-w-md h-screen h-[100dvh] flex flex-col p-5 pb-8 relative z-10">
         
-        <!-- Background Decor -->
         <div class="fixed top-[-5%] left-[-5%] w-72 h-72 bg-indigo-100 rounded-full blur-[80px] opacity-50 z-0"></div>
         <div class="fixed bottom-[-5%] right-[-5%] w-72 h-72 bg-rose-100 rounded-full blur-[80px] opacity-50 z-0"></div>
 
-        <!-- Header -->
         <header class="flex justify-between items-center mb-5 shrink-0 relative z-20">
             <div>
                 <h1 class="text-xl font-black tracking-tighter text-slate-800">J-MASTER <span class="text-indigo-600">SRS</span></h1>
@@ -95,18 +93,20 @@
             </button>
         </header>
 
-        <!-- Main Display -->
         <main class="flex-1 overflow-hidden relative">
             
-            <!-- VIEW: Study -->
             <section id="view-study" class="view h-full flex flex-col animate-fade">
                 <div id="study-status" class="flex-1 flex flex-col items-center justify-center text-center p-6">
                     <div id="status-icon" class="text-6xl mb-6">📚</div>
                     <h2 id="status-title" class="text-xl font-black text-slate-800 uppercase tracking-tight">Sesi Belajar</h2>
-                    <p id="status-desc" class="text-slate-500 text-[10px] font-bold mt-2 mb-8 leading-relaxed px-10 uppercase tracking-widest opacity-60">Fokus dan selesaikan kartu hari ini.</p>
-                    <div class="space-y-3 w-full max-w-[200px]">
-                        <button id="btn-start-session" onclick="startSession()" class="w-full glass bg-slate-900 text-white text-[11px] font-black uppercase tracking-[0.2em] py-5 rounded-2xl shadow-xl active:scale-95 transition-all">Mulai Sesi</button>
-                        <button onclick="switchView('quiz')" class="w-full glass bg-white/60 text-indigo-600 text-[9px] font-black uppercase tracking-widest py-3 rounded-xl active:scale-95 transition-all">Daily Quiz</button>
+                    <p id="status-desc" class="text-slate-500 text-[10px] font-bold mt-2 mb-8 leading-relaxed px-10 uppercase tracking-widest opacity-60">Pilih kategori yang ingin kamu pelajari hari ini.</p>
+                    <div id="session-buttons" class="space-y-3 w-full max-w-[250px]">
+                        <!-- Tombol Sesi Terpisah -->
+                        <button onclick="startSession('vocab')" class="w-full glass bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.1em] py-3.5 rounded-xl shadow-xl active:scale-95 transition-all">Sesi Vocab & Kanji</button>
+                        <button onclick="startSession('hira')" class="w-full glass bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.1em] py-3.5 rounded-xl shadow-xl active:scale-95 transition-all">Sesi Hiragana</button>
+                        <button onclick="startSession('kata')" class="w-full glass bg-rose-500 text-white text-[10px] font-black uppercase tracking-[0.1em] py-3.5 rounded-xl shadow-xl active:scale-95 transition-all">Sesi Katakana</button>
+                        <div class="h-px bg-slate-200 w-1/2 mx-auto my-4 opacity-50"></div>
+                        <button onclick="switchView('quiz')" class="w-full glass bg-white/60 text-indigo-600 text-[9px] font-black uppercase tracking-widest py-3 rounded-xl active:scale-95 transition-all">Daily Quiz (Campur)</button>
                     </div>
                 </div>
 
@@ -116,11 +116,12 @@
                         <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40">
                             <div id="session-progress" class="h-full bg-indigo-500 transition-all duration-500 w-0"></div>
                         </div>
+                        <button onclick="endSessionEarly()" class="text-slate-400 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 transition-colors">Batal</button>
                     </div>
                     <div class="flex-1 perspective relative">
                         <div id="flashcard" class="card-inner w-full h-full relative cursor-pointer" onclick="flipCard()">
                             <div class="card-front glass absolute inset-0 rounded-[2.5rem] flex flex-col items-center justify-center p-6 border-white/80">
-                                <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-6">Vocab / Kanji</span>
+                                <span id="card-label-front" class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-6">Flashcard</span>
                                 <div id="display-front" class="text-3xl md:text-4xl font-bold text-slate-800 tracking-tighter text-center px-4 leading-tight transition-all duration-300">--</div>
                                 <div class="absolute bottom-10 text-indigo-400 text-[9px] font-black uppercase animate-pulse tracking-widest">Tap to flip</div>
                             </div>
@@ -152,7 +153,6 @@
                 </div>
             </section>
 
-            <!-- VIEW: Daily Quiz -->
             <section id="view-quiz" class="view h-full flex flex-col hidden animate-fade">
                 <div id="quiz-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
                     <div class="text-5xl mb-6">⚡</div>
@@ -162,9 +162,12 @@
                 </div>
 
                 <div id="quiz-active" class="h-full flex flex-col hidden">
-                    <div class="flex justify-between items-center mb-6 px-1">
-                        <span id="quiz-q-count" class="glass px-4 py-1.5 rounded-full text-[9px] font-black uppercase text-slate-600">Soal 1</span>
-                        <button onclick="switchView('study')" class="text-slate-400 font-black text-[9px] uppercase tracking-widest">Batal</button>
+                    <div class="flex items-center gap-3 mb-6 px-1 shrink-0">
+                        <span id="quiz-q-count" class="glass px-4 py-1.5 rounded-full text-[9px] font-black uppercase text-slate-600 shrink-0">Soal 1</span>
+                        <div class="flex-1 h-1.5 glass rounded-full overflow-hidden border-white/40">
+                            <div id="quiz-progress" class="h-full bg-indigo-500 transition-all duration-500 w-0"></div>
+                        </div>
+                        <button onclick="switchView('study')" class="text-slate-400 font-black text-[9px] uppercase tracking-widest shrink-0 hover:text-rose-500 transition-colors">Batal</button>
                     </div>
                     <div class="flex-1 glass rounded-[3rem] flex items-center justify-center p-8 mb-6 text-center">
                         <div id="quiz-display" class="text-3xl md:text-4xl font-black text-slate-800 leading-tight transition-all duration-300">--</div>
@@ -186,7 +189,6 @@
                 </div>
             </section>
 
-            <!-- VIEW: Kana Blitz -->
             <section id="view-kana" class="view h-full flex flex-col hidden animate-fade">
                 <div id="kana-setup" class="h-full flex flex-col items-center justify-center text-center p-6">
                     <div class="w-20 h-20 glass rounded-[2rem] flex items-center justify-center mb-6 text-3xl shadow-sm border-white">あ</div>
@@ -245,9 +247,8 @@
                 </div>
             </section>
 
-            <!-- VIEW: List -->
             <section id="view-list" class="view h-full flex flex-col hidden animate-fade">
-                <div class="mb-5 shrink-0 px-1">
+                <div class="mb-2 shrink-0 px-1">
                     <h2 class="text-sm font-black text-slate-800 mb-4">Statistik & Riwayat</h2>
                     <div class="grid grid-cols-4 gap-2">
                         <div class="glass p-3 rounded-2xl border-indigo-100 text-center">
@@ -268,10 +269,14 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="mb-4 shrink-0 px-1">
+                    <input type="text" id="search-input" oninput="renderList()" placeholder="Cari vocab/kanji/kana..." class="w-full bg-white/50 border-none rounded-xl p-3 text-[11px] font-bold outline-none ring-1 ring-slate-200 focus:ring-indigo-500 transition-all shadow-sm">
+                </div>
+
                 <div id="card-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar"></div>
             </section>
 
-            <!-- VIEW: Settings -->
             <section id="view-settings" class="view h-full flex flex-col hidden animate-fade">
                 <h2 class="text-sm font-black text-slate-800 mb-6 px-1 uppercase tracking-wider">Pengaturan</h2>
                 <div class="space-y-4">
@@ -291,7 +296,6 @@
             </section>
         </main>
 
-        <!-- Navigation -->
         <nav class="mt-auto mb-6 glass rounded-[2.5rem] p-1.5 flex gap-1 shrink-0 z-30">
             <button onclick="switchView('study')" id="nav-study" class="nav-btn flex-1 py-4 rounded-full flex flex-col items-center justify-center gap-1 nav-active transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -311,8 +315,12 @@
     </div>
 
     <script>
-        // Database Kosakata Ekstensif (SEMUA ~1000+ Kosakata PDF Dimasukkan)
-        const ALL_VOCAB = [
+        const KANA_POOL = {
+            hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','me':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
+            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro','ワ':'wa','ヲ':'wo','ン':'n' }
+        };
+
+        const BASE_VOCAB = [
             // Sapaan & Kata Ganti
             {f:'こんにちは',r:'Konnichiwa',m:'Halo/Selamat siang'},{f:'おはようございます',r:'Ohayou gozaimasu',m:'Selamat pagi'},{f:'こんばんは',r:'Konbanwa',m:'Selamat sore/malam'},{f:'おやすみなさい',r:'Oyasuminasai',m:'Selamat malam'},{f:'ばいばい',r:'Bye-bye',m:'Dahh!'},{f:'さようなら',r:'Sayounara',m:'Sampai jumpa'},{f:'私',r:'わたし',m:'Saya'},{f:'私たち',r:'わたしたち',m:'Kami'},{f:'あなた',r:'あなた',m:'Kamu'},{f:'あなたがた',r:'あなたがた',m:'Kamu sekalian'},{f:'彼',r:'かれ',m:'Dia (laki)'},{f:'彼女',r:'かのじょ',m:'Dia (perempuan)'},{f:'これ',r:'kore',m:'Ini'},{f:'それ',r:'sore',m:'Itu'},
             // Hari, Waktu & Bulan
@@ -329,22 +337,24 @@
             {f:'包丁',r:'ほうちょう',m:'Pisau dapur'},{f:'まな板',r:'まないた',m:'Talenan'},{f:'浄水器',r:'じょうすいき',m:'Penyuling air'},{f:'鍋',r:'なべ',m:'Panci'},{f:'フライパン',r:'furaipan',m:'Wajan'},{f:'やかん',r:'yakan',m:'Ketel'},{f:'おたま',r:'otama',m:'Sendok sayur'},{f:'排水溝',r:'はいすいこう',m:'Saringan'},{f:'ボウル',r:'bouru',m:'Mangkuk'},{f:'ミキサー',r:'mikisaa',m:'Blender'},{f:'おろし金',r:'おろしがね',m:'Parutan'},{f:'皮むき機',r:'かわむきき',m:'Alat pengupas'},{f:'栓抜き',r:'せんぬき',m:'Pembuka botol'},{f:'缶切り',r:'かんきり',m:'Pembuka kaleng'},{f:'コルク抜き',r:'korukunuki',m:'Kotrek'},
             // Buah & Sayur
             {f:'果物',r:'くだもの',m:'Buah'},{f:'苺',r:'いちご',m:'Strawberry'},{f:'蜜柑',r:'みかん',m:'Jeruk mandarin'},{f:'オレンジ',r:'orenji',m:'Jeruk'},{f:'レモン',r:'remon',m:'Lemon'},{f:'西瓜',r:'すいか',m:'Semangka'},{f:'葡萄',r:'ぶどう',m:'Anggur'},{f:'パイナップル',r:'painappuru',m:'Nanas'},{f:'林檎',r:'りんご',m:'Apel'},{f:'ドリアン',r:'dorian',m:'Durian'},{f:'パパイヤ',r:'papaiya',m:'Pepaya'},{f:'桃',r:'もも',m:'Persik'},{f:'梅',r:'うめ',m:'Plum'},{f:'マンゴー',r:'mangoo',m:'Mangga'},{f:'キウイ',r:'kiui',m:'Kiwi'},{f:'グアバ',r:'guaba',m:'Jambu biji'},{f:'干し葡萄',r:'ほしぶどう',m:'Kismis'},{f:'栗',r:'くり',m:'Coklat/Kastanye'},{f:'ザクロ',r:'ざくろ',m:'Delima'},{f:'ココナッツ',r:'kokonattsu',m:'Kelapa'},{f:'柿',r:'かき',m:'Kesemek'},{f:'アボカド',r:'abokado',m:'Alpukat'},{f:'梨',r:'なし',m:'Pir'},{f:'野菜',r:'やさい',m:'Sayur'},{f:'大根',r:'だいこん',m:'Lobak'},{f:'レタス',r:'retasu',m:'Selada'},{f:'トマト',r:'tomato',m:'Tomat'},{f:'じゃが芋',r:'じゃがいも',m:'Kentang'},{f:'キャベツ',r:'kyabetsu',m:'Kubis'},{f:'生姜',r:'しょうが',m:'Jahe'},{f:'茄子',r:'なす',m:'Terong'},{f:'人参',r:'にんじん',m:'Wortel'},{f:'玉葱',r:'たまねぎ',m:'Bawang merah/Bombay'},{f:'大蒜',r:'にんにく',m:'Bawang putih'},{f:'胡瓜',r:'きゅうり',m:'Mentimun'},{f:'ピーマン',r:'piiman',m:'Cabe/Paprika'},{f:'豆',r:'まめ',m:'Kacang'},{f:'マッシュルーム',r:'masshuruumu',m:'Jamur'},{f:'白菜',r:'はくさい',m:'Sawi putih'},{f:'南瓜',r:'かぼちゃ',m:'Labu'},{f:'ブロッコリー',r:'burokkorii',m:'Brokoli'},{f:'大豆',r:'だいず',m:'Kedelai'},
-            // Kata Sifat (Lengkap)
-            {f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'長い',r:'ながい',m:'Panjang'},{f:'短い',r:'みじかい',m:'Pendek'},{f:'多い',r:'おおい',m:'Banyak'},{f:'少ない',r:'すくない',m:'Sedikit'},{f:'太い',r:'ふとい',m:'Gemuk/Tebal'},{f:'細い',r:'ほそい',m:'Ramping/Tipis'},{f:'厚い',r:'あつい',m:'Tebal'},{f:'薄い',r:'うすい',m:'Tipis'},{f:'固い',r:'かたい',m:'Keras'},{f:'柔らかい',r:'やわらかい',m:'Lunak'},{f:'細かい',r:'こまかい',m:'Kecil/Detail'},{f:'粗い',r:'あらい',m:'Kasar'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'古い',r:'ふるい',m:'Lama/Tua'},{f:'高い',r:'たかい',m:'Tinggi/Mahal'},{f:'安い',r:'やすい',m:'Murah'},{f:'早い',r:'はやい',m:'Cepat (waktu)'},{f:'速い',r:'はやい',m:'Cepat (laju)'},{f:'遅い',r:'おそい',m:'Lambat'},{f:'遠い',r:'とおい',m:'Jauh'},{f:'近い',r:'ちかい',m:'Dekat'},{f:'強い',r:'つよい',m:'Kuat'},{f:'弱い',r:'よわい',m:'Lemah'},{f:'低い',r:'ひくい',m:'Rendah'},{f:'熱い',r:'あつい',m:'Panas (benda)'},{f:'冷たい',r:'つめたい',m:'Dingin (benda)'},{f:'温かい',r:'あたたかい',m:'Hangat (benda)'},{f:'ぬるい',r:'ぬるい',m:'Kurang panas'},{f:'丸い',r:'まるい',m:'Bundar'},{f:'甘い',r:'あまい',m:'Manis'},{f:'辛い',r:'からい',m:'Pedas'},{f:'すっぱい',r:'すっぱい',m:'Asam'},{f:'塩辛い',r:'しおからい',m:'Asin'},{f:'苦い',r:'にがい',m:'Pahit'},{f:'濃い',r:'こい',m:'Pekat'},{f:'おいしい',r:'おいしい',m:'Enak'},{f:'まずい',r:'まずい',m:'Tidak enak'},{f:'暑い',r:'あつい',m:'Panas (suhu)'},{f:'寒い',r:'さむい',m:'Dingin (suhu)'},{f:'暖かい',r:'あたたかい',m:'Hangat (suhu)'},{f:'涼しい',r:'すずしい',m:'Sejuk'},{f:'蒸し暑い',r:'むしあつい',m:'Gerah'},{f:'明るい',r:'あかるい',m:'Terang/Riang'},{f:'暗い',r:'くらい',m:'Gelap/Suram'},{f:'汚い',r:'きたない',m:'Kotor'},{f:'重い',r:'おもい',m:'Berat'},{f:'軽い',r:'かるい',m:'Ringan'},{f:'詳しい',r:'くわしい',m:'Detail'},{f:'難しい',r:'むずかしい',m:'Sulit'},{f:'易しい',r:'やさしい',m:'Mudah'},{f:'珍しい',r:'めずらしい',m:'Langka'},{f:'おかしい',r:'おかしい',m:'Aneh/Lucu'},{f:'危ない',r:'あぶない',m:'Bahaya'},{f:'うまい',r:'うまい',m:'Enak/Pandai'},{f:'いい',r:'いい',m:'Bagus'},{f:'悪い',r:'わるい',m:'Jelek'},{f:'ひどい',r:'ひどい',m:'Kejam/Parah'},{f:'うるさい',r:'うるさい',m:'Berisik'},{f:'忙しい',r:'いそがしい',m:'Sibuk'},{f:'正しい',r:'ただしい',m:'Benar'},{f:'すごい',r:'すごい',m:'Hebat'},{f:'素晴らしい',r:'すばらしい',m:'Luar biasa'},{f:'かっこいい',r:'かっこいい',m:'Keren'},{f:'えらい',r:'えらい',m:'Pintar/Hebat'},{f:'親しい',r:'したしい',m:'Akrab'},{f:'優しい',r:'やさしい',m:'Baik hati'},{f:'かわいい',r:'かわいい',m:'Cantik/Imut'},{f:'美しい',r:'うつくしい',m:'Indah'},{f:'厳しい',r:'きびしい',m:'Tegas/Ketat'},{f:'大人しい',r:'おとなしい',m:'Pendiam'},{f:'楽しい',r:'たのしい',m:'Menyenangkan'},{f:'面白い',r:'おもしろい',m:'Menarik/Lucu'},{f:'つまらない',r:'つまらない',m:'Bosan'},{f:'うれしい',r:'うれしい',m:'Senang'},{f:'寂しい',r:'さびしい',m:'Sepi'},{f:'怖い',r:'こわい',m:'Takut'},{f:'悲しい',r:'かなしい',m:'Sedih'},{f:'恥ずかしい',r:'はずかしい',m:'Malu'},{f:'羨ましい',r:'うらやましい',m:'Iri hati'},{f:'懐かしい',r:'なつかしい',m:'Rindu'},{f:'眠い',r:'ねむい',m:'Ngantuk'},{f:'痛い',r:'いたい',m:'Sakit'},{f:'欲しい',r:'ほしい',m:'Ingin'},{f:'無い',r:'ない',m:'Tidak ada'},{f:'残念',r:'ざんねん',m:'Sayang sekali'},{f:'心配',r:'しんぱい',m:'Khawatir'},{f:'不安',r:'ふあん',m:'Cemas'},{f:'好き',r:'すき',m:'Suka'},{f:'嫌い',r:'きらい',m:'Benci'},{f:'大好き',r:'だいすき',m:'Suka sekali'},{f:'大嫌い',r:'だいきらい',m:'Benci sekali'},{f:'きれい',r:'きれい',m:'Cantik/Bersih'},{f:'にぎやか',r:'にぎやか',m:'Ramai'},{f:'静か',r:'しずか',m:'Tenang'},{f:'複雑',r:'ふくざつ',m:'Rumit'},{f:'簡単',r:'かんたん',m:'Mudah'},{f:'便利',r:'べんり',m:'Praktis'},{f:'不便',r:'ふべん',m:'Tidak praktis'},{f:'幸せ',r:'しあわせ',m:'Bahagia'},{f:'素敵',r:'すてき',m:'Bagus/Keren'},{f:'有名',r:'ゆうめい',m:'Terkenal'},{f:'安全',r:'あんぜん',m:'Aman'},{f:'危険',r:'きけん',m:'Bahaya'},{f:'色々',r:'いろいろ',m:'Bermacam'},{f:'大丈夫',r:'だいじょうぶ',m:'Tidak apa-apa'},{f:'大事',r:'だいじ',m:'Penting'},{f:'大切',r:'たいせつ',m:'Penting'},{f:'だめ',r:'だめ',m:'Tidak boleh'},{f:'変',r:'へん',m:'Aneh'},{f:'無駄',r:'むだ',m:'Sia-sia'},{f:'急',r:'きゅう',m:'Mendadak'},{f:'上手',r:'じょうず',m:'Pandai'},{f:'下手',r:'へた',m:'Tidak pandai'},{f:'得意',r:'とくい',m:'Jago'},{f:'苦手',r:'にがて',m:'Lemah/Kurang suka'},{f:'暇',r:'ひま',m:'Senggang'},{f:'かわいそう',r:'かわいそう',m:'Kasihan'},{f:'立派',r:'りっぱ',m:'Megah'},{f:'大変',r:'たいへん',m:'Berat/Sulit'},{f:'楽',r:'らく',m:'Mudah/Nyaman'},{f:'無理',r:'むり',m:'Mustahil'},{f:'おしゃれ',r:'おしゃれ',m:'Modis'},{f:'丁寧',r:'ていねい',m:'Sopan/Teliti'},{f:'親切',r:'しんせつ',m:'Ramah'},{f:'ハンサム',r:'ハンサム',m:'Ganteng'},{f:'真面目',r:'まじめ',m:'Rajin'},{f:'不真面目',r:'ふまじめ',m:'Tidak serius'},{f:'嫌',r:'いや',m:'Tidak suka'},{f:'一生懸命',r:'いっしょうけんめい',m:'Sungguh-sungguh'},{f:'盛ん',r:'さかん',m:'Populer'},{f:'邪魔',r:'じゃま',m:'Mengganggu'},{f:'十分',r:'じゅうぶん',m:'Cukup'},{f:'丈夫',r:'じょうぶ',m:'Kuat'},{f:'適当',r:'てきとう',m:'Tepat'},{f:'特別',r:'とくべつ',m:'Khusus'},{f:'自由',r:'じゆう',m:'Bebas'},{f:'まっすぐ',r:'まっすぐ',m:'Lurus'},{f:'熱心',r:'ねっしん',m:'Antusias'},{f:'必要',r:'ひつよう',m:'Perlu'},{f:'別',r:'べつ',m:'Lain'},{f:'不思議',r:'ふしぎ',m:'Ajaib'},{f:'豪華',r:'ごうか',m:'Mewah'},{f:'同じ',r:'おなじ',m:'Sama'},{f:'伝統的',r:'でんとうてき',m:'Tradisional'},{f:'活発',r:'かっぱつ',m:'Aktif'},{f:'誠実',r:'せいじつ',m:'Tulus'},{f:'わがまま',r:'わがまま',m:'Egois'},{f:'頑固',r:'がんこ',m:'Keras kepala'},{f:'素直',r:'すなお',m:'Patuh/Polos'},{f:'意地悪',r:'いじわる',m:'Jahat'},{f:'勝ち気',r:'かちき',m:'Tak mau kalah'},{f:'神経質',r:'しんけいしつ',m:'Sensitif'},
-            // Kata Kerja (Lengkap)
-            {f:'有る',r:'ある',m:'Ada (Benda)'},{f:'居る',r:'いる',m:'Ada (Mahluk)'},{f:'作業する',r:'さぎょうする',m:'Bekerja'},{f:'協力する',r:'きょうりょくする',m:'Bekerjasama'},{f:'勉強する',r:'べんきょうする',m:'Belajar'},{f:'学ぶ',r:'まなぶ',m:'Belajar'},{f:'出発する',r:'しゅっぱつする',m:'Berangkat'},{f:'話し合う',r:'はなしあう',m:'Berbincang'},{f:'呼吸する',r:'こきゅうする',m:'Bernafas'},{f:'運動する',r:'うんどうする',m:'Olahraga'},{f:'組む',r:'くむ',m:'Berpasangan'},{f:'経験する',r:'けいけんする',m:'Pengalaman'},{f:'思う',r:'おもう',m:'Berpikir'},{f:'離れる',r:'はなれる',m:'Berpisah'},{f:'悲しむ',r:'かなしむ',m:'Bersedih'},{f:'隠れる',r:'かくれる',m:'Bersembunyi'},{f:'掃除する',r:'そうじする',m:'Bersih-bersih'},{f:'輝く',r:'かがやく',m:'Bersinar'},{f:'悩む',r:'なやむ',m:'Susah hati'},{f:'伺う',r:'うかがう',m:'Bertanya (sopan)'},{f:'戦う',r:'たたかう',m:'Bertarung'},{f:'出会う',r:'であう',m:'Bertemu'},{f:'喧嘩する',r:'けんかする',m:'Bertengkar'},{f:'叫ぶ',r:'さけぶ',m:'Berteriak'},{f:'感謝する',r:'かんしゃする',m:'Berterima kasih'},{f:'婚約する',r:'こんやくする',m:'Bertunangan'},{f:'努力する',r:'どりょくする',m:'Berusaha keras'},{f:'観光する',r:'かんこうする',m:'Berwisata'},{f:'出来る',r:'できる',m:'Bisa'},{f:'自殺する',r:'じさつする',m:'Bunuh diri'},{f:'適する',r:'てきする',m:'Cocok'},{f:'似合う',r:'にあう',m:'Sesuai'},{f:'効く',r:'きく',m:'Efektif'},{f:'好む',r:'このむ',m:'Gemar'},{f:'騒ぐ',r:'さわぐ',m:'Gempar/Berisik'},{f:'緊張する',r:'きんちょうする',m:'Gugup'},{f:'希望する',r:'きぼうする',m:'Berharap'},{f:'暮らす',r:'くらす',m:'Hidup'},{f:'気に入る',r:'きにいる',m:'Menyukai'},{f:'散歩する',r:'さんぽする',m:'Jalan-jalan'},{f:'飽きる',r:'あきる',m:'Jenuh/Bosan'},{f:'劣る',r:'おとる',m:'Kalah/Inferior'},{f:'混乱する',r:'こんらんする',m:'Kekacauan'},{f:'がっかりする',r:'がっかりする',m:'Kecewa'},{f:'失望する',r:'しつぼうする',m:'Kecewa'},{f:'失う',r:'うしなう',m:'Kehilangan'},{f:'欠ける',r:'かける',m:'Kekurangan'},{f:'外出する',r:'がいしゅつする',m:'Keluar'},{f:'当たる',r:'あたる',m:'Kena'},{f:'相談する',r:'そうだんする',m:'Konsultasi'},{f:'合格する',r:'ごうかくする',m:'Lulus'},{f:'食う',r:'くう',m:'Makan (Kasar)'},{f:'怠ける',r:'なまける',m:'Malas'},{f:'浴びる',r:'あびる',m:'Mandi'},{f:'入院する',r:'にゅういんする',m:'Masuk RS'},{f:'入学する',r:'にゅうがくする',m:'Masuk sekolah'},{f:'解釈する',r:'かいしゃくする',m:'Menjelaskan'},{f:'越える',r:'こえる',m:'Melampaui'},{f:'優れる',r:'すぐれる',m:'Unggul'},{f:'進学する',r:'しんがくする',m:'Lanjut sekolah'},{f:'報告する',r:'ほうこくする',m:'Melaporkan'},{f:'禁止する',r:'きんしする',m:'Melarang'},{f:'爆発する',r:'ばくはつする',m:'Meledak'},{f:'抜く',r:'ぬく',m:'Mencabut/Melepas'},{f:'放す',r:'はなす',m:'Melepas'},{f:'外す',r:'はずす',m:'Melepaskan'},{f:'見る',r:'みる',m:'Melihat'},{f:'守る',r:'まもる',m:'Melindungi'},{f:'横断する',r:'おうだんする',m:'Melintasi'},{f:'横切る',r:'よこぎる',m:'Melintasi'},{f:'含む',r:'ふくむ',m:'Mengandung'},{f:'飛び出す',r:'とびだす',m:'Melompat'},{f:'広がる',r:'ひろがる',m:'Meluas'},{f:'描く',r:'えがく/かく',m:'Menggambar'},{f:'発車する',r:'はっしゃする',m:'Berangkat (Krt)'},{f:'許す',r:'ゆるす',m:'Memaafkan'},{f:'理解する',r:'りかいする',m:'Memahami'},{f:'奏でる',r:'かなでる',m:'Memainkan(musik)'},{f:'進める',r:'すすめる',m:'Memajukan'},{f:'被る',r:'かぶる',m:'Memakai (Topi)'},{f:'用いる',r:'もちいる',m:'Memakai'},{f:'無理する',r:'むりする',m:'Memaksakan diri'},{f:'眺める',r:'ながめる',m:'Memandang'},{f:'収穫する',r:'しゅうかくする',m:'Memanen'},{f:'刈る',r:'かる',m:'Memangkas'},{f:'付ける',r:'つける',m:'Memasang'},{f:'確かめる',r:'たしかめる',m:'Memastikan'},{f:'割る',r:'わる',m:'Membagi/Memecah'},{f:'応じる',r:'おうじる',m:'Membalas'},{f:'比較する',r:'ひかくする',m:'Membandingkan'},{f:'援助する',r:'えんじょする',m:'Membantu'},{f:'限る',r:'かぎる',m:'Membatasi'},{f:'制限する',r:'せいげんする',m:'Membatasi'},{f:'支払う',r:'しはらう',m:'Membayar'},{f:'凍る',r:'こおる',m:'Membeku'},{f:'分ける',r:'わける',m:'Membelah'},{f:'嫌う',r:'きらう',m:'Membenci'},{f:'伸ばす',r:'のばす',m:'Membentangkan'},{f:'飼う',r:'かう',m:'Memelihara'},{f:'与える',r:'あたえる',m:'Memberikan'},{f:'建設する',r:'けんせつする',m:'Membina'},{f:'証明する',r:'しょうめいする',m:'Membuktikan'},{f:'殺す',r:'ころす',m:'Membunuh'},{f:'腐る',r:'くさる',m:'Membusuk'},{f:'解く',r:'とく',m:'Memecahkan'},{f:'掴む',r:'つかむ',m:'Memegang'},{f:'抱く',r:'だく/いだく',m:'Memeluk'},{f:'検査する',r:'けんさする',m:'Memeriksa'},{f:'命じる',r:'めいじる',m:'Memerintah'},{f:'注文する',r:'ちゅうもんする',m:'Memesan'},{f:'選択する',r:'せんたくする',m:'Memilih'},{f:'移す',r:'うつす',m:'Memindah'},{f:'求める',r:'もとめる',m:'Meminta'},{f:'省く',r:'はぶく',m:'Mengesampingkan'},{f:'構う',r:'かまう',m:'Mempedulikan'},{f:'修理する',r:'しゅうりする',m:'Memperbaiki'},{f:'議論する',r:'ぎろんする',m:'Membahas'},{f:'論じる',r:'ろんじる',m:'Memperbincangkan'},{f:'警告する',r:'けいこくする',m:'Memperingati'},{f:'防ぐ',r:'ふせぐ',m:'Menangkal'},{f:'逮捕する',r:'たいほする',m:'Menangkap'},{f:'捕まる',r:'つかまる',m:'Tertangkap'},{f:'供給する',r:'きょうきゅうする',m:'Menawarkan'},{f:'達する',r:'たっする',m:'Mencapai'},{f:'届く',r:'とどく',m:'Sampai'},{f:'就職する',r:'しゅうしょくする',m:'Mencari kerja'},{f:'予防する',r:'よぼうする',m:'Mencegah'},{f:'営業する',r:'えいぎょうする',m:'Berbisnis'},{f:'語る',r:'かたる',m:'Bercerita'},{f:'商売する',r:'しょうばいする',m:'Berdagang'},{f:'基づく',r:'もとづく',m:'Berdasarkan'},{f:'黙る',r:'だまる',m:'Berdiam'},{f:'立ち上げる',r:'たちあげる',m:'Mendirikan'},{f:'泳ぐ',r:'およぐ',m:'Berenang'},{f:'参加する',r:'さんかする',m:'Bergabung'},{f:'期待する',r:'きたいする',m:'Berharap'},{f:'願う',r:'ねがう',m:'Berdoa/Harap'},{f:'辞める',r:'やめる',m:'Berhenti'},{f:'留める',r:'とめる',m:'Menghentikan'},{f:'約束する',r:'やくそくする',m:'Berjanji'},{f:'関連する',r:'かんれんする',m:'Berkaitan'},{f:'言う',r:'いう',m:'Berkata'},{f:'裏切る',r:'うらぎる',m:'Berkhianat'},{f:'集中する',r:'しゅうちゅうする',m:'Konsentrasi'},{f:'貢献する',r:'こうけんする',m:'Berkontribusi'},{f:'会合する',r:'かいごうする',m:'Berkumpul'},{f:'減る',r:'へる',m:'Berkurang'},{f:'異なる',r:'ことなる',m:'Berbeda'},{f:'訓練する',r:'くんれんする',m:'Berlatih'},{f:'練習する',r:'れんしゅうする',m:'Latihan'},{f:'愛する',r:'あいする',m:'Mencintai'},{f:'試す',r:'ためす',m:'Mencoba'},{f:'注ぐ',r:'そそぐ',m:'Menuangkan'},{f:'苦しむ',r:'くるしむ',m:'Menderita'},{f:'発見する',r:'はっけんする',m:'Menemukan'},{f:'建築する',r:'けんちくする',m:'Mendirikan'},{f:'強調する',r:'きょうちょうする',m:'Menekankan'},{f:'検討する',r:'けんとうする',m:'Meneliti'},{f:'通す',r:'とおす',m:'Menembus'},{f:'占める',r:'しめる',m:'Menempati'},{f:'張る',r:'はる',m:'Menepuk/Tempel'},{f:'飛ばす',r:'とばす',m:'Menerbangkan'},{f:'出版する',r:'しゅっぱんする',m:'Menerbitkan'},{f:'頂く',r:'いただく',m:'Menerima (Sopan)'},{f:'受け取る',r:'うけとる',m:'Menerima'},{f:'貰う',r:'もらう',m:'Menerima'},{f:'決定する',r:'けっていする',m:'Menetapkan'},{f:'記録する',r:'きろくする',m:'Mencatat'},{f:'適用する',r:'てきようする',m:'Menerapkan'},{f:'誘う',r:'さそう',m:'Mengajak'},{f:'勧める',r:'すすめる',m:'Menganjurkan'},{f:'終える',r:'おえる',m:'Mengakhiri'},{f:'通じる',r:'つうじる',m:'Mengalirkan'},{f:'流す',r:'ながす',m:'Mengalirkan'},{f:'観察する',r:'かんさつする',m:'Mengamati'},{f:'取り上げる',r:'とりあげる',m:'Mengambil'},{f:'分析する',r:'ぶんせきする',m:'Menganalisa'},{f:'頼る',r:'たよる',m:'Mengandalkan'},{f:'失業する',r:'しつぎょうする',m:'Menganggur'},{f:'持ち上げる',r:'もちあげる',m:'Mengangkat'},{f:'配達する',r:'はいたつする',m:'Mengantar'},{f:'振る',r:'ふる',m:'Mengayunkan'},{f:'批評する',r:'ひひょうする',m:'Mengkritik'},{f:'変更する',r:'へんこうする',m:'Mengubah'},{f:'追う',r:'おう',m:'Mengejar'},{f:'輸出する',r:'ゆしゅつする',m:'Mengekspor'},{f:'表す',r:'あらわす',m:'Mengekspresikan'},{f:'回す',r:'まわす',m:'Memutar'},{f:'経営する',r:'けいえいする',m:'Mengelola'},{f:'戻す',r:'もどす',m:'Mengembalikan'},{f:'発展する',r:'はってんする',m:'Berkembang'},{f:'述べる',r:'のべる',m:'Menceritakan'},{f:'履く',r:'はく',m:'Memakai(Bawah)'},{f:'握る',r:'にぎる',m:'Mengepal'},{f:'囲む',r:'かこむ',m:'Mengepung'},{f:'唸る',r:'うなる',m:'Mengerang'},{f:'除く',r:'のぞく',m:'Mengesampingkan'},{f:'雇う',r:'やとう',m:'Mempekerjakan'},{f:'邪魔する',r:'じゃまする',m:'Mengganggu'},{f:'迷惑する',r:'めいわくする',m:'Meresahkan'},{f:'換える',r:'かえる',m:'Mengganti'},{f:'交換する',r:'こうかんする',m:'Menukar'},{f:'掛ける',r:'かける',m:'Menggantung'},{f:'動かす',r:'うごかす',m:'Menggerakkan'},{f:'震える',r:'ふるえる',m:'Menggigil'},{f:'狂う',r:'くるう',m:'Gila'},{f:'転ぶ',r:'ころぶ',m:'Berguling'},{f:'及ぼす',r:'およぼす',m:'Mempengaruhi'},{f:'使用する',r:'しようする',m:'Menggunakan'},{f:'過ごす',r:'すごす',m:'Menghabiskan'},{f:'向ける',r:'むける',m:'Mengarahkan'},{f:'出席する',r:'しゅっせきする',m:'Menghadiri'},{f:'望む',r:'のぞむ',m:'Mengharapkan'},{f:'避ける',r:'さける',m:'Menghindar'},{f:'数える',r:'かぞえる',m:'Menghitung'},{f:'計算する',r:'けいさんする',m:'Menghitung'},{f:'尊敬する',r:'そんけいする',m:'Menghormati'},{f:'罰する',r:'ばっする',m:'Menghukum'},{f:'結ぶ',r:'むすぶ',m:'Mengikat'},{f:'従う',r:'したがう',m:'Mengikuti'},{f:'輸入する',r:'ゆにゅうする',m:'Mengimpor'},{f:'現す',r:'あらわす',m:'Menunjukkan'},{f:'思い出す',r:'おもいだす',m:'Mengingat'},{f:'贈る',r:'おくる',m:'Mengirim'},{f:'記入する',r:'きにゅうする',m:'Mengisi'},{f:'許可する',r:'きょかする',m:'Mengizinkan'},{f:'心配する',r:'しんぱいする',m:'Mengkhawatirkan'},{f:'確認する',r:'かくにんする',m:'Memastikan'},{f:'承認する',r:'しょうにんする',m:'Menyetujui'},{f:'消費する',r:'しょうひする',m:'Konsumsi'},{f:'喋る',r:'しゃべる',m:'Mengobrol'},{f:'叱る',r:'しかる',m:'Memarahi'},{f:'契約する',r:'けいやくする',m:'Mengontrak'},{f:'左右する',r:'さゆうする',m:'Menguasai'},{f:'変化する',r:'へんかする',m:'Berubah'},{f:'計る',r:'はかる',m:'Mengukur'},{f:'繰り返す',r:'くりかえす',m:'Mengulang'},{f:'積もる',r:'つもる',m:'Terkumpul'},{f:'発表する',r:'はっぴょうする',m:'Mengumumkan'},{f:'招待する',r:'しょうたいする',m:'Mengundang'},{f:'訪問する',r:'ほうもんする',m:'Mengunjungi'},{f:'減らす',r:'へらす',m:'Mengurangi'},{f:'管理する',r:'かんりする',m:'Mengurus'},{f:'処理する',r:'しょりする',m:'Mengolah'},{f:'評価する',r:'ひょうかする',m:'Menilai'},{f:'修正する',r:'しゅうせいする',m:'Merevisi'},{f:'預ける',r:'あずける',m:'Menitipkan'},{f:'就く',r:'つく',m:'Menjabat'},{f:'成る',r:'なる',m:'Menjadi'},{f:'濡れる',r:'ぬれる',m:'Basah'},{f:'空く',r:'すく',m:'Kosong'},{f:'明ける',r:'あける',m:'Terang'},{f:'支配する',r:'しはいする',m:'Menjajah'},{f:'保障する',r:'ほしょうする',m:'Menjamin'},{f:'離す',r:'はなす',m:'Menjauhkan'},{f:'混雑する',r:'こんざつする',m:'Berdesakan'},{f:'詰める',r:'つめる',m:'Mengisi'},{f:'優勝する',r:'ゆうしょうする',m:'Juara'},{f:'批判する',r:'ひはんする',m:'Kritik'},{f:'断る',r:'ことわる',m:'Menolak'},{f:'振り向く',r:'ふりむく',m:'Menoleh'},{f:'向く',r:'むく',m:'Berpaling'},{f:'助ける',r:'たすける',m:'Menolong'},{f:'収める',r:'おさめる',m:'Menuai'},{f:'替える',r:'かえる',m:'Menukar'},{f:'指す',r:'さす',m:'Menunjuk'},{f:'示す',r:'しめす',m:'Menunjukkan'},{f:'下ろす',r:'おろす',m:'Menurunkan'},{f:'刺す',r:'さす',m:'Menusuk'},{f:'閉じる',r:'とじる',m:'Menutup'},{f:'覆う',r:'おおう',m:'Menutupi'},{f:'気付く',r:'きづく',m:'Menyadari'},{f:'責める',r:'せめる',m:'Menyalahkan'},{f:'吠える',r:'ほえる',m:'Menggonggong'},{f:'歓迎する',r:'かんげいする',m:'Menyambut'},{f:'合わせる',r:'あわせる',m:'Menyatukan'},{f:'救う',r:'すくう',m:'Menyelamatkan'},{f:'調査する',r:'ちょうさする',m:'Menyelidiki'},{f:'隠す',r:'かくす',m:'Menyembunyikan'},{f:'完成する',r:'かんせいする',m:'Menyempurnakan'},{f:'触れる',r:'ふれる',m:'Menyentuh'},{f:'諦める',r:'あきらめる',m:'Menyerah'},{f:'任せる',r:'まかせる',m:'Menyerahkan'},{f:'撃つ',r:'うつ',m:'Menembak'},{f:'攻撃する',r:'こうげきする',m:'Menyerang'},{f:'運転する',r:'うんてんする',m:'Menyetir'},{f:'放送する',r:'ほうそうする',m:'Menyiarkan'},{f:'結論する',r:'けつろんする',m:'Menyimpulkan'},{f:'残す',r:'のこす',m:'Menyisakan'},{f:'支える',r:'ささえる',m:'Menopang'},{f:'刺激する',r:'しげきする',m:'Merangsang'},{f:'感じる',r:'かんじる',m:'Merasa'},{f:'祝う',r:'いわう',m:'Merayakan'},{f:'済ませる',r:'すませる',m:'Meredakan'},{f:'推薦する',r:'すいせんする',m:'Rekomendasi'},{f:'対する',r:'たいする',m:'Terhadap'},{f:'感動する',r:'かんどうする',m:'Terharu'},{f:'繋ぐ',r:'つなぐ',m:'Terhubung'},{f:'起こる',r:'おこる',m:'Terjadi'},{f:'覚める',r:'さめる',m:'Terbangun'},{f:'売れる',r:'うれる',m:'Terjual'},{f:'びっくりする',r:'びっくりする',m:'Terkejut'},{f:'感心する',r:'かんしんする',m:'Kagum'},{f:'得る',r:'える',m:'Memperoleh'},{f:'稼ぐ',r:'かせぐ',m:'Mendapat uang'},{f:'備える',r:'そなえる',m:'Mempersiapkan'},{f:'生産する',r:'せいさんする',m:'Memproduksi'},{f:'褒める',r:'ほめる',m:'Memuji'},{f:'当てる',r:'あてる',m:'Menebak'},{f:'開始する',r:'かいしする',m:'Memulai'},{f:'快復する',r:'かいふくする',m:'Pulih'},{f:'決心する',r:'けっしんする',m:'Bertekad'},{f:'叩く',r:'たたく',m:'Memukul/Menabuk'},{f:'貯金する',r:'ちょきんする',m:'Menabung'},{f:'請求する',r:'せいきゅうする',m:'Menagih'},{f:'我慢する',r:'がまんする',m:'Bersabar'},{f:'乗せる',r:'のせる',m:'Menaikkan'},{f:'増す',r:'ます',m:'Bertambah'},{f:'加える',r:'くわえる',m:'Menambah'},{f:'遅刻する',r:'ちこくする',m:'Terlambat'},{f:'抜ける',r:'ぬける',m:'Terlepas'},{f:'切れる',r:'きれる',m:'Terpotong/Habis'},{f:'微笑む',r:'ほほえむ',m:'Tersenyum'},{f:'残る',r:'のこる',m:'Tertinggal'},{f:'到着する',r:'とうちゃくする',m:'Tiba'},{f:'計画する',r:'けいかくする',m:'Merencanakan'},{f:'奪う',r:'うばう',m:'Merenggut'},{f:'破る',r:'やぶる',m:'Merobek'},{f:'倒す',r:'たおす',m:'Merobohkan/Kalahkan'},{f:'掲示する',r:'けいじする',m:'Mewahyukan/Umumkan'},{f:'譲る',r:'ゆずる',m:'Mewariskan'},{f:'現れる',r:'あらわれる',m:'Muncul'},{f:'吐く',r:'はく',m:'Muntah'},{f:'昇る',r:'のぼる',m:'Naik/Terbit'},{f:'承知する',r:'しょうちする',m:'Paham'},{f:'解ける',r:'とける',m:'Pecah/Urai'},{f:'満ちる',r:'みちる',m:'Penuh'},{f:'信じる',r:'しんじる',m:'Percaya'},{f:'行く',r:'いく',m:'Pergi'},{f:'去る',r:'さる',m:'Meninggalkan'},{f:'出張する',r:'しゅっちょうする',m:'Dinas'},{f:'帰宅する',r:'きたくする',m:'Pulang kerumah'},{f:'関する',r:'かんする',m:'Berkenaan dg'},{f:'留学する',r:'りゅうがくする',m:'Sekolah LN'},{f:'完了する',r:'かんりょうする',m:'Rampung'},{f:'訴える',r:'うったえる',m:'Menuntut'},{f:'成功する',r:'せいこうする',m:'Sukses'},{f:'恐れる',r:'おそれる',m:'Takut'},{f:'溺れる',r:'おぼれる',m:'Tenggelam'},{f:'沈む',r:'しずむ',m:'Tenggelam'},{f:'燃える',r:'もえる',m:'Terbakar'},{f:'育つ',r:'そだつ',m:'Tumbuh/Besar'}
+            // Kata Sifat
+            {f:'大きい',r:'おおきい',m:'Besar'},{f:'小さい',r:'ちいさい',m:'Kecil'},{f:'長い',r:'ながい',m:'Panjang'},{f:'短い',r:'みじかい',m:'Pendek'},{f:'多い',r:'おおい',m:'Banyak'},{f:'少ない',r:'すくない',m:'Sedikit'},{f:'太い',r:'ふとい',m:'Gemuk/Tebal'},{f:'細い',r:'ほそい',m:'Ramping/Tipis'},{f:'厚い',r:'あつい',m:'Tebal'},{f:'薄い',r:'うすい',m:'Tipis'},{f:'固い',r:'かたい',m:'Keras'},{f:'柔らかい',r:'やわらかい',m:'Lunak'},{f:'新しい',r:'あたらしい',m:'Baru'},{f:'古い',r:'ふるい',m:'Lama/Tua'},{f:'高い',r:'たかい',m:'Tinggi/Mahal'},{f:'安い',r:'やすい',m:'Murah'},{f:'早い',r:'はやい',m:'Cepat (waktu)'},{f:'遠い',r:'とおい',m:'Jauh'},{f:'近い',r:'ちかい',m:'Dekat'},{f:'強い',r:'つよい',m:'Kuat'},{f:'弱い',r:'よわい',m:'Lemah'},{f:'暑い',r:'あつい',m:'Panas (suhu)'},{f:'寒い',r:'さむい',m:'Dingin (suhu)'},{f:'明るい',r:'あかるい',m:'Terang'},{f:'暗い',r:'くらい',m:'Gelap'},{f:'汚い',r:'きたない',m:'Kotor'},{f:'難しい',r:'むずかしい',m:'Sulit'},{f:'易しい',r:'やasashii',m:'Mudah'},{f:'危ない',r:'abunai',m:'Bahaya'},{f:'うれしい',r:'ureshii',m:'Senang'},{f:'悲しい',r:'kanashii',m:'Sedih'},{f:'寂しい',r:'sabishii',m:'Sepi'},{f:'怖い',r:'kowai',m:'Takut'},{f:'眠い',r:'nemui',m:'Ngantuk'},{f:'痛い',r:'itai',m:'Sakit'},
+            // Kata Kerja
+            {f:'有る',r:'ある',m:'Ada (Benda)'},{f:'居る',r:'いる',m:'Ada (Mahluk)'},{f:'作業する',r:'さぎょうする',m:'Bekerja'},{f:'勉強する',r:'べんきょうする',m:'Belajar'},{f:'思う',r:'おもう',m:'Berpikir'},{f:'掃除する',r:'そうじする',m:'Bersih-bersih'},{f:'行く',r:'いく',m:'Pergi'},{f:'見る',r:'みる',m:'Melihat'},{f:'守る',r:'まもる',m:'Melindungi'},{f:'食べる',r:'たべる',m:'Makan'},{f:'飲む',r:'のむ',m:'Minum'},{f:'寝る',r:'ねる',m:'Tidur'},{f:'起きる',r:'おきる',m:'Bangun'},{f:'待つ',r:'まつ',m:'Menunggu'},{f:'話す',r:'はなす',m:'Berbicara'},{f:'聞く',r:'きく',m:'Mendengar'},{f:'書く',r:'かく',m:'Menulis'},{f:'読む',r:'よむ',m:'Membaca'},{f:'歩く',r:'あるく',m:'Berjalan'},{f:'走る',r:'はしる',m:'Berlari'},{f:'泳ぐ',r:'およぐ',m:'Berenang'},{f:'会う',r:'あう',m:'Bertemu'},{f:'買う',r:'かう',m:'Membeli'},{f:'売る',r:'うる',m:'Menjual'},{f:'出す',r:'だす',m:'Mengeluarkan'},{f:'入れる',r:'いれる',m:'Memasukkan'}
         ];
 
-        const KANA_POOL = {
-            hira: { 'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n' },
-            kata: { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o','カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko','サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so','タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to','ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no','ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho','マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo','ヤ':'ya','ユ':'yu','ヨ':'yo','ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro','ワ':'wa','ヲ':'wo','ン':'n' }
-        };
+        // GABUNGKAN KANA KE DALAM FLASHCARD
+        const ALL_VOCAB = [...BASE_VOCAB];
+        Object.entries(KANA_POOL.hira).forEach(([kana, romaji]) => {
+            ALL_VOCAB.push({ f: kana, r: romaji, m: 'Hiragana' });
+        });
+        Object.entries(KANA_POOL.kata).forEach(([kana, romaji]) => {
+            ALL_VOCAB.push({ f: kana, r: romaji, m: 'Katakana' });
+        });
 
         // --- STATE ---
-        // V16 key dipertahankan agar tidak menghilangkan riwayat belajarmu yang lama.
-        // Sistem akan otomatis menambahkan vocab baru yang belum ada di localstorage.
-        const STORAGE_CARDS_KEY = 'jmaster_v16_cards';
-        const STORAGE_SETTINGS_KEY = 'jmaster_v16_settings';
+        const STORAGE_CARDS_KEY = 'jmaster_v17_cards'; // Diubah ke V17 untuk reset kartu baru
+        const STORAGE_SETTINGS_KEY = 'jmaster_v17_settings';
 
         let cards = [];
         let settings = { newLimit: 15, reviewLimit: 30, dailyReset: "", newDoneToday: 0, reviewDoneToday: 0 };
@@ -372,7 +382,6 @@
 
             if (storedCards) {
                 cards = JSON.parse(storedCards);
-                // Sinkronisasi jika ada vocab baru yang belum ada di localstorage
                 const existingIds = cards.map(c => c.f);
                 ALL_VOCAB.forEach(v => {
                     if(!existingIds.includes(v.f)) {
@@ -387,7 +396,6 @@
 
             if (storedSettings) {
                 settings = JSON.parse(storedSettings);
-                // Reset harian
                 if (settings.dailyReset !== todayWIB) {
                     settings.dailyReset = todayWIB;
                     settings.newDoneToday = 0;
@@ -401,10 +409,21 @@
             updateUI();
         };
 
-        const startSession = () => {
+        const startSession = (mode = 'vocab') => {
             const now = Date.now();
-            const dueRev = cards.filter(c => c.repetitions > 0 && c.nextReview <= now);
-            const newCards = cards.filter(c => c.repetitions === 0);
+            
+            // Filter kartu berdasarkan mode yang dipilih
+            let targetCards = cards;
+            if (mode === 'vocab') {
+                targetCards = cards.filter(c => c.m !== 'Hiragana' && c.m !== 'Katakana');
+            } else if (mode === 'hira') {
+                targetCards = cards.filter(c => c.m === 'Hiragana');
+            } else if (mode === 'kata') {
+                targetCards = cards.filter(c => c.m === 'Katakana');
+            }
+
+            const dueRev = targetCards.filter(c => c.repetitions > 0 && c.nextReview <= now);
+            const newCards = targetCards.filter(c => c.repetitions === 0);
             
             const remNew = Math.max(0, settings.newLimit - settings.newDoneToday);
             const remRev = Math.max(0, settings.reviewLimit - settings.reviewDoneToday);
@@ -413,8 +432,15 @@
             totalQueueSize = activeQueue.length;
             
             if (activeQueue.length === 0) {
-                return showToast("Target harian sudah terpenuhi!", "success");
+                return showToast("Semua kartu di kategori ini sudah selesai dipelajari hari ini!", "success");
             }
+
+            // Update Label Tipe
+            const labelEl = document.getElementById('card-label-front');
+            if(mode === 'vocab') labelEl.innerText = "Vocab / Kanji";
+            else if(mode === 'hira') labelEl.innerText = "Hiragana";
+            else if(mode === 'kata') labelEl.innerText = "Katakana";
+
             updateUI();
         };
 
@@ -459,13 +485,14 @@
 
         window.flipCard = () => { if(!isFlipped && activeQueue.length > 0) setIsFlipped(true); };
 
+        window.endSessionEarly = () => {
+            activeQueue = [];
+            updateUI();
+        };
+
         window.startDailyQuiz = () => {
-            // HANYA mengambil kartu yang sudah pernah di-review sebelumnya (Riwayat)
             const available = cards.filter(c => c.repetitions > 0);
-            
-            if(available.length === 0) {
-                return showToast("Belum ada kartu di riwayat. Review dulu ya!", "error");
-            }
+            if(available.length === 0) return showToast("Review dulu kartunya!", "error");
             
             const quizLimit = Math.min(10, available.length);
             quizQueue = available.sort(() => Math.random() - 0.5).slice(0, quizLimit);
@@ -482,18 +509,18 @@
             if(quizQueue.length === 0) return showQuizResult();
             const current = quizQueue[0];
             const qCount = totalQuizQuestions - quizQueue.length + 1;
-            
             const displayEl = document.getElementById('quiz-display');
             displayEl.innerText = current.f;
             
-            // FONT SIZING LOGIC FOR QUIZ
             displayEl.className = "font-black text-slate-800 leading-tight transition-all duration-300";
             if(current.f.length > 12) displayEl.classList.add('text-base', 'md:text-lg');
             else if(current.f.length > 8) displayEl.classList.add('text-lg', 'md:text-xl');
             else if(current.f.length > 5) displayEl.classList.add('text-xl', 'md:text-2xl');
             else displayEl.classList.add('text-3xl', 'md:text-4xl');
             
-            document.getElementById('quiz-q-count').innerText = `Soal ${qCount}/${totalQuizQuestions}`;
+            document.getElementById('quiz-q-count').innerText = `Soal ${qCount}`;
+            const progressPercent = ((qCount - 1) / totalQuizQuestions) * 100;
+            document.getElementById('quiz-progress').style.width = `${progressPercent}%`;
             
             let opts = [current.m];
             const pool = cards.map(k => k.m);
@@ -513,22 +540,18 @@
             if(isProcessing) return;
             isProcessing = true;
             const correct = quizQueue[0].m;
-            if(ans === correct) {
-                quizScore++;
-                e.currentTarget.classList.add('ans-correct');
-            } else {
-                e.currentTarget.classList.add('ans-wrong');
-            }
-            setTimeout(() => {
-                quizQueue.shift();
-                nextQuizQuestion();
-            }, 600);
+            if(ans === correct) { quizScore++; e.currentTarget.classList.add('ans-correct'); }
+            else { e.currentTarget.classList.add('ans-wrong'); }
+            setTimeout(() => { quizQueue.shift(); nextQuizQuestion(); }, 600);
         };
 
         const showQuizResult = () => {
-            document.getElementById('quiz-active').classList.add('hidden');
-            document.getElementById('quiz-result').classList.remove('hidden');
-            document.getElementById('quiz-final-score').innerText = `${quizScore}/${totalQuizQuestions}`;
+            document.getElementById('quiz-progress').style.width = `100%`;
+            setTimeout(() => {
+                document.getElementById('quiz-active').classList.add('hidden');
+                document.getElementById('quiz-result').classList.remove('hidden');
+                document.getElementById('quiz-final-score').innerText = `${quizScore}/${totalQuizQuestions}`;
+            }, 500);
         };
 
         window.startKanaQuiz = () => {
@@ -587,12 +610,10 @@
         window.switchView = (target) => {
             document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
             document.getElementById(`view-${target}`).classList.remove('hidden');
-            
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
             const map = { 'study': 'nav-study', 'quiz': 'nav-study', 'settings': 'nav-study', 'kana': 'nav-kana', 'list': 'nav-list' };
             const btn = document.getElementById(map[target]);
             if(btn) btn.classList.add('nav-active');
-
             if(target === 'kana') {
                 document.getElementById('kana-setup').classList.remove('hidden');
                 document.getElementById('kana-active').classList.add('hidden');
@@ -604,7 +625,7 @@
                 document.getElementById('quiz-active').classList.add('hidden');
                 document.getElementById('quiz-result').classList.add('hidden');
             }
-            if(target === 'list') renderList();
+            if(target === 'list') { document.getElementById('search-input').value = ""; renderList(); }
             if(target === 'study') updateUI();
         };
 
@@ -620,28 +641,26 @@
                 document.getElementById('study-status').classList.remove('hidden');
                 document.getElementById('study-active').classList.add('hidden');
                 
+                // Cek apakah target HARIAN KESELURUHAN (Limit) benar-benar sudah habis
                 if(remNew === 0 && remRev === 0) {
                     document.getElementById('status-icon').innerText = "🎉";
                     document.getElementById('status-title').innerText = "お疲れ様でした！";
                     document.getElementById('status-title').classList.add('text-indigo-600');
-                    document.getElementById('status-desc').innerHTML = "Selamat! Semua kartu untuk hari ini sudah selesai di-review.<br/><br/>Lanjutkan kerja kerasmu untuk Kaigo. Sampai jumpa besok!";
-                    document.getElementById('btn-start-session').classList.add('hidden'); 
+                    document.getElementById('status-desc').innerHTML = "Selamat! Limit kartu harianmu sudah terpenuhi.<br/><br/>Terus semangat belajarnya ya, ingat tujuan besarmu!";
+                    document.getElementById('session-buttons').classList.add('hidden'); 
                 } else {
                     document.getElementById('status-icon').innerText = "📚";
                     document.getElementById('status-title').innerText = "Sesi Belajar";
                     document.getElementById('status-title').classList.remove('text-indigo-600');
-                    document.getElementById('status-desc').innerHTML = "Fokus dan selesaikan kartu hari ini.";
-                    document.getElementById('btn-start-session').classList.remove('hidden');
+                    document.getElementById('status-desc').innerHTML = "Pilih kategori flashcard yang ingin kamu pelajari hari ini.";
+                    document.getElementById('session-buttons').classList.remove('hidden');
                 }
             } else {
                 document.getElementById('study-status').classList.add('hidden');
                 document.getElementById('study-active').classList.remove('hidden');
                 const card = activeQueue[0];
-                
                 const displayFront = document.getElementById('display-front');
                 displayFront.innerText = card.f;
-                
-                // FONT SIZING LOGIC FOR FLASHCARD
                 displayFront.className = "font-bold text-slate-800 tracking-tighter text-center px-4 leading-tight transition-all duration-300";
                 if(card.f.length > 12) displayFront.classList.add('text-base', 'md:text-lg');
                 else if(card.f.length > 8) displayFront.classList.add('text-lg', 'md:text-xl');
@@ -668,26 +687,27 @@
             settings.newLimit = parseInt(document.getElementById('input-new-limit').value) || 10;
             settings.reviewLimit = parseInt(document.getElementById('input-rev-limit').value) || 20;
             localStorage.setItem(STORAGE_SETTINGS_KEY, JSON.stringify(settings));
-            if(sh) { showToast("Pengaturan Disimpan", "success"); switchView('study'); }
+            if(sh) { showToast("Simpan!", "success"); switchView('study'); }
         };
 
         const saveCards = () => localStorage.setItem(STORAGE_CARDS_KEY, JSON.stringify(cards));
-        window.resetCard = (id) => { if(confirm("Reset progress kartu ini?")) { const c = cards.find(x => x.id === id); c.repetitions = 0; c.interval = 0; c.ease = 2.5; c.nextReview = 0; saveCards(); renderList(); } };
-        window.resetAllData = () => { if(confirm("Hapus seluruh progress riwayat?")) { localStorage.clear(); location.reload(); } };
+        window.resetCard = (id) => { if(confirm("Reset kartu?")) { const c = cards.find(x => x.id === id); c.repetitions = 0; c.interval = 0; c.ease = 2.5; c.nextReview = 0; saveCards(); renderList(); } };
+        window.resetAllData = () => { if(confirm("Hapus semua data?")) { localStorage.clear(); location.reload(); } };
 
-        const renderList = () => {
+        window.renderList = () => {
             const list = document.getElementById('card-list');
+            const searchTerm = (document.getElementById('search-input')?.value || '').toLowerCase();
             const mature = cards.filter(c => c.interval >= 21).length;
             const young = cards.filter(c => c.repetitions > 0 && c.interval < 21).length;
             const unseen = cards.filter(c => c.repetitions === 0).length;
             const totalReviewed = cards.filter(c => c.repetitions > 0).length;
-
             document.getElementById('stat-mature').innerText = mature;
             document.getElementById('stat-young').innerText = young;
             document.getElementById('stat-unseen').innerText = unseen;
             document.getElementById('stat-total-reviewed').innerText = totalReviewed;
 
-            list.innerHTML = cards.map(c => {
+            const filteredCards = cards.filter(c => c.f.toLowerCase().includes(searchTerm) || c.r.toLowerCase().includes(searchTerm) || c.m.toLowerCase().includes(searchTerm));
+            list.innerHTML = filteredCards.map(c => {
                 let color = "text-slate-300 border-slate-100"; let label = "NEW";
                 if(c.interval >= 21) { color = "text-indigo-600 bg-indigo-50/50 border-indigo-100"; label = "MATURE"; }
                 else if(c.repetitions > 0) { color = "text-orange-500 bg-orange-50/50 border-orange-100"; label = "YOUNG"; }
